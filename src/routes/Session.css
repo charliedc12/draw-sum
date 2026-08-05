@@ -1,0 +1,203 @@
+.durationPicker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.durationPicker__lede {
+  font-size: var(--text-lg);
+  text-align: center;
+}
+
+.durationPicker__options {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.durationPicker__button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 72px;
+  background: var(--surface-sunken);
+  border-radius: var(--radius);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.durationPicker__button:active {
+  background: var(--accent-soft);
+}
+
+.durationPicker__button:disabled {
+  opacity: 0.4;
+}
+
+.durationPicker__unit {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.runner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.runner__breadcrumb {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.timer__elapsed {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  /* Deliberately the same colour as any other number in the app — a reference, not a
+     countdown, so it never turns red or otherwise signals urgency. */
+}
+
+.timer__controls {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.timer__button {
+  min-height: var(--touch-target);
+  padding: 0 var(--space-4);
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+
+.timer__button--primary {
+  background: var(--accent);
+  color: var(--accent-on);
+  box-shadow: none;
+}
+
+.stages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+  padding: 0;
+}
+
+.stages__item {
+  border-radius: var(--radius);
+}
+
+/* The stage nudge: subtle, not a countdown or an alarm. */
+.stages__item[data-current='true'] {
+  background: var(--accent-soft);
+}
+
+.stages__label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: var(--touch-target);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+
+.stages__checkbox {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+}
+
+.stages__atMin {
+  flex-shrink: 0;
+  width: 3.5em;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.stages__instruction {
+  font-size: var(--text-base);
+  line-height: 1.4;
+}
+
+.runner__discard {
+  align-self: center;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tagPicker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.tagPicker__lede {
+  color: var(--text-muted);
+}
+
+.tagPicker__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+  padding: 0;
+}
+
+.tagPicker__item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.tagPicker__label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: var(--touch-target);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+}
+
+.tagPicker__checkbox {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+}
+
+.tagPicker__text {
+  font-size: var(--text-base);
+  line-height: 1.4;
+}

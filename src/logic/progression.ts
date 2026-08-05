@@ -4,7 +4,9 @@
    The governing rule: nothing in this file may penalise a missed day. There is no
    streak, no decay, no reset-on-gap. A gap is simply time in which nothing happened. */
 
-import type { Curriculum, Phase, Step, Unit } from '../types/curriculum.ts'
+import type { Curriculum, DurationOption, Phase, Step, Unit } from '../types/curriculum.ts'
+import type { ActiveSession, SessionTimer } from './session.ts'
+import * as session from './session.ts'
 
 /** Drills owed before the app asks for a longer session instead of another drill. */
 export const DEBT_THRESHOLD = 10
@@ -17,10 +19,11 @@ export const TOP_UP_DAYS = 14
 
 /**
  * Applied to a weekend session's log entry when the drawing's overall proportions came
- * apart. No UI writes this tag yet (that's a later milestone) — the field exists now so
- * the regression detector has something to read.
+ * apart. Its value matches the "proportions collapsed" option in the Phase 4, 5 and 6
+ * error-tag lists (src/data/curriculum.json) verbatim — the regression check reads
+ * whatever the session-completion screen actually writes, not a separate slug.
  */
-export const PROPORTION_COLLAPSED_TAG = 'proportion-collapsed'
+export const PROPORTION_COLLAPSED_TAG = 'proportions collapsed'
 
 /** Earliest phase order at which a proportion regression is watched for. */
 export const REGRESSION_MIN_PHASE_ORDER = 4
@@ -37,7 +40,11 @@ export type LogEntry = {
   targetKind: 'step' | 'session'
   date: string
   status: 'done' | 'skipped'
-  /** Free-form error tags a weekend session can carry. Written by a later milestone. */
+  /**
+   * Error tags picked on a weekend session's completion screen (see Session.tsx). The
+   * only downstream uses are drill weighting and the soft-regression check above —
+   * never a score, grade, trend, or anything shown back to the user as an assessment.
+   */
   tags?: string[]
 }
 
@@ -65,6 +72,8 @@ export type ProgressState = {
   /** Set when a phase advanced on the clock rather than on the gate. UI explains it. */
   forcedAdvance: boolean
   topUp: TopUp | null
+  /** The in-progress weekend session, if any. Persisted so it survives a full reload. */
+  activeSession: ActiveSession | null
 }
 
 export type TodayView = { phaseOverdue: boolean } & (
@@ -82,12 +91,11 @@ export type TodayView = { phaseOverdue: boolean } & (
       supportingNote?: string
     }
   | {
+      /** A nudge, not the session itself — routes to /session, the only page in the
+          app that blocks the user's normal flow. */
       kind: 'session'
       reason: 'debt'
       phase: Phase
-      /** The phase's weekend unit, when it has one — the session's actual content. */
-      unit?: Unit
-      steps: Step[]
       drillsOwed: number
     }
   | { kind: 'gate'; phase: Phase }
@@ -465,16 +473,7 @@ export function getTodayStep(
   if (!phase) return { kind: 'empty', phaseOverdue }
 
   if (state.debtCounter >= DEBT_THRESHOLD) {
-    const unit = weekendUnit(curriculum, phase)
-    return {
-      kind: 'session',
-      reason: 'debt',
-      phase,
-      unit,
-      steps: unit ? stepsOfUnit(curriculum, unit) : [],
-      drillsOwed: state.debtCounter,
-      phaseOverdue,
-    }
+    return { kind: 'session', reason: 'debt', phase, drillsOwed: state.debtCounter, phaseOverdue }
   }
 
   const gateReady = isGateReady(state, curriculum)
@@ -593,8 +592,8 @@ export function markStepSkipped(
 }
 
 /**
- * A finished long session. Clears the debt, and credits the phase's weekend unit so
- * weekend reps track the same way daily reps do.
+ * A finished long session. Clears the debt and the in-progress session state, and
+ * credits the phase's weekend unit so weekend reps track the same way daily reps do.
  */
 export function completeSession(
   state: ProgressState,
@@ -611,7 +610,86 @@ export function completeSession(
     sessionCount: state.sessionCount + 1,
     unitRepCounts: unit ? bump(state.unitRepCounts, unit.id) : state.unitRepCounts,
     log: [...state.log, makeLogEntry(state, targetId, 'session', 'done', now)],
+    activeSession: null,
   }
+}
+
+/**
+ * Attaches error tags to the most recently completed session's log entry. Called after
+ * `completeSession`, once the user has picked (or skipped) tags on the follow-up
+ * screen — the entry already exists, tagging is a separate, optional step onto it.
+ *
+ * These tags feed exactly two things: future drill weighting, and the soft-regression
+ * check above. They are never turned into a score, a grade, a trend, or shown back to
+ * the user as any kind of assessment.
+ */
+export function tagLastSession(state: ProgressState, tags: string[]): ProgressState {
+  if (tags.length === 0) return state
+
+  const lastSessionIndex = state.log.reduce(
+    (found, entry, index) => (entry.targetKind === 'session' ? index : found),
+    -1,
+  )
+  if (lastSessionIndex === -1) return state
+
+  const log = [...state.log]
+  log[lastSessionIndex] = { ...log[lastSessionIndex], tags }
+  return { ...state, log }
+}
+
+// ---- the active session (Session.tsx) ---------------------------------------
+
+/** Generates a staged session for the current phase. A no-op if none exists. */
+export function beginSession(
+  state: ProgressState,
+  curriculum: Curriculum,
+  durationOption: DurationOption,
+  random: () => number = Math.random,
+): ProgressState {
+  const activeSession = session.createActiveSession(
+    curriculum,
+    state.currentPhaseId,
+    durationOption,
+    random,
+  )
+  if (!activeSession) return state
+  return { ...state, activeSession }
+}
+
+/** Discards the in-progress session without completing it. Nothing else is touched. */
+export function discardActiveSession(state: ProgressState): ProgressState {
+  return { ...state, activeSession: null }
+}
+
+export function toggleActiveSessionStage(state: ProgressState, index: number): ProgressState {
+  if (!state.activeSession) return state
+  return { ...state, activeSession: session.toggleStage(state.activeSession, index) }
+}
+
+export function startActiveSessionTimer(
+  state: ProgressState,
+  now: Date = new Date(),
+): ProgressState {
+  if (!state.activeSession) return state
+  return { ...state, activeSession: { ...state.activeSession, timer: session.startTimer(now) } }
+}
+
+export function pauseActiveSessionTimer(
+  state: ProgressState,
+  now: Date = new Date(),
+): ProgressState {
+  if (!state.activeSession) return state
+  const timer: SessionTimer = session.pauseTimer(state.activeSession.timer, now)
+  return { ...state, activeSession: { ...state.activeSession, timer } }
+}
+
+export function resumeActiveSessionTimer(
+  state: ProgressState,
+  now: Date = new Date(),
+): ProgressState {
+  if (!state.activeSession) return state
+  const timer: SessionTimer = session.resumeTimer(state.activeSession.timer, now)
+  return { ...state, activeSession: { ...state.activeSession, timer } }
 }
 
 export function tickGate(
@@ -708,6 +786,7 @@ export function initialProgress(curriculum: Curriculum, now: Date = new Date()):
     log: [],
     forcedAdvance: false,
     topUp: null,
+    activeSession: null,
   }
 }
 

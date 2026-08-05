@@ -27,20 +27,22 @@ if (issues.length > 0) {
   )
 }
 
-const { phases, units, steps, references } = parsed.data
+const { phases, units, steps, references, sessionTemplates } = parsed.data
 const dailyUnits = units.filter((u) => u.kind === 'daily')
 
 console.log('✓ curriculum.json is valid')
 console.log(
   `  ${phases.length} phases · ${units.length} units (${dailyUnits.length} daily, ` +
     `${units.length - dailyUnits.length} weekend) · ${steps.length} steps · ` +
-    `${references.length} references`,
+    `${references.length} references · ${sessionTemplates.length} session templates`,
 )
 for (const phase of phases) {
   const phaseUnits = phase.unitIds.map((id) => units.find((u) => u.id === id)!)
   const stepCount = phaseUnits.reduce((n, u) => n + u.stepIds.length, 0)
+  const templateCount = sessionTemplates.filter((t) => t.phaseId === phase.id).length
   console.log(
     `  ${phase.id} ${phase.name}: ${phaseUnits.length} units, ${stepCount} steps, ` +
-      `maxWeeks ${phase.maxWeeks}, ${phase.gateStatements.length} gate statements`,
+      `maxWeeks ${phase.maxWeeks}, ${phase.gateStatements.length} gate statements, ` +
+      `${phase.errorTags.length} error tags, ${templateCount} session templates`,
   )
 }

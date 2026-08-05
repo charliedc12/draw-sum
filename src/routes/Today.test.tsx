@@ -93,14 +93,12 @@ describe('Today', () => {
     expect(screen.queryByText('Common failure')).not.toBeInTheDocument()
   })
 
-  it('clears the debt when the session is marked done', async () => {
+  it('routes to /session — the only place in the app that blocks the normal flow', () => {
     useAppStore.setState({ debtCounter: 10 })
     renderToday()
-    await userEvent.click(screen.getByRole('button', { name: 'Session done' }))
 
-    expect(useAppStore.getState().debtCounter).toBe(0)
-    expect(useAppStore.getState().sessionCount).toBe(1)
-    expect(screen.getByText('PHASE 1 · UNIT 1.1 · STEP 1')).toBeInTheDocument()
+    const link = screen.getByRole('link', { name: 'Start a session' })
+    expect(link).toHaveAttribute('href', '/session')
   })
 
   it('explains a forced advance instead of leaving it unexplained', () => {

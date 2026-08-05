@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import { curriculum } from '../data/curriculum.ts'
 import * as progression from '../logic/progression.ts'
 import type { ProgressState } from '../logic/progression.ts'
+import type { DurationOption } from '../types/curriculum.ts'
 
 export type { LogEntry, ProgressState } from '../logic/progression.ts'
 
@@ -13,6 +14,16 @@ export type AppActions = {
   markStepDone: (stepId: string) => void
   markStepSkipped: (stepId: string) => void
   completeSession: () => void
+  /** Attaches error tags to the session just completed. A no-op if none are selected. */
+  tagLastSession: (tags: string[]) => void
+  /** Generates a staged session for the current phase at the given length. */
+  beginSession: (durationOption: DurationOption) => void
+  /** Discards an in-progress session without completing it. */
+  discardActiveSession: () => void
+  toggleActiveSessionStage: (index: number) => void
+  startActiveSessionTimer: () => void
+  pauseActiveSessionTimer: () => void
+  resumeActiveSessionTimer: () => void
   tickGate: (phaseId: string, index: number, value: boolean) => void
   advancePhase: () => void
   /** Manual override, either direction. Leaves all progress counts intact. */
@@ -48,6 +59,25 @@ export const useAppStore = create<AppState>()(
 
       completeSession: () =>
         set((state) => progression.completeSession(state, curriculum)),
+
+      tagLastSession: (tags) => set((state) => progression.tagLastSession(state, tags)),
+
+      beginSession: (durationOption) =>
+        set((state) => progression.beginSession(state, curriculum, durationOption)),
+
+      discardActiveSession: () => set((state) => progression.discardActiveSession(state)),
+
+      toggleActiveSessionStage: (index) =>
+        set((state) => progression.toggleActiveSessionStage(state, index)),
+
+      startActiveSessionTimer: () =>
+        set((state) => progression.startActiveSessionTimer(state)),
+
+      pauseActiveSessionTimer: () =>
+        set((state) => progression.pauseActiveSessionTimer(state)),
+
+      resumeActiveSessionTimer: () =>
+        set((state) => progression.resumeActiveSessionTimer(state)),
 
       tickGate: (phaseId, index, value) =>
         set((state) => progression.tickGate(state, curriculum, phaseId, index, value)),
@@ -112,5 +142,6 @@ function pickProgress(state: AppState): ProgressState {
     log: state.log,
     forcedAdvance: state.forcedAdvance,
     topUp: state.topUp,
+    activeSession: state.activeSession,
   }
 }

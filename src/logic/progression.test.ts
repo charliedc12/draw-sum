@@ -10,12 +10,14 @@ import {
   TOP_UP_DAYS,
   advancePhase,
   applyForcedAdvance,
+  beginSession,
   classifyPhase,
   classifyStep,
   classifyUnit,
   closeAllDailyUnits,
   completeSession,
   daysSince,
+  discardActiveSession,
   getRegressionUnitIds,
   getServingUnit,
   getTodayStep,
@@ -31,10 +33,15 @@ import {
   markStepDone,
   markStepSkipped,
   orderStepsForUnit,
+  pauseActiveSessionTimer,
+  resumeActiveSessionTimer,
   setPhase,
   setPhaseEntryDaysAgo,
+  startActiveSessionTimer,
   startTopUp,
+  tagLastSession,
   tickGate,
+  toggleActiveSessionStage,
 } from './progression.ts'
 import type { LogEntry, ProgressState } from './progression.ts'
 
@@ -53,6 +60,7 @@ const fixture: Curriculum = {
         { text: 'a', statementUnitIds: ['u1.1'] },
         { text: 'b', statementUnitIds: ['u1.2'] },
       ],
+      errorTags: [],
     },
     {
       id: 'p2',
@@ -61,6 +69,7 @@ const fixture: Curriculum = {
       unitIds: ['u2.1'],
       maxWeeks: 4,
       gateStatements: [{ text: 'c', statementUnitIds: ['u2.1'] }],
+      errorTags: ['drifted too large'],
     },
   ],
   units: [
@@ -117,7 +126,20 @@ const fixture: Curriculum = {
       subject: { kind: 'fromLife', text: 'thing' },
     },
   ],
-  references: [],
+  references: [
+    { id: 'r1', phaseId: 'p1', category: 'subject', subject: 'a thing', fromLife: true },
+  ],
+  sessionTemplates: [
+    {
+      phaseId: 'p1',
+      durationOption: 30,
+      stages: [
+        { atMin: 0, instruction: 'Start' },
+        { atMin: 5, instruction: 'Stop. Check the masses.' },
+        { atMin: 20, instruction: 'Finish' },
+      ],
+    },
+  ],
 }
 
 const T0 = new Date('2026-01-01T09:00:00.000Z')
@@ -260,8 +282,7 @@ describe('debt', () => {
     if (view.kind !== 'session') return
     expect(view.reason).toBe('debt')
     expect(view.drillsOwed).toBe(DEBT_THRESHOLD)
-    expect(view.unit?.id).toBe('u1.W')
-    expect(view.steps.map((s) => s.id)).toEqual(['w1'])
+    expect(view.phase.id).toBe('p1')
   })
 
   it('still serves a step one drill below the threshold', () => {
@@ -345,6 +366,91 @@ describe('completeSession', () => {
   it('returns to serving steps once the debt is cleared', () => {
     const state = completeSession(start({ debtCounter: DEBT_THRESHOLD }), fixture, T0)
     expect(getTodayStep(state, fixture, T0).kind).toBe('step')
+  })
+
+  it('clears the in-progress active session', () => {
+    const withSession = beginSession(start(), fixture, 30)
+    const state = completeSession(withSession, fixture, T0)
+    expect(state.activeSession).toBeNull()
+  })
+})
+
+describe('the active session', () => {
+  it('beginSession generates a session for the current phase', () => {
+    const state = beginSession(start(), fixture, 30)
+    expect(state.activeSession).toMatchObject({ phaseId: 'p1', durationOption: 30 })
+    expect(state.activeSession?.checkedStageIndices).toEqual([])
+  })
+
+  it('discardActiveSession clears it without touching anything else', () => {
+    const withSession = beginSession(start({ drillCount: 5 }), fixture, 30)
+    const state = discardActiveSession(withSession)
+    expect(state.activeSession).toBeNull()
+    expect(state.drillCount).toBe(5)
+  })
+
+  it('toggleActiveSessionStage checks and unchecks a stage index', () => {
+    let state = beginSession(start(), fixture, 30)
+    state = toggleActiveSessionStage(state, 1)
+    expect(state.activeSession?.checkedStageIndices).toEqual([1])
+    state = toggleActiveSessionStage(state, 1)
+    expect(state.activeSession?.checkedStageIndices).toEqual([])
+  })
+
+  it('toggleActiveSessionStage is a no-op with no active session', () => {
+    const before = start()
+    expect(toggleActiveSessionStage(before, 0)).toBe(before)
+  })
+
+  it('start/pause/resume the timer through the state layer', () => {
+    const fiveMinLater = new Date(T0.getTime() + 5 * 60_000)
+    const eightMinLater = new Date(T0.getTime() + 8 * 60_000)
+
+    let state = beginSession(start(), fixture, 30)
+    state = startActiveSessionTimer(state, T0)
+    expect(state.activeSession?.timer.startedAt).toBe(T0.toISOString())
+
+    state = pauseActiveSessionTimer(state, fiveMinLater)
+    expect(state.activeSession?.timer.pausedAt).toBe(fiveMinLater.toISOString())
+
+    state = resumeActiveSessionTimer(state, eightMinLater)
+    expect(state.activeSession?.timer.pausedAt).toBeNull()
+    expect(state.activeSession?.timer.accumulatedPauseMs).toBe(3 * 60_000)
+  })
+
+  it('timer actions are a no-op with no active session', () => {
+    const before = start()
+    expect(startActiveSessionTimer(before, T0)).toBe(before)
+    expect(pauseActiveSessionTimer(before, T0)).toBe(before)
+    expect(resumeActiveSessionTimer(before, T0)).toBe(before)
+  })
+})
+
+describe('tagLastSession', () => {
+  it('attaches tags to the most recently completed session entry', () => {
+    let state = completeSession(start(), fixture, T0)
+    state = tagLastSession(state, ['drifted too large'])
+    const sessionEntry = state.log.find((e) => e.targetKind === 'session')
+    expect(sessionEntry?.tags).toEqual(['drifted too large'])
+  })
+
+  it('does nothing with an empty tag list', () => {
+    const before = completeSession(start(), fixture, T0)
+    expect(tagLastSession(before, [])).toBe(before)
+  })
+
+  it('does nothing when there is no session log entry to tag', () => {
+    const before = start()
+    expect(tagLastSession(before, ['x'])).toBe(before)
+  })
+
+  it('tags the most recent session, not an earlier one', () => {
+    let state = completeSession(start(), fixture, T0)
+    state = completeSession(state, fixture, at(1))
+    state = tagLastSession(state, ['second session tag'])
+    const sessionEntries = state.log.filter((e) => e.targetKind === 'session')
+    expect(sessionEntries[0].tags).toBeUndefined()
+    expect(sessionEntries[1].tags).toEqual(['second session tag'])
   })
 })
 

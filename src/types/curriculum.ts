@@ -28,6 +28,12 @@ export type Phase = {
   /** After this many weeks the phase advances whether or not the gate was ticked. */
   maxWeeks: number
   gateStatements: GateStatement[]
+  /**
+   * Options offered after a weekend session, multi-select and entirely optional.
+   * Empty for Phase 1 — at that stage the user can't yet identify their own errors, and
+   * asking would just teach guessing.
+   */
+  errorTags: string[]
 }
 
 export type Unit = {
@@ -63,10 +69,30 @@ export type Reference = {
   fromLife: boolean
 }
 
+export type DurationOption = 30 | 45 | 60
+
+export type SessionStage = {
+  /** Minutes into the session this stage begins. Always < the template's durationOption. */
+  atMin: number
+  instruction: string
+}
+
+export type SessionTemplate = {
+  phaseId: string
+  durationOption: DurationOption
+  /**
+   * Ordered by atMin. Every template must have a stage before the halfway mark whose
+   * instruction stops the user to check the big masses — see CLAUDE.md. From Phase 2
+   * onward, at least one of a phase's templates must also carry a from-life stage.
+   */
+  stages: SessionStage[]
+}
+
 export type Curriculum = {
   version: number
   phases: Phase[]
   units: Unit[]
   steps: Step[]
   references: Reference[]
+  sessionTemplates: SessionTemplate[]
 }

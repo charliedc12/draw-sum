@@ -34,43 +34,23 @@ export default function Today() {
 function TodayCard({ view }: { view: TodayView }) {
   const markStepDone = useAppStore((s) => s.markStepDone)
   const markStepSkipped = useAppStore((s) => s.markStepSkipped)
-  const completeSession = useAppStore((s) => s.completeSession)
 
   if (view.kind === 'session') {
     return (
       <article className="card">
-        <p className="card__breadcrumb">
-          {phaseLabel(view.phase.order)} · SESSION
-        </p>
+        <p className="card__breadcrumb">{phaseLabel(view.phase.order)} · SESSION</p>
         <h1 className="card__title">Time for a longer session</h1>
-        <p className="card__meta">
-          {view.drillsOwed} drills since your last one
-        </p>
+        <p className="card__meta">{view.drillsOwed} drills since your last one</p>
 
         <p className="card__lede">
           Short drills build the hand. The long session is where they turn into
           drawings. Take one before the next drill.
         </p>
 
-        {view.unit && (
-          <ol className="card__instructions">
-            {view.steps.map((step) => (
-              <li key={step.id}>
-                <span className="card__sessionStep">{step.name}</span>
-                <span className="card__sessionMeta">{step.durationMin} min</span>
-              </li>
-            ))}
-          </ol>
-        )}
-
         <div className="actions">
-          <button
-            type="button"
-            className="actions__button actions__button--primary"
-            onClick={completeSession}
-          >
-            Session done
-          </button>
+          <Link to="/session" className="actions__button actions__button--primary">
+            Start a session
+          </Link>
         </div>
       </article>
     )

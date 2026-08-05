@@ -5,7 +5,12 @@ import { describeLogTarget, formatLogDate, groupLogByMonth } from './log.ts'
 
 const fixture: Curriculum = {
   version: 1,
-  phases: [{ id: 'p1', name: 'One', order: 1, unitIds: ['u1'], maxWeeks: 5, gateStatements: [] }],
+  phases: [
+    {
+      id: 'p1', name: 'One', order: 1, unitIds: ['u1'], maxWeeks: 5,
+      gateStatements: [], errorTags: [],
+    },
+  ],
   units: [{ id: 'u1', phaseId: 'p1', name: 'Unit', kind: 'weekend', stepIds: ['s1'], requiredReps: 4 }],
   steps: [
     {
@@ -14,6 +19,7 @@ const fixture: Curriculum = {
     },
   ],
   references: [],
+  sessionTemplates: [],
 }
 
 function entry(overrides: Partial<LogEntry>): LogEntry {

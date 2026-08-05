@@ -37,7 +37,8 @@
             "u1.W"
           ]
         }
-      ]
+      ],
+      "errorTags": []
     },
     {
       "id": "p2",
@@ -70,6 +71,14 @@
             "u2.W"
           ]
         }
+      ],
+      "errorTags": [
+        "drifted too large toward the bottom",
+        "flattened the extreme angles",
+        "placed details before the proportions were settled",
+        "lost the silhouette",
+        "negative space shapes filled in as an afterthought",
+        "angles guessed instead of measured against the pencil"
       ]
     },
     {
@@ -110,6 +119,14 @@
             "u3.W"
           ]
         }
+      ],
+      "errorTags": [
+        "horizon line moved mid-drawing",
+        "ellipse minor axis misaligned",
+        "started with detail instead of the mass",
+        "depth too compressed",
+        "boxes rotated at inconsistent angles to each other",
+        "windows and doors added before the wall planes were set"
       ]
     },
     {
@@ -144,6 +161,14 @@
             "u4.4"
           ]
         }
+      ],
+      "errorTags": [
+        "darks crowded together",
+        "outlined everything at equal edge hardness",
+        "light direction became inconsistent",
+        "rendered before blocking three values",
+        "cast shadow shape didn't match the light source",
+        "proportions collapsed"
       ]
     },
     {
@@ -179,6 +204,14 @@
             "u5.W"
           ]
         }
+      ],
+      "errorTags": [
+        "stiff symmetrical gesture with no weight shift",
+        "features on a flat plane rather than a curved skull",
+        "eyes placed too high",
+        "hands drawn as mittens",
+        "portrait started with the eyes instead of the skull",
+        "proportions collapsed"
       ]
     },
     {
@@ -191,7 +224,15 @@
         "u6.W"
       ],
       "maxWeeks": 999,
-      "gateStatements": []
+      "gateStatements": [],
+      "errorTags": [
+        "no clear focal point",
+        "all values in the middle range",
+        "background competing with foreground",
+        "leaves drawn individually instead of as masses",
+        "thumbnail skipped, went straight to the final drawing",
+        "proportions collapsed"
+      ]
     }
   ],
   "units": [
@@ -2337,6 +2378,476 @@
       "category": "subject",
       "subject": "farmyard with scattered outbuildings",
       "fromLife": false
+    }
+  ],
+  "sessionTemplates": [
+    {
+      "phaseId": "p1",
+      "durationOption": 30,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Warm-up marks — five quick throwaway lines to loosen the hand"
+        },
+        {
+          "atMin": 3,
+          "instruction": "Begin the contour. One continuous line, no lifting."
+        },
+        {
+          "atMin": 10,
+          "instruction": "Stop. Does the outline capture the object's proportions? Fix now, not later."
+        },
+        {
+          "atMin": 18,
+          "instruction": "Continue into the interior shapes and edges"
+        },
+        {
+          "atMin": 25,
+          "instruction": "Final check — compare the drawing to the object and correct any obvious drift"
+        }
+      ]
+    },
+    {
+      "phaseId": "p1",
+      "durationOption": 45,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Warm-up marks — five quick throwaway lines to loosen the hand"
+        },
+        {
+          "atMin": 4,
+          "instruction": "Begin the contour. One continuous line, no lifting."
+        },
+        {
+          "atMin": 15,
+          "instruction": "Stop. Does the outline capture the object's proportions? Fix now, not later."
+        },
+        {
+          "atMin": 28,
+          "instruction": "Continue into the interior shapes and edges"
+        },
+        {
+          "atMin": 38,
+          "instruction": "Final check — compare the drawing to the object and correct any obvious drift"
+        }
+      ]
+    },
+    {
+      "phaseId": "p1",
+      "durationOption": 60,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Warm-up marks — five quick throwaway lines to loosen the hand"
+        },
+        {
+          "atMin": 5,
+          "instruction": "Begin the contour. One continuous line, no lifting."
+        },
+        {
+          "atMin": 20,
+          "instruction": "Stop. Does the outline capture the object's proportions? Fix now, not later."
+        },
+        {
+          "atMin": 38,
+          "instruction": "Continue into the interior shapes and edges"
+        },
+        {
+          "atMin": 52,
+          "instruction": "Final check — compare the drawing to the object and correct any obvious drift"
+        }
+      ]
+    },
+    {
+      "phaseId": "p2",
+      "durationOption": 30,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Thumbnail — where does the subject sit on the page?"
+        },
+        {
+          "atMin": 3,
+          "instruction": "Block in the big shapes. Stop. Are the proportions right? Fix now, not later."
+        },
+        {
+          "atMin": 10,
+          "instruction": "Measure against the real thing — from life, not a photo — with a pencil at arm's length"
+        },
+        {
+          "atMin": 18,
+          "instruction": "Commit to the shapes you've checked; stop redrawing them"
+        },
+        {
+          "atMin": 25,
+          "instruction": "Final check — angles and proportions against the subject one more time"
+        }
+      ]
+    },
+    {
+      "phaseId": "p2",
+      "durationOption": 45,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Thumbnail — where does the subject sit on the page?"
+        },
+        {
+          "atMin": 4,
+          "instruction": "Block in the big shapes. Stop. Are the proportions right? Fix now, not later."
+        },
+        {
+          "atMin": 15,
+          "instruction": "Measure against the real thing — from life, not a photo — with a pencil at arm's length"
+        },
+        {
+          "atMin": 28,
+          "instruction": "Commit to the shapes you've checked; stop redrawing them"
+        },
+        {
+          "atMin": 38,
+          "instruction": "Final check — angles and proportions against the subject one more time"
+        }
+      ]
+    },
+    {
+      "phaseId": "p2",
+      "durationOption": 60,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Thumbnail — where does the subject sit on the page?"
+        },
+        {
+          "atMin": 5,
+          "instruction": "Block in the big shapes. Stop. Are the proportions right? Fix now, not later."
+        },
+        {
+          "atMin": 18,
+          "instruction": "Measure against the real thing — from life, not a photo — with a pencil at arm's length"
+        },
+        {
+          "atMin": 38,
+          "instruction": "Commit to the shapes you've checked; stop redrawing them"
+        },
+        {
+          "atMin": 52,
+          "instruction": "Final check — angles and proportions against the subject one more time"
+        }
+      ]
+    },
+    {
+      "phaseId": "p3",
+      "durationOption": 30,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Thumbnail — horizon line and vanishing points only"
+        },
+        {
+          "atMin": 3,
+          "instruction": "Big masses. Stop. Are they right? Fix now, not later."
+        },
+        {
+          "atMin": 10,
+          "instruction": "Secondary structure — roof planes, window grids, drawn from life, not a photo"
+        },
+        {
+          "atMin": 20,
+          "instruction": "Detail, focal area only"
+        },
+        {
+          "atMin": 26,
+          "instruction": "Check your receding lines against the vanishing point"
+        }
+      ]
+    },
+    {
+      "phaseId": "p3",
+      "durationOption": 45,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Thumbnail — horizon line and vanishing points only"
+        },
+        {
+          "atMin": 4,
+          "instruction": "Big masses. Stop. Are they right? Fix now, not later."
+        },
+        {
+          "atMin": 14,
+          "instruction": "Secondary structure — roof planes, window grids, drawn from life, not a photo"
+        },
+        {
+          "atMin": 28,
+          "instruction": "Detail, focal area only"
+        },
+        {
+          "atMin": 38,
+          "instruction": "Check your receding lines against the vanishing point"
+        }
+      ]
+    },
+    {
+      "phaseId": "p3",
+      "durationOption": 60,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Thumbnail — horizon line and vanishing points only"
+        },
+        {
+          "atMin": 3,
+          "instruction": "Big masses. Stop. Are they right? Fix now, not later."
+        },
+        {
+          "atMin": 12,
+          "instruction": "Secondary structure — roof planes, window grids"
+        },
+        {
+          "atMin": 35,
+          "instruction": "Detail, focal area only"
+        },
+        {
+          "atMin": 50,
+          "instruction": "Check your receding lines against the vanishing point"
+        }
+      ]
+    },
+    {
+      "phaseId": "p4",
+      "durationOption": 30,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Thumbnail — light direction and the biggest shadow shape only"
+        },
+        {
+          "atMin": 3,
+          "instruction": "Block in three values. Stop. Do they hold up? Fix now, not later."
+        },
+        {
+          "atMin": 10,
+          "instruction": "Refine the core shadow and reflected light, from life, not a photo"
+        },
+        {
+          "atMin": 20,
+          "instruction": "Add the smaller value transitions"
+        },
+        {
+          "atMin": 26,
+          "instruction": "Squint — do the three big values still read correctly?"
+        }
+      ]
+    },
+    {
+      "phaseId": "p4",
+      "durationOption": 45,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Thumbnail — light direction and the biggest shadow shape only"
+        },
+        {
+          "atMin": 4,
+          "instruction": "Block in three values. Stop. Do they hold up? Fix now, not later."
+        },
+        {
+          "atMin": 15,
+          "instruction": "Refine the core shadow and reflected light, from life, not a photo"
+        },
+        {
+          "atMin": 30,
+          "instruction": "Add the smaller value transitions"
+        },
+        {
+          "atMin": 38,
+          "instruction": "Squint — do the three big values still read correctly?"
+        }
+      ]
+    },
+    {
+      "phaseId": "p4",
+      "durationOption": 60,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Thumbnail — light direction and the biggest shadow shape only"
+        },
+        {
+          "atMin": 5,
+          "instruction": "Block in three values. Stop. Do they hold up? Fix now, not later."
+        },
+        {
+          "atMin": 18,
+          "instruction": "Refine the core shadow and reflected light, from life, not a photo"
+        },
+        {
+          "atMin": 40,
+          "instruction": "Add the smaller value transitions"
+        },
+        {
+          "atMin": 52,
+          "instruction": "Squint — do the three big values still read correctly?"
+        }
+      ]
+    },
+    {
+      "phaseId": "p5",
+      "durationOption": 30,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Warm-up gesture — three 60-second poses, line of action only"
+        },
+        {
+          "atMin": 3,
+          "instruction": "Longer gesture. Stop. Does it read as a person doing something? Fix now, not later."
+        },
+        {
+          "atMin": 10,
+          "instruction": "Build simplified masses over the gesture, from life, not a photo"
+        },
+        {
+          "atMin": 20,
+          "instruction": "Contour — find the real edges on top of the masses"
+        },
+        {
+          "atMin": 26,
+          "instruction": "Final check — weight and balance against the pose"
+        }
+      ]
+    },
+    {
+      "phaseId": "p5",
+      "durationOption": 45,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Loomis head — sphere, side plane, jaw, no features yet"
+        },
+        {
+          "atMin": 4,
+          "instruction": "Stop. Is the skull's structure believable from this angle? Fix now, not later."
+        },
+        {
+          "atMin": 15,
+          "instruction": "Place the major planes — brow, cheekbone, jaw line, from life, not a photo"
+        },
+        {
+          "atMin": 28,
+          "instruction": "Add features onto the structure, resisting the urge to start with the eyes"
+        },
+        {
+          "atMin": 38,
+          "instruction": "Final check — do the features still sit on a believable skull?"
+        }
+      ]
+    },
+    {
+      "phaseId": "p5",
+      "durationOption": 60,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Warm-up gesture — three 60-second poses, line of action only"
+        },
+        {
+          "atMin": 5,
+          "instruction": "Longer gesture study. Stop. Does it read as a person doing something? Fix now, not later."
+        },
+        {
+          "atMin": 18,
+          "instruction": "Build simplified masses over the gesture, from life, not a photo"
+        },
+        {
+          "atMin": 35,
+          "instruction": "Contour — find the real edges on top of the masses"
+        },
+        {
+          "atMin": 50,
+          "instruction": "Final check — weight, balance and proportion against the pose"
+        }
+      ]
+    },
+    {
+      "phaseId": "p6",
+      "durationOption": 30,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Four small thumbnails — value structure and focal point only"
+        },
+        {
+          "atMin": 3,
+          "instruction": "Pick one. Stop. Does its value structure actually work? Fix now, not later."
+        },
+        {
+          "atMin": 10,
+          "instruction": "Block in the three big value zones, from life where possible, not just a photo"
+        },
+        {
+          "atMin": 20,
+          "instruction": "Begin the finished drawing on the chosen thumbnail"
+        },
+        {
+          "atMin": 26,
+          "instruction": "Final check — squint and compare to the thumbnail you picked"
+        }
+      ]
+    },
+    {
+      "phaseId": "p6",
+      "durationOption": 45,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Four small thumbnails — value structure and focal point only"
+        },
+        {
+          "atMin": 4,
+          "instruction": "Pick one. Stop. Does its value structure actually work? Fix now, not later."
+        },
+        {
+          "atMin": 15,
+          "instruction": "Block in the three big value zones, from life where possible, not just a photo"
+        },
+        {
+          "atMin": 28,
+          "instruction": "Begin the finished drawing on the chosen thumbnail"
+        },
+        {
+          "atMin": 38,
+          "instruction": "Final check — squint and compare to the thumbnail you picked"
+        }
+      ]
+    },
+    {
+      "phaseId": "p6",
+      "durationOption": 60,
+      "stages": [
+        {
+          "atMin": 0,
+          "instruction": "Four small thumbnails — value structure and focal point only"
+        },
+        {
+          "atMin": 5,
+          "instruction": "Pick one. Stop. Does its value structure actually work? Fix now, not later."
+        },
+        {
+          "atMin": 18,
+          "instruction": "Block in the three big value zones, from life where possible, not just a photo"
+        },
+        {
+          "atMin": 40,
+          "instruction": "Begin the finished drawing on the chosen thumbnail"
+        },
+        {
+          "atMin": 52,
+          "instruction": "Final check — squint and compare to the thumbnail you picked"
+        }
+      ]
     }
   ]
 }
