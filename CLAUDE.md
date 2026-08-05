@@ -30,6 +30,27 @@ Mobile web app, installed to the iOS home screen as a PWA.
   no component library.
 - **Dark mode via `prefers-color-scheme`.** No theme toggle, no stored preference.
 
+## Curriculum is data, not code
+
+All steps, subjects, failure lines, gate statements and session stages live in
+`src/data/curriculum.json`. The curriculum is content, and content gets revised —
+rewording a failure line, retiming a drill, or reordering a unit must never require
+touching logic. `src/logic/` reads the curriculum; it never hardcodes any part of it.
+
+The source text is `docs/CURRICULUM.md`. The JSON is derived from it, and the doc stays
+authoritative for wording.
+
+**Never delete a step or unit ID — deprecate it.** Saved user progress references those
+IDs (`unitRepCounts`, `stepCompletionCounts`, `stepSkipCounts`, `log[].targetId`).
+Deleting an ID orphans somebody's history; reusing one silently rewrites it. To retire a
+step, remove it from its unit's `stepIds` and leave the step itself in place.
+
+ID conventions: phase `p<n>`, unit `u<phase>.<unit>`, step `s<phase>.<unit>.<step>`.
+The unit segment is also its display label, so `u1.W` renders as "UNIT 1.W".
+
+Run `npm run validate:curriculum` after editing the JSON. It fails on schema errors,
+dangling step or unit IDs, and units whose `requiredReps` is below their step count.
+
 ## Stack
 
 Vite + React + TypeScript. `react-router-dom` with a `HashRouter` — deep links work

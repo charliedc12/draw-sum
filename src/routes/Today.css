@@ -1,0 +1,186 @@
+.today {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.card__breadcrumb {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+
+.card__title {
+  font-size: var(--text-2xl);
+  letter-spacing: -0.02em;
+  /* Pulled tight to the breadcrumb: they read as one block. */
+  margin-top: calc(var(--space-4) * -1 + var(--space-1));
+}
+
+.card__meta {
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  margin-top: calc(var(--space-4) * -1 + var(--space-2));
+}
+
+.card__lede {
+  color: var(--text-muted);
+}
+
+.card__instructions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding-left: 1.35em;
+}
+
+.card__instructions li {
+  padding-left: var(--space-1);
+}
+
+.card__instructions li::marker {
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.card__sessionStep {
+  display: block;
+}
+
+.card__sessionMeta {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* The subject is the point of the screen — it gets the only colour on the card. */
+.subject {
+  padding: var(--space-4);
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+}
+
+.subject__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: var(--space-1);
+}
+
+.subject__text {
+  font-size: var(--text-lg);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+/* Deliberately quiet: useful to read once, not something to dwell on. */
+.failure {
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-sunken);
+  border-radius: var(--radius);
+}
+
+.failure__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: var(--space-1);
+}
+
+.failure__text {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.card__alternate {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.card__alternateName {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.actions__button {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  min-height: 56px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  text-align: center;
+}
+
+.actions__button--primary {
+  background: var(--accent);
+  color: var(--accent-on);
+}
+
+.actions__button--secondary {
+  background: var(--surface);
+  color: var(--text-muted);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+  /* Skip is a real option, not a failure state — it just doesn't shout. */
+  flex: 0 1 38%;
+}
+
+.actions__button:active {
+  transform: translateY(1px);
+}
+
+.card__shortcut {
+  align-self: center;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.notice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-sunken);
+  border-radius: var(--radius);
+}
+
+.notice__text {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.notice__dismiss {
+  min-height: var(--touch-target);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--accent);
+}

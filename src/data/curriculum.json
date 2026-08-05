@@ -1,0 +1,484 @@
+{
+  "version": 1,
+  "phases": [
+    {
+      "id": "p1",
+      "name": "Line control",
+      "order": 1,
+      "unitIds": ["u1.1", "u1.2", "u1.3", "u1.W"],
+      "maxWeeks": 5,
+      "gateStatements": [
+        "My lines land roughly where I aimed about 7 times in 10.",
+        "My ellipses are smooth and closed, even when they're the wrong shape.",
+        "I can draw a box that reads as a box in space without thinking hard.",
+        "I've done at least 4 weekend contour sessions."
+      ]
+    },
+    {
+      "id": "p2",
+      "name": "Observation",
+      "order": 2,
+      "unitIds": ["u2.1", "u2.2", "u2.3", "u2.W"],
+      "maxWeeks": 10,
+      "gateStatements": [
+        "I can block in overall proportions in the first 90 seconds and not need to shift them.",
+        "When I compare a drawing to its reference, my errors are small and scattered rather than the same distortion every time.",
+        "I've done at least 4 complexity studies of 25 minutes or longer."
+      ]
+    }
+  ],
+  "units": [
+    {
+      "id": "u1.1",
+      "phaseId": "p1",
+      "name": "Marks",
+      "kind": "daily",
+      "stepIds": ["s1.1.1", "s1.1.2", "s1.1.3", "s1.1.4"],
+      "requiredReps": 8
+    },
+    {
+      "id": "u1.2",
+      "phaseId": "p1",
+      "name": "Ellipses",
+      "kind": "daily",
+      "stepIds": ["s1.2.1", "s1.2.2", "s1.2.3"],
+      "requiredReps": 6
+    },
+    {
+      "id": "u1.3",
+      "phaseId": "p1",
+      "name": "Boxes",
+      "kind": "daily",
+      "stepIds": ["s1.3.1", "s1.3.2", "s1.3.3"],
+      "requiredReps": 6
+    },
+    {
+      "id": "u1.W",
+      "phaseId": "p1",
+      "name": "Weekend contour",
+      "kind": "weekend",
+      "stepIds": ["s1.W.1", "s1.W.2"],
+      "requiredReps": 4
+    },
+    {
+      "id": "u2.1",
+      "phaseId": "p2",
+      "name": "Angles",
+      "kind": "daily",
+      "stepIds": ["s2.1.1", "s2.1.2", "s2.1.3"],
+      "requiredReps": 6
+    },
+    {
+      "id": "u2.2",
+      "phaseId": "p2",
+      "name": "Negative space",
+      "kind": "daily",
+      "stepIds": ["s2.2.1", "s2.2.2", "s2.2.3"],
+      "requiredReps": 6
+    },
+    {
+      "id": "u2.3",
+      "phaseId": "p2",
+      "name": "Measuring",
+      "kind": "daily",
+      "stepIds": ["s2.3.1", "s2.3.2", "s2.3.3"],
+      "requiredReps": 8
+    },
+    {
+      "id": "u2.W",
+      "phaseId": "p2",
+      "name": "Weekend studies",
+      "kind": "weekend",
+      "stepIds": ["s2.W.1", "s2.W.2"],
+      "requiredReps": 8
+    }
+  ],
+  "steps": [
+    {
+      "id": "s1.1.1",
+      "unitId": "u1.1",
+      "name": "Straight lines, dot to dot, 20 reps",
+      "durationMin": 6,
+      "materials": "Pen",
+      "instructions": [
+        "Draw straight lines from dot to dot, 20 reps.",
+        "Look at the endpoint, not the pen tip."
+      ],
+      "commonFailure": "Hooking the line at the far end because your eye followed the tip.",
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s1.1.2",
+      "unitId": "u1.1",
+      "name": "Superimposed lines — one line, trace it 5 times without drifting",
+      "durationMin": 6,
+      "materials": "Pen",
+      "instructions": [
+        "Draw one line.",
+        "Trace it 5 times without drifting."
+      ],
+      "commonFailure": "Fraying at the far end. The start is always tighter than the finish.",
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s1.1.3",
+      "unitId": "u1.1",
+      "name": "Ghosted lines — hover the motion twice, commit once",
+      "durationMin": 7,
+      "materials": "Pen",
+      "instructions": [
+        "Hover the motion twice without touching the page, then commit once.",
+        "15 lines."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s1.1.4",
+      "unitId": "u1.1",
+      "name": "Long single-stroke curves, 15 reps",
+      "durationMin": 7,
+      "materials": "Pen",
+      "instructions": [
+        "Draw long curves, one stroke each, 15 reps."
+      ],
+      "commonFailure": "Sketchy repair strokes.",
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s1.2.1",
+      "unitId": "u1.2",
+      "name": "Ellipses in a shallow angled box, fill the row",
+      "durationMin": 7,
+      "materials": "Pen",
+      "instructions": [
+        "Draw a shallow angled box.",
+        "Fill the row with ellipses."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s1.2.2",
+      "unitId": "u1.2",
+      "name": "Ellipses in a steep box, fill the row",
+      "durationMin": 7,
+      "materials": "Pen",
+      "instructions": [
+        "Draw a steep box.",
+        "Fill the row with ellipses."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s1.2.3",
+      "unitId": "u1.2",
+      "name": "Ellipse funnel — a curved corridor, ellipses filling it",
+      "durationMin": 8,
+      "materials": "Pen",
+      "instructions": [
+        "Draw a curved corridor.",
+        "Fill it with ellipses, all minor axes aligned to the centre line."
+      ],
+      "commonFailure": "Each ellipse tilted independently.",
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s1.3.1",
+      "unitId": "u1.3",
+      "name": "Eight freehand boxes, rotated at random",
+      "durationMin": 8,
+      "materials": "Pen, no rulers ever",
+      "instructions": [
+        "Draw eight freehand boxes, each rotated at random."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s1.3.2",
+      "unitId": "u1.3",
+      "name": "Six boxes with every edge drawn twice",
+      "durationMin": 8,
+      "materials": "Pen, no rulers ever",
+      "instructions": [
+        "Draw six boxes.",
+        "Draw every edge twice."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s1.3.3",
+      "unitId": "u1.3",
+      "name": "Six boxes, each larger than the last",
+      "durationMin": 8,
+      "materials": "Pen, no rulers ever",
+      "instructions": [
+        "Draw six boxes, each larger than the last.",
+        "The largest fills the page."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s1.W.1",
+      "unitId": "u1.W",
+      "name": "Contour studies of 5-10 household objects",
+      "durationMin": 40,
+      "materials": "Pen",
+      "instructions": [
+        "Draw 5-10 household objects, one after another.",
+        "One continuous line, no lifting, no erasing."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "Five to ten household objects — a crumpled receipt, open scissors, keys on a ring, a tangled charging cable."
+      }
+    },
+    {
+      "id": "s1.W.2",
+      "unitId": "u1.W",
+      "name": "One blind contour",
+      "durationMin": 20,
+      "materials": "Pen",
+      "instructions": [
+        "Eyes on the object only, never on the page.",
+        "It will look terrible. That is the drill working."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "One household object — a wire whisk, a sneaker with loose laces, an adjustable wrench."
+      }
+    },
+    {
+      "id": "s2.1.1",
+      "unitId": "u2.1",
+      "name": "One object, its 5-8 major angles only",
+      "durationMin": 6,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw the 5-8 major angles as straight lines.",
+        "Nothing else."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "The nearest chair, standing and looking down at it."
+      }
+    },
+    {
+      "id": "s2.1.2",
+      "unitId": "u2.1",
+      "name": "Major angles, measured before committing",
+      "durationMin": 7,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw the major angles as straight lines, as before.",
+        "Hold your pencil up to compare each real angle before committing."
+      ],
+      "commonFailure": "You will flatten the extremes. Steep angles get drawn shallower than they are.",
+      "subject": {
+        "kind": "fromLife",
+        "text": "Your own shoe from behind, laces toward you."
+      }
+    },
+    {
+      "id": "s2.1.3",
+      "unitId": "u2.1",
+      "name": "Angle-only sketch of something with no right angles",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw the angles only, on something that has no right angles anywhere."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "Something with no right angles — a plant, a shoe."
+      }
+    },
+    {
+      "id": "s2.2.1",
+      "unitId": "u2.2",
+      "name": "Draw only the gaps around a chair",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw only the gaps around the chair.",
+        "Never the chair itself."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A chair at an oblique angle."
+      }
+    },
+    {
+      "id": "s2.2.2",
+      "unitId": "u2.2",
+      "name": "Draw only the gaps between the leaves of a houseplant",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw only the gaps between the leaves.",
+        "Never the leaves themselves."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A monstera or spider plant."
+      }
+    },
+    {
+      "id": "s2.2.3",
+      "unitId": "u2.2",
+      "name": "Draw only the gaps in a bicycle's frame and wheels",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw only the gaps inside the frame and between the spokes.",
+        "Never the frame itself."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A bicycle, side-on."
+      }
+    },
+    {
+      "id": "s2.3.1",
+      "unitId": "u2.3",
+      "name": "Sketch, then measure against the real thing",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Sketch the object.",
+        "Measure it against the real thing with a pencil at arm's length.",
+        "Note the direction of your error."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "The third item from the left on your kitchen counter."
+      }
+    },
+    {
+      "id": "s2.3.2",
+      "unitId": "u2.3",
+      "name": "Two-value block-in",
+      "durationMin": 5,
+      "materials": "Pencil",
+      "instructions": [
+        "Block in the silhouette.",
+        "Add one internal shadow shape."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "Whatever is currently in your sink."
+      }
+    },
+    {
+      "id": "s2.3.3",
+      "unitId": "u2.3",
+      "name": "Comparative proportion — two objects of different size",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw two objects of different size.",
+        "Get their relative scale correct."
+      ],
+      "commonFailure": "Drawings drift too large toward the bottom of the page.",
+      "subject": {
+        "kind": "fromLife",
+        "text": "Two things at different scales in one view — a stepladder beside a chair, or an open laptop beside a mug."
+      }
+    },
+    {
+      "id": "s2.W.1",
+      "unitId": "u2.W",
+      "name": "Photo study, then a self-check pass",
+      "durationMin": 45,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw from the photo.",
+        "Hold your drawing beside the reference.",
+        "Name the single biggest error out loud."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "A photo of one hard thing — a bicycle side-on, a staircase railing, a radiator."
+      }
+    },
+    {
+      "id": "s2.W.2",
+      "unitId": "u2.W",
+      "name": "One complexity study, 30 min minimum, from life",
+      "durationMin": 30,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw one complex subject from life.",
+        "30 minutes minimum. Stay with it."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A kitchen sink with dishes in it, a pile of unfolded laundry, or a bookshelf corner."
+      }
+    }
+  ],
+  "references": [
+    { "id": "r1.01", "phaseId": "p1", "category": "subject", "subject": "crumpled receipt", "fromLife": true },
+    { "id": "r1.02", "phaseId": "p1", "category": "subject", "subject": "open scissors", "fromLife": true },
+    { "id": "r1.03", "phaseId": "p1", "category": "subject", "subject": "keys on a ring", "fromLife": true },
+    { "id": "r1.04", "phaseId": "p1", "category": "subject", "subject": "mug with the handle at three-quarter", "fromLife": true },
+    { "id": "r1.05", "phaseId": "p1", "category": "subject", "subject": "tangled charging cable", "fromLife": true },
+    { "id": "r1.06", "phaseId": "p1", "category": "subject", "subject": "half-peeled banana", "fromLife": true },
+    { "id": "r1.07", "phaseId": "p1", "category": "subject", "subject": "wire whisk", "fromLife": true },
+    { "id": "r1.08", "phaseId": "p1", "category": "subject", "subject": "folded towel", "fromLife": true },
+    { "id": "r1.09", "phaseId": "p1", "category": "subject", "subject": "sneaker with loose laces", "fromLife": true },
+    { "id": "r1.10", "phaseId": "p1", "category": "subject", "subject": "celery bunch", "fromLife": true },
+    { "id": "r1.11", "phaseId": "p1", "category": "subject", "subject": "clothespin", "fromLife": true },
+    { "id": "r1.12", "phaseId": "p1", "category": "subject", "subject": "adjustable wrench", "fromLife": true },
+
+    { "id": "r2.01", "phaseId": "p2", "category": "subject", "subject": "chair at an oblique angle", "fromLife": false },
+    { "id": "r2.02", "phaseId": "p2", "category": "subject", "subject": "open laptop", "fromLife": false },
+    { "id": "r2.03", "phaseId": "p2", "category": "subject", "subject": "stepladder", "fromLife": false },
+    { "id": "r2.04", "phaseId": "p2", "category": "subject", "subject": "bicycle side-on", "fromLife": false },
+    { "id": "r2.05", "phaseId": "p2", "category": "subject", "subject": "half-collapsed folding table", "fromLife": false },
+    { "id": "r2.06", "phaseId": "p2", "category": "subject", "subject": "staircase railing", "fromLife": false },
+    { "id": "r2.07", "phaseId": "p2", "category": "subject", "subject": "radiator", "fromLife": false },
+    { "id": "r2.08", "phaseId": "p2", "category": "subject", "subject": "bookshelf corner", "fromLife": false },
+    { "id": "r2.09", "phaseId": "p2", "category": "subject", "subject": "pile of unfolded laundry", "fromLife": false },
+    { "id": "r2.10", "phaseId": "p2", "category": "subject", "subject": "monstera or spider plant", "fromLife": false },
+    { "id": "r2.11", "phaseId": "p2", "category": "subject", "subject": "kitchen sink with dishes in it", "fromLife": false },
+    { "id": "r2.12", "phaseId": "p2", "category": "subject", "subject": "bare branch with leaves attached", "fromLife": false },
+
+    { "id": "r2.f01", "phaseId": "p2", "category": "fromLifePrompt", "subject": "the third item from the left on your kitchen counter", "fromLife": true },
+    { "id": "r2.f02", "phaseId": "p2", "category": "fromLifePrompt", "subject": "your own shoe from behind, laces toward you", "fromLife": true },
+    { "id": "r2.f03", "phaseId": "p2", "category": "fromLifePrompt", "subject": "the nearest chair, standing and looking down at it", "fromLife": true },
+    { "id": "r2.f04", "phaseId": "p2", "category": "fromLifePrompt", "subject": "whatever is currently in your sink", "fromLife": true },
+    { "id": "r2.f05", "phaseId": "p2", "category": "fromLifePrompt", "subject": "the corner where two walls meet the ceiling", "fromLife": true },
+    { "id": "r2.f06", "phaseId": "p2", "category": "fromLifePrompt", "subject": "the car parked furthest from your door, rear three-quarter", "fromLife": true },
+    { "id": "r2.f07", "phaseId": "p2", "category": "fromLifePrompt", "subject": "your non-drawing hand gripping a doorknob", "fromLife": true },
+    { "id": "r2.f08", "phaseId": "p2", "category": "fromLifePrompt", "subject": "the view out any window, but only shapes above the horizon line", "fromLife": true }
+  ]
+}

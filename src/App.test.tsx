@@ -10,7 +10,7 @@ describe('App shell', () => {
 
   it('opens on Today', () => {
     render(<App />)
-    expect(screen.getByRole('heading', { name: 'Today' })).toBeInTheDocument()
+    expect(screen.getByText('PHASE 1 · UNIT 1.1 · STEP 1')).toBeInTheDocument()
   })
 
   it('shows exactly the four tabs', () => {
