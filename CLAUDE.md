@@ -51,6 +51,13 @@ The unit segment is also its display label, so `u1.W` renders as "UNIT 1.W".
 Run `npm run validate:curriculum` after editing the JSON. It fails on schema errors,
 dangling step or unit IDs, and units whose `requiredReps` is below their step count.
 
+**Renaming an ID is a migration, not a delete.** If a unit or step genuinely needs a
+new ID (not just deprecation), bump `curriculum.json`'s top-level `version` and add an
+entry to `CURRICULUM_MIGRATIONS` in `src/logic/migrations.ts` mapping the old ID to the
+new one. `hydrate()` runs every saved state through it on load, so existing progress
+follows the rename instead of silently losing history. See `migrations.test.ts` for
+what a migration needs to prove: everything remapped, nothing lost.
+
 ## Stack
 
 Vite + React + TypeScript. `react-router-dom` with a `HashRouter` — deep links work
@@ -78,4 +85,10 @@ with a dashboard. Settings is reached from the header icon.
 - Minimum 16px body text, minimum 44px touch targets.
 - Respect `env(safe-area-inset-*)` on anything pinned to a screen edge.
 - Colors come from custom properties in `global.css`. Do not hardcode hex values in
-  component CSS.
+  component CSS. Every token is checked against WCAG AA in `src/styles/contrast.test.ts`
+  — `text-faint` and `border-strong` in particular are tuned to just clear 4.5:1 and
+  3:1 respectively, so don't lighten either without re-running that test.
+- Any `flex: 1` row of sibling elements that can contain a long, unbreakable word
+  (a tab label, a stat label) needs `min-width: 0` on the flex item — the default
+  `min-width: auto` floors it at the word's own width and can push the row past the
+  viewport at large iOS text sizes. See `TabBar.css` for the reference fix.

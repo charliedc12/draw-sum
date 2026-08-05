@@ -20,6 +20,10 @@
 
 .tabbar__item {
   flex: 1;
+  /* Flex items default to min-width: auto, which floors each column at the width of
+     its longest unbreakable word ("Session") — at large text sizes that pushes the
+     row past the viewport. This lets a column shrink below that and wrap instead. */
+  min-width: 0;
 }
 
 .tabbar__link {
@@ -40,9 +44,12 @@
 
 .tabbar__icon {
   display: block;
+  flex-shrink: 0;
 }
 
 .tabbar__label {
   font-size: var(--text-sm);
   line-height: 1.2;
+  text-align: center;
+  overflow-wrap: break-word;
 }

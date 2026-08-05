@@ -87,6 +87,12 @@ export type ProgressState = {
   /** Which redraw-round day-milestones have been marked complete. */
   redrawRoundsCompleted: number[]
   notificationSettings: NotificationSettings
+  /**
+   * Which curriculum.json version this state's IDs were last reconciled against.
+   * hydrate() runs it through migrateProgressState (src/logic/migrations.ts) on load,
+   * which brings it forward and updates this field — see that module for why.
+   */
+  curriculumVersion: number
 }
 
 export type TodayView = { phaseOverdue: boolean } & (
@@ -835,6 +841,7 @@ export function initialProgress(curriculum: Curriculum, now: Date = new Date()):
     risingStandardsShown: [],
     redrawRoundsCompleted: [],
     notificationSettings: defaultNotificationSettings(),
+    curriculumVersion: curriculum.version,
   }
 }
 

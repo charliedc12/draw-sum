@@ -245,7 +245,7 @@ function RisingStandardsCard({ onDismiss }: { onDismiss: () => void }) {
     away from the app. Logs completion only: no image, no comparison, no result. */
 function RedrawCard({ onComplete }: { onComplete: () => void }) {
   return (
-    <div className="notice">
+    <div className="notice" role="status">
       <p className="notice__phase">Redraw set</p>
       <p className="notice__text">
         Draw all six again: {curriculum.redrawSubjects.map((s) => s.text).join(', ')}.

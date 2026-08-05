@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import { curriculum } from '../data/curriculum.ts'
 import * as progression from '../logic/progression.ts'
 import type { ProgressState } from '../logic/progression.ts'
+import { migrateProgressState } from '../logic/migrations.ts'
 import type { DueNotification } from '../logic/notifications.ts'
 import type { DurationOption } from '../types/curriculum.ts'
 
@@ -116,10 +117,14 @@ export const useAppStore = create<AppState>()(
       startTopUp: () => set((state) => progression.startTopUp(state, curriculum)),
 
       hydrate: () => {
+        // ID migration runs on the raw saved data first — it only ever rewrites
+        // unit/step/phase ID references, so it must see the actual old IDs before
+        // the defaults merge below could paper over a missing curriculumVersion.
+        const migrated = migrateProgressState(pickProgress(get()), curriculum)
         const defaults = progression.initialProgress(curriculum)
         const repaired: ProgressState = {
           ...defaults,
-          ...stripUndefined(pickProgress(get())),
+          ...stripUndefined(migrated),
         }
         if (!progression.findPhase(curriculum, repaired.currentPhaseId)) {
           repaired.currentPhaseId = defaults.currentPhaseId
@@ -190,5 +195,6 @@ function pickProgress(state: AppState): ProgressState {
     risingStandardsShown: state.risingStandardsShown,
     redrawRoundsCompleted: state.redrawRoundsCompleted,
     notificationSettings: state.notificationSettings,
+    curriculumVersion: state.curriculumVersion,
   }
 }

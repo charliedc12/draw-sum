@@ -58,7 +58,7 @@
 }
 
 .devPanel__button--danger {
-  color: #c4453a;
+  color: var(--danger);
 }
 
 .devPanel__input {

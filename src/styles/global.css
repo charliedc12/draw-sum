@@ -2,19 +2,24 @@
    Design tokens live here. Component CSS reads these — never hardcoded hex. */
 
 :root {
-  /* Light: warm paper and graphite */
+  /* Light: warm paper and graphite. text-faint, border-strong and danger are tuned to
+     WCAG AA: text-faint clears 4.5:1 against both bg and surface-sunken (it labels
+     real text — breadcrumbs, eyebrows — not just decoration); border-strong clears
+     the 3:1 non-text minimum against surface and surface-sunken, since it's the only
+     boundary marking an input, select, or secondary button as interactive. */
   --bg: #faf8f5;
   --surface: #ffffff;
   --surface-sunken: #f2efea;
   --text: #1b1917;
   --text-muted: #6c655c;
-  --text-faint: #9a938a;
+  --text-faint: #6f685e;
   --border: #e4dfd7;
-  --border-strong: #d0c9bf;
+  --border-strong: #8a8175;
   --accent: #2f6ba8;
   --accent-on: #ffffff;
   --accent-soft: #e8f0f8;
   --success: #3f7d4e;
+  --danger: #ad3a26;
   --shadow: 0 -1px 0 var(--border);
 
   /* Type */
@@ -58,13 +63,14 @@
     --surface-sunken: #101112;
     --text: #ecebe8;
     --text-muted: #9a968f;
-    --text-faint: #6e6a64;
+    --text-faint: #928e87;
     --border: #2b2e32;
-    --border-strong: #3a3e43;
+    --border-strong: #6b7079;
     --accent: #7fb0e6;
     --accent-on: #10171f;
     --accent-soft: #1d2a38;
     --success: #6aa87a;
+    --danger: #e17a63;
     --shadow: 0 -1px 0 var(--border);
 
     color-scheme: dark;

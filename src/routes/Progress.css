@@ -35,6 +35,9 @@
 
 .stats__figure {
   flex: 1;
+  /* Without this, "Sessions" (an unbreakable word) floors this column's width at
+     large text sizes and can push the row past the viewport. See TabBar.css. */
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -54,6 +57,7 @@
 .stats__label {
   font-size: var(--text-sm);
   color: var(--text-muted);
+  overflow-wrap: break-word;
 }
 
 .gatePreview {
