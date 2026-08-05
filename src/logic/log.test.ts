@@ -20,6 +20,8 @@ const fixture: Curriculum = {
   ],
   references: [],
   sessionTemplates: [],
+  microDrills: [],
+  redrawSubjects: [],
 }
 
 function entry(overrides: Partial<LogEntry>): LogEntry {

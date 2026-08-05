@@ -7,10 +7,13 @@ import Session from './routes/Session.tsx'
 import Gate from './routes/Gate.tsx'
 import Progress from './routes/Progress.tsx'
 import Settings from './routes/Settings.tsx'
+import { useNotificationScheduler } from './notifications/useNotificationScheduler.ts'
 
 /* HashRouter, not BrowserRouter: deep links and a reloaded home-screen PWA
    resolve without any server rewrite rules. */
 export default function App() {
+  useNotificationScheduler()
+
   return (
     <HashRouter>
       <Routes>

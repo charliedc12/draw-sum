@@ -2,7 +2,9 @@ import { z } from 'zod'
 import type {
   Curriculum,
   GateStatement,
+  MicroDrill,
   Phase,
+  RedrawSubject,
   Reference,
   SessionStage,
   SessionTemplate,
@@ -75,6 +77,19 @@ export const sessionTemplateSchema: z.ZodType<SessionTemplate> = z.object({
   stages: z.array(sessionStageSchema).min(1),
 })
 
+export const microDrillSchema: z.ZodType<MicroDrill> = z.object({
+  id,
+  name: text,
+  durationMin: z.number().int().positive(),
+  materials: text,
+  instructions: z.array(text).min(1),
+})
+
+export const redrawSubjectSchema: z.ZodType<RedrawSubject> = z.object({
+  id,
+  text,
+})
+
 export const curriculumSchema: z.ZodType<Curriculum> = z.object({
   version: z.number().int().positive(),
   phases: z.array(phaseSchema).min(1),
@@ -82,6 +97,8 @@ export const curriculumSchema: z.ZodType<Curriculum> = z.object({
   steps: z.array(stepSchema).min(1),
   references: z.array(referenceSchema),
   sessionTemplates: z.array(sessionTemplateSchema),
+  microDrills: z.array(microDrillSchema),
+  redrawSubjects: z.array(redrawSubjectSchema),
 })
 
 export type CurriculumIssue = {
@@ -102,6 +119,8 @@ export function checkCurriculumIntegrity(curriculum: Curriculum): CurriculumIssu
     ['units', curriculum.units],
     ['steps', curriculum.steps],
     ['references', curriculum.references],
+    ['microDrills', curriculum.microDrills],
+    ['redrawSubjects', curriculum.redrawSubjects],
   ] as const) {
     const seen = new Set<string>()
     for (const item of items) {
@@ -259,6 +278,22 @@ export function checkCurriculumIntegrity(curriculum: Curriculum): CurriculumIssu
         })
       }
     }
+  }
+
+  // Six locked redraw subjects, no more, no fewer — the whole point is a fixed set
+  // that stays comparable across every round.
+  if (curriculum.redrawSubjects.length !== 6) {
+    issues.push({
+      path: 'redrawSubjects',
+      message: `expected exactly 6 redraw subjects, found ${curriculum.redrawSubjects.length}`,
+    })
+  }
+
+  if (curriculum.microDrills.length !== 3) {
+    issues.push({
+      path: 'microDrills',
+      message: `expected exactly 3 micro-drills, found ${curriculum.microDrills.length}`,
+    })
   }
 
   return issues

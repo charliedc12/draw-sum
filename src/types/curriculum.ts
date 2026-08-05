@@ -88,6 +88,30 @@ export type SessionTemplate = {
   stages: SessionStage[]
 }
 
+/**
+ * A drill that fits inside the ninety-second floor: not tied to any unit, doesn't
+ * count toward unit reps. For when there's real time but not enough for a normal
+ * drill — a five-minute drill actually done beats a forty-five-minute session planned
+ * and skipped.
+ */
+export type MicroDrill = {
+  id: string
+  name: string
+  durationMin: number
+  materials: string
+  instructions: string[]
+}
+
+/**
+ * One of the six locked redraw subjects. Never served by the ordinary reference or
+ * from-life pools — the whole point is that they stay fixed across every round so the
+ * four attempts of each are comparable. See docs/CURRICULUM.md.
+ */
+export type RedrawSubject = {
+  id: string
+  text: string
+}
+
 export type Curriculum = {
   version: number
   phases: Phase[]
@@ -95,4 +119,6 @@ export type Curriculum = {
   steps: Step[]
   references: Reference[]
   sessionTemplates: SessionTemplate[]
+  microDrills: MicroDrill[]
+  redrawSubjects: RedrawSubject[]
 }

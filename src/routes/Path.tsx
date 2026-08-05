@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { curriculum } from '../data/curriculum.ts'
-import { classifyPhase, classifyStep, classifyUnit } from '../logic/progression.ts'
+import { classifyPhase, classifyStep, classifyUnit, unitLabel } from '../logic/progression.ts'
 import type { Phase, Step, Unit } from '../types/curriculum.ts'
 import { useAppStore } from '../store/useAppStore.ts'
 import './Path.css'
@@ -146,11 +146,6 @@ function StepRow({ step }: { step: Step }) {
       <span className="step__name">{step.name}</span>
     </li>
   )
-}
-
-/* Unit IDs carry their own label: u1.W renders as "1.W". See CLAUDE.md. */
-function unitLabel(unitId: string): string {
-  return unitId.replace(/^u/, '')
 }
 
 /**

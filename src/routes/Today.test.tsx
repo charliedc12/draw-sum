@@ -108,3 +108,131 @@ describe('Today', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/far more common, and far more damaging/)
   })
 })
+
+describe('the ninety-second floor', () => {
+  it('reveals three micro-drill options on tap, none shown before that', () => {
+    renderToday()
+    for (const drill of curriculum.microDrills) {
+      expect(screen.queryByRole('button', { name: drill.name })).not.toBeInTheDocument()
+    }
+  })
+
+  it('shows the three curriculum micro-drills once opened', async () => {
+    renderToday()
+    await userEvent.click(screen.getByRole('button', { name: 'Less than five minutes?' }))
+
+    expect(curriculum.microDrills).toHaveLength(3)
+    for (const drill of curriculum.microDrills) {
+      expect(screen.getByRole('button', { name: drill.name })).toBeInTheDocument()
+    }
+  })
+
+  it('completing one increments drillCount but not debt or unit reps', async () => {
+    renderToday()
+    await userEvent.click(screen.getByRole('button', { name: 'Less than five minutes?' }))
+    await userEvent.click(screen.getByRole('button', { name: curriculum.microDrills[0].name }))
+
+    const state = useAppStore.getState()
+    expect(state.drillCount).toBe(1)
+    expect(state.debtCounter).toBe(0)
+    expect(state.unitRepCounts).toEqual({})
+    expect(state.log[0]).toMatchObject({ targetKind: 'microDrill', status: 'done' })
+  })
+
+  it('does not disturb the main step — the same drill is still next after', async () => {
+    renderToday()
+    await userEvent.click(screen.getByRole('button', { name: 'Less than five minutes?' }))
+    await userEvent.click(screen.getByRole('button', { name: curriculum.microDrills[0].name }))
+
+    expect(screen.getByText('PHASE 1 · UNIT 1.1 · STEP 1')).toBeInTheDocument()
+  })
+
+  it('"Never mind" collapses the picker without logging anything', async () => {
+    renderToday()
+    await userEvent.click(screen.getByRole('button', { name: 'Less than five minutes?' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Never mind' }))
+
+    expect(screen.getByRole('button', { name: 'Less than five minutes?' })).toBeInTheDocument()
+    expect(useAppStore.getState().log).toEqual([])
+  })
+})
+
+describe('rising-standards cards', () => {
+  it('is absent before day 42', () => {
+    renderToday()
+    expect(screen.queryByText(/Feeling worse about your drawings/)).not.toBeInTheDocument()
+  })
+
+  it('shows the exact given copy once day 42 is reached', () => {
+    useAppStore.setState({
+      firstUseDate: new Date(Date.now() - 42 * 86_400_000).toISOString(),
+    })
+    renderToday()
+    expect(screen.getByText(/Feeling worse about your drawings right now is expected/)).toBeInTheDocument()
+  })
+
+  it('dismissing marks that milestone shown so it never reappears', async () => {
+    useAppStore.setState({
+      firstUseDate: new Date(Date.now() - 42 * 86_400_000).toISOString(),
+    })
+    renderToday()
+    await userEvent.click(screen.getAllByRole('button', { name: 'Got it' })[0])
+
+    expect(useAppStore.getState().risingStandardsShown).toContain(42)
+    expect(screen.queryByText(/Feeling worse about your drawings/)).not.toBeInTheDocument()
+  })
+
+  it('is never framed as a failure, warning, or grade', () => {
+    useAppStore.setState({
+      firstUseDate: new Date(Date.now() - 42 * 86_400_000).toISOString(),
+    })
+    renderToday()
+    const body = document.body.textContent ?? ''
+    for (const word of [/warning/i, /you'?re behind/i, /score/i, /grade/i]) {
+      expect(body).not.toMatch(word)
+    }
+  })
+})
+
+describe('redraw prompts', () => {
+  it('is absent before day 7', () => {
+    renderToday()
+    expect(screen.queryByText('Redraw set')).not.toBeInTheDocument()
+  })
+
+  it('lists all six locked subjects once day 7 is reached', () => {
+    useAppStore.setState({
+      firstUseDate: new Date(Date.now() - 7 * 86_400_000).toISOString(),
+    })
+    renderToday()
+    expect(screen.getByText('Redraw set')).toBeInTheDocument()
+    for (const subject of curriculum.redrawSubjects) {
+      expect(screen.getByText(new RegExp(subject.text))).toBeInTheDocument()
+    }
+  })
+
+  it('explains why comparison matters and instructs keeping attempts together', () => {
+    useAppStore.setState({
+      firstUseDate: new Date(Date.now() - 7 * 86_400_000).toISOString(),
+    })
+    renderToday()
+    expect(
+      screen.getByText(/Keep every attempt of each subject together in one place/),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/your own sense of whether you're improving isn't trustworthy/),
+    ).toBeInTheDocument()
+  })
+
+  it('checking the box logs completion — nothing more', async () => {
+    useAppStore.setState({
+      firstUseDate: new Date(Date.now() - 7 * 86_400_000).toISOString(),
+    })
+    renderToday()
+    await userEvent.click(screen.getByRole('checkbox'))
+
+    const state = useAppStore.getState()
+    expect(state.redrawRoundsCompleted).toContain(7)
+    expect(screen.queryByText('Redraw set')).not.toBeInTheDocument()
+  })
+})

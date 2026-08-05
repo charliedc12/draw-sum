@@ -7,6 +7,8 @@
 import type { Curriculum, DurationOption, Phase, Step, Unit } from '../types/curriculum.ts'
 import type { ActiveSession, SessionTimer } from './session.ts'
 import * as session from './session.ts'
+import type { NotificationSettings } from './notifications.ts'
+import { defaultNotificationSettings } from './notifications.ts'
 
 /** Drills owed before the app asks for a longer session instead of another drill. */
 export const DEBT_THRESHOLD = 10
@@ -37,7 +39,7 @@ export const REGRESSION_THRESHOLD = 3
 export type LogEntry = {
   id: string
   targetId: string
-  targetKind: 'step' | 'session'
+  targetKind: 'step' | 'session' | 'microDrill'
   date: string
   status: 'done' | 'skipped'
   /**
@@ -74,6 +76,17 @@ export type ProgressState = {
   topUp: TopUp | null
   /** The in-progress weekend session, if any. Persisted so it survives a full reload. */
   activeSession: ActiveSession | null
+  /**
+   * Set once, on first launch, and never touched again — an anchor for the day-42/98/182
+   * and day-7/84/168/252 milestones below. This is NOT "last used": it never resets on a
+   * gap and is never read to compute or display how long the user has been away.
+   */
+  firstUseDate: string
+  /** Which rising-standards day-milestones have already been shown and dismissed. */
+  risingStandardsShown: number[]
+  /** Which redraw-round day-milestones have been marked complete. */
+  redrawRoundsCompleted: number[]
+  notificationSettings: NotificationSettings
 }
 
 export type TodayView = { phaseOverdue: boolean } & (
@@ -114,6 +127,16 @@ export function findUnit(curriculum: Curriculum, unitId: string): Unit | undefin
 
 export function findStep(curriculum: Curriculum, stepId: string): Step | undefined {
   return curriculum.steps.find((s) => s.id === stepId)
+}
+
+export function findMicroDrill(curriculum: Curriculum, microDrillId: string) {
+  return curriculum.microDrills.find((d) => d.id === microDrillId)
+}
+
+/* Unit IDs carry their own label: u1.W renders as "1.W". Shared by every screen and
+   by notification copy so the format can't drift between them. */
+export function unitLabel(unitId: string): string {
+  return unitId.replace(/^u/, '')
 }
 
 function unitsOfPhase(curriculum: Curriculum, phase: Phase): Unit[] {
@@ -592,6 +615,27 @@ export function markStepSkipped(
 }
 
 /**
+ * The ninety-second floor: a micro-drill, offered when there isn't time for a real
+ * one. Counts toward drillCount like anything else drawn, but deliberately touches
+ * nothing else — no unit reps, no debt. A five-minute drill actually done beats a
+ * forty-five-minute session planned and skipped.
+ */
+export function markMicroDrillDone(
+  state: ProgressState,
+  curriculum: Curriculum,
+  microDrillId: string,
+  now: Date = new Date(),
+): ProgressState {
+  if (!findMicroDrill(curriculum, microDrillId)) return state
+
+  return {
+    ...state,
+    drillCount: state.drillCount + 1,
+    log: [...state.log, makeLogEntry(state, microDrillId, 'microDrill', 'done', now)],
+  }
+}
+
+/**
  * A finished long session. Clears the debt and the in-progress session state, and
  * credits the phase's weekend unit so weekend reps track the same way daily reps do.
  */
@@ -787,6 +831,114 @@ export function initialProgress(curriculum: Curriculum, now: Date = new Date()):
     forcedAdvance: false,
     topUp: null,
     activeSession: null,
+    firstUseDate: now.toISOString(),
+    risingStandardsShown: [],
+    redrawRoundsCompleted: [],
+    notificationSettings: defaultNotificationSettings(),
+  }
+}
+
+// ---- rising-standards cards --------------------------------------------------
+
+/**
+ * Days since first use, not days since last use — this is a fixed anchor that never
+ * resets and is never used to compute or display a gap. See ProgressState.firstUseDate.
+ */
+export const RISING_STANDARDS_DAYS = [42, 98, 182]
+
+export const RISING_STANDARDS_COPY =
+  'Feeling worse about your drawings right now is expected and it is not a sign the ' +
+  'practice isn’t working. Taste improves faster than skill, so perceived ' +
+  'progress goes negative before it goes positive. Look at what you drew six weeks ' +
+  'ago rather than trusting how today felt.'
+
+/** The smallest reached-but-not-yet-shown milestone, or null if none is due. */
+export function getDueRisingStandardsMilestone(
+  state: ProgressState,
+  now: Date = new Date(),
+): number | null {
+  const elapsed = daysSince(state.firstUseDate, now)
+  const due = RISING_STANDARDS_DAYS.find(
+    (day) => elapsed >= day && !state.risingStandardsShown.includes(day),
+  )
+  return due ?? null
+}
+
+export function dismissRisingStandardsCard(state: ProgressState, day: number): ProgressState {
+  if (state.risingStandardsShown.includes(day)) return state
+  return { ...state, risingStandardsShown: [...state.risingStandardsShown, day].sort((a, b) => a - b) }
+}
+
+// ---- redraw prompts -----------------------------------------------------------
+
+export const REDRAW_DAYS = [7, 84, 168, 252]
+
+/** The smallest reached-but-not-yet-completed redraw round, or null if none is due. */
+export function getDueRedrawRound(state: ProgressState, now: Date = new Date()): number | null {
+  const elapsed = daysSince(state.firstUseDate, now)
+  const due = REDRAW_DAYS.find(
+    (day) => elapsed >= day && !state.redrawRoundsCompleted.includes(day),
+  )
+  return due ?? null
+}
+
+/** Logs nothing but the fact of completion — no image, no comparison, no result. */
+export function completeRedrawRound(state: ProgressState, day: number): ProgressState {
+  if (state.redrawRoundsCompleted.includes(day)) return state
+  return {
+    ...state,
+    redrawRoundsCompleted: [...state.redrawRoundsCompleted, day].sort((a, b) => a - b),
+  }
+}
+
+// ---- notification settings -----------------------------------------------------
+
+export function setDailyNotificationSlot(
+  state: ProgressState,
+  index: 0 | 1,
+  partial: Partial<Pick<NotificationSettings['daily'][number], 'hour' | 'minute' | 'enabled'>>,
+): ProgressState {
+  const daily = [...state.notificationSettings.daily] as NotificationSettings['daily']
+  daily[index] = { ...daily[index], ...partial }
+  return { ...state, notificationSettings: { ...state.notificationSettings, daily } }
+}
+
+export function setWeeklyNotificationSlot(
+  state: ProgressState,
+  partial: Partial<
+    Pick<
+      NotificationSettings['weekly'],
+      'hour' | 'minute' | 'enabled' | 'weekday' | 'durationOption'
+    >
+  >,
+): ProgressState {
+  return {
+    ...state,
+    notificationSettings: {
+      ...state.notificationSettings,
+      weekly: { ...state.notificationSettings.weekly, ...partial },
+    },
+  }
+}
+
+/** Marks a slot as fired just now, so the same occurrence doesn't fire twice. */
+export function recordNotificationFired(
+  state: ProgressState,
+  due: { kind: 'daily'; index: 0 | 1 } | { kind: 'weekly' },
+  now: Date = new Date(),
+): ProgressState {
+  if (due.kind === 'daily') {
+    const daily = state.notificationSettings.daily.map((slot, i) =>
+      i === due.index ? { ...slot, lastFiredAt: now.toISOString() } : slot,
+    ) as NotificationSettings['daily']
+    return { ...state, notificationSettings: { ...state.notificationSettings, daily } }
+  }
+  return {
+    ...state,
+    notificationSettings: {
+      ...state.notificationSettings,
+      weekly: { ...state.notificationSettings.weekly, lastFiredAt: now.toISOString() },
+    },
   }
 }
 

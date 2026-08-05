@@ -68,6 +68,48 @@ export function describeLogTarget(entry: LogEntry, curriculum: Curriculum): LogT
     const step = findStep(curriculum, entry.targetId)
     return step ? { name: step.name, durationMin: step.durationMin } : { name: 'A step' }
   }
+  if (entry.targetKind === 'microDrill') {
+    const drill = curriculum.microDrills.find((d) => d.id === entry.targetId)
+    return drill ? { name: drill.name, durationMin: drill.durationMin } : { name: 'A micro-drill' }
+  }
   const unit = findUnit(curriculum, entry.targetId)
   return { name: unit ? unit.name : 'Session' }
+}
+
+/** "Wed 12 Aug 2026" — the export needs the year; the on-screen Log list doesn't. */
+function formatLogDateWithYear(iso: string): string {
+  const d = new Date(iso)
+  return `${WEEKDAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`
+}
+
+/**
+ * The entire log as plain text, for the Settings screen's copy/download export.
+ * Reverse-chronological, grouped by month, same ordering as the Log screen itself.
+ */
+export function formatLogAsText(
+  log: LogEntry[],
+  curriculum: Curriculum,
+  now: Date = new Date(),
+): string {
+  const groups = groupLogByMonth(log)
+  const lines: string[] = ['DrawPath — log export', `Generated ${now.toISOString().slice(0, 10)}`, '']
+
+  if (groups.length === 0) {
+    lines.push('Nothing logged yet.')
+  }
+
+  for (const group of groups) {
+    lines.push(group.label)
+    lines.push('-'.repeat(group.label.length))
+    for (const entry of group.entries) {
+      const target = describeLogTarget(entry, curriculum)
+      const duration = target.durationMin !== undefined ? ` — ${target.durationMin} min` : ''
+      const status = entry.status === 'done' ? 'done' : 'skipped'
+      const tags = entry.tags && entry.tags.length > 0 ? ` [${entry.tags.join(', ')}]` : ''
+      lines.push(`${formatLogDateWithYear(entry.date)} — ${target.name}${duration} — ${status}${tags}`)
+    }
+    lines.push('')
+  }
+
+  return `${lines.join('\n').trimEnd()}\n`
 }

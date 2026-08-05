@@ -6,6 +6,7 @@ import {
   PROPORTION_COLLAPSED_TAG,
   REGRESSION_THRESHOLD,
   REGRESSION_UNIT_ID,
+  RISING_STANDARDS_COPY,
   SKIPS_BEFORE_ALTERNATE,
   TOP_UP_DAYS,
   advancePhase,
@@ -15,9 +16,13 @@ import {
   classifyStep,
   classifyUnit,
   closeAllDailyUnits,
+  completeRedrawRound,
   completeSession,
   daysSince,
   discardActiveSession,
+  dismissRisingStandardsCard,
+  getDueRedrawRound,
+  getDueRisingStandardsMilestone,
   getRegressionUnitIds,
   getServingUnit,
   getTodayStep,
@@ -30,13 +35,17 @@ import {
   isSoftRegressionActive,
   isTopUpActive,
   isUnitClosed,
+  markMicroDrillDone,
   markStepDone,
   markStepSkipped,
   orderStepsForUnit,
   pauseActiveSessionTimer,
+  recordNotificationFired,
   resumeActiveSessionTimer,
+  setDailyNotificationSlot,
   setPhase,
   setPhaseEntryDaysAgo,
+  setWeeklyNotificationSlot,
   startActiveSessionTimer,
   startTopUp,
   tagLastSession,
@@ -139,6 +148,19 @@ const fixture: Curriculum = {
         { atMin: 20, instruction: 'Finish' },
       ],
     },
+  ],
+  microDrills: [
+    {
+      id: 'micro-x',
+      name: 'X',
+      durationMin: 2,
+      materials: 'Pen',
+      instructions: ['do x'],
+    },
+  ],
+  redrawSubjects: [
+    { id: 'rd1', text: 'thing one' },
+    { id: 'rd2', text: 'thing two' },
   ],
 }
 
@@ -849,6 +871,175 @@ describe('dev tools', () => {
   it('setPhaseEntryDaysAgo backdates phaseEntryDate by exactly N days', () => {
     const state = setPhaseEntryDaysAgo(start(), 10, T0)
     expect(state.phaseEntryDate).toBe(at(-10).toISOString())
+  })
+})
+
+describe('markMicroDrillDone — the ninety-second floor', () => {
+  it('increments drillCount and logs the entry', () => {
+    const state = markMicroDrillDone(start(), fixture, 'micro-x', T0)
+    expect(state.drillCount).toBe(1)
+    expect(state.log[0]).toMatchObject({
+      targetId: 'micro-x',
+      targetKind: 'microDrill',
+      status: 'done',
+    })
+  })
+
+  it('does NOT increment debtCounter', () => {
+    const state = markMicroDrillDone(start({ debtCounter: 3 }), fixture, 'micro-x', T0)
+    expect(state.debtCounter).toBe(3)
+  })
+
+  it('does NOT increment any unit rep count', () => {
+    const state = markMicroDrillDone(start(), fixture, 'micro-x', T0)
+    expect(state.unitRepCounts).toEqual({})
+  })
+
+  it('does not touch stepCompletionCounts — a micro-drill is not a step', () => {
+    const state = markMicroDrillDone(start(), fixture, 'micro-x', T0)
+    expect(state.stepCompletionCounts).toEqual({})
+  })
+
+  it('ignores an unknown micro-drill id', () => {
+    const before = start()
+    expect(markMicroDrillDone(before, fixture, 'nope', T0)).toBe(before)
+  })
+
+  it('several micro-drills each count toward drillCount independently', () => {
+    let state = start()
+    state = markMicroDrillDone(state, fixture, 'micro-x', T0)
+    state = markMicroDrillDone(state, fixture, 'micro-x', T0)
+    expect(state.drillCount).toBe(2)
+    expect(state.log).toHaveLength(2)
+  })
+})
+
+describe('rising-standards cards — shown exactly once per day-milestone', () => {
+  it('is not due before day 42', () => {
+    expect(getDueRisingStandardsMilestone(start(), at(41))).toBeNull()
+  })
+
+  it('is due exactly at day 42', () => {
+    expect(getDueRisingStandardsMilestone(start(), at(42))).toBe(42)
+  })
+
+  it('reads elapsed time from firstUseDate, not from any recency/gap signal', () => {
+    const state = start({ firstUseDate: T0.toISOString() })
+    expect(getDueRisingStandardsMilestone(state, at(42))).toBe(42)
+  })
+
+  it('never shows again once dismissed', () => {
+    let state = start()
+    state = dismissRisingStandardsCard(state, 42)
+    expect(getDueRisingStandardsMilestone(state, at(42))).toBeNull()
+    expect(getDueRisingStandardsMilestone(state, at(50))).toBeNull()
+  })
+
+  it('advances to the next milestone once the current one is dismissed', () => {
+    let state = start()
+    state = dismissRisingStandardsCard(state, 42)
+    expect(getDueRisingStandardsMilestone(state, at(98))).toBe(98)
+  })
+
+  it('shows the earliest un-dismissed milestone if several are already due', () => {
+    // The user was away long enough that both 42 and 98 have passed unseen.
+    expect(getDueRisingStandardsMilestone(start(), at(100))).toBe(42)
+  })
+
+  it('dismissing is idempotent', () => {
+    let state = dismissRisingStandardsCard(start(), 42)
+    const again = dismissRisingStandardsCard(state, 42)
+    expect(again.risingStandardsShown).toEqual([42])
+  })
+
+  it('each of the three milestones tracks independently', () => {
+    let state = start()
+    state = dismissRisingStandardsCard(state, 42)
+    state = dismissRisingStandardsCard(state, 182)
+    expect(state.risingStandardsShown).toEqual([42, 182])
+    expect(getDueRisingStandardsMilestone(state, at(98))).toBe(98)
+  })
+
+  it('the exact given copy, verbatim', () => {
+    expect(RISING_STANDARDS_COPY).toBe(
+      'Feeling worse about your drawings right now is expected and it is not a sign the ' +
+        'practice isn’t working. Taste improves faster than skill, so perceived ' +
+        'progress goes negative before it goes positive. Look at what you drew six weeks ' +
+        'ago rather than trusting how today felt.',
+    )
+  })
+})
+
+describe('redraw prompts — logged as a checkbox, nothing more', () => {
+  it('is not due before day 7', () => {
+    expect(getDueRedrawRound(start(), at(6))).toBeNull()
+  })
+
+  it('is due exactly at day 7', () => {
+    expect(getDueRedrawRound(start(), at(7))).toBe(7)
+  })
+
+  it('never shows again once completed — even once later rounds also become due', () => {
+    let state = start()
+    state = completeRedrawRound(state, 7)
+    expect(getDueRedrawRound(state, at(7))).toBeNull()
+    // Round 84 is due on its own by day 90; round 7 specifically never resurfaces.
+    expect(getDueRedrawRound(state, at(90))).toBe(84)
+    state = completeRedrawRound(state, 84)
+    expect(getDueRedrawRound(state, at(90))).toBeNull()
+  })
+
+  it('advances through all four rounds in order: 7, 84, 168, 252', () => {
+    let state = start()
+    expect(getDueRedrawRound(state, at(300))).toBe(7)
+    state = completeRedrawRound(state, 7)
+    expect(getDueRedrawRound(state, at(300))).toBe(84)
+    state = completeRedrawRound(state, 84)
+    expect(getDueRedrawRound(state, at(300))).toBe(168)
+    state = completeRedrawRound(state, 168)
+    expect(getDueRedrawRound(state, at(300))).toBe(252)
+    state = completeRedrawRound(state, 252)
+    expect(getDueRedrawRound(state, at(300))).toBeNull()
+  })
+
+  it('completing is idempotent', () => {
+    let state = completeRedrawRound(start(), 7)
+    const again = completeRedrawRound(state, 7)
+    expect(again.redrawRoundsCompleted).toEqual([7])
+  })
+
+  it('logs only the fact of completion — nothing else lives on redrawRoundsCompleted', () => {
+    const state = completeRedrawRound(start(), 7)
+    expect(state.redrawRoundsCompleted).toEqual([7])
+    expect(state.log).toEqual([])
+  })
+})
+
+describe('notification settings state layer', () => {
+  it('setDailyNotificationSlot updates exactly the targeted slot', () => {
+    let state = setDailyNotificationSlot(start(), 0, { enabled: true, hour: 8, minute: 30 })
+    expect(state.notificationSettings.daily[0]).toMatchObject({
+      enabled: true,
+      hour: 8,
+      minute: 30,
+    })
+    expect(state.notificationSettings.daily[1].enabled).toBe(false)
+  })
+
+  it('setWeeklyNotificationSlot updates the weekly slot', () => {
+    const state = setWeeklyNotificationSlot(start(), { enabled: true, weekday: 0 })
+    expect(state.notificationSettings.weekly).toMatchObject({ enabled: true, weekday: 0 })
+  })
+
+  it('recordNotificationFired stamps lastFiredAt on the right daily slot only', () => {
+    const state = recordNotificationFired(start(), { kind: 'daily', index: 1 }, T0)
+    expect(state.notificationSettings.daily[0].lastFiredAt).toBeNull()
+    expect(state.notificationSettings.daily[1].lastFiredAt).toBe(T0.toISOString())
+  })
+
+  it('recordNotificationFired stamps the weekly slot', () => {
+    const state = recordNotificationFired(start(), { kind: 'weekly' }, T0)
+    expect(state.notificationSettings.weekly.lastFiredAt).toBe(T0.toISOString())
   })
 })
 

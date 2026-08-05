@@ -1,0 +1,126 @@
+.settingsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  margin-top: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.settingsBlock:first-of-type {
+  margin-top: var(--space-2);
+}
+
+.settingsBlock__title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.settingsBlock__note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.settingsBlock__steps {
+  padding-left: 1.35em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.settingsBlock__row {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.settingsBlock__button {
+  flex: 1;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-4);
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+
+.settingsBlock__button--danger {
+  color: #c4453a;
+}
+
+.notificationSlots {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.notificationSlot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--surface-sunken);
+  border-radius: var(--radius);
+}
+
+.notificationSlot__toggleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notificationSlot__checkbox {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--accent);
+}
+
+.notificationSlot__row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.notificationSlot__time,
+.notificationSlot__select {
+  min-height: var(--touch-target);
+  padding: 0 var(--space-3);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+  border-radius: var(--radius);
+  font-size: var(--text-base);
+  color: var(--text);
+}
+
+.notificationSlot__select {
+  flex: 1;
+}
+
+.phaseOverride {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.phaseOverride__button {
+  min-height: var(--touch-target);
+  padding: 0 var(--space-4);
+  text-align: left;
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+
+.phaseOverride__button[data-active='true'] {
+  background: var(--accent);
+  color: var(--accent-on);
+  box-shadow: none;
+}

@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import { curriculum } from '../data/curriculum.ts'
 import * as progression from '../logic/progression.ts'
 import type { ProgressState } from '../logic/progression.ts'
+import type { DueNotification } from '../logic/notifications.ts'
 import type { DurationOption } from '../types/curriculum.ts'
 
 export type { LogEntry, ProgressState } from '../logic/progression.ts'
@@ -13,6 +14,8 @@ export type { LogEntry, ProgressState } from '../logic/progression.ts'
 export type AppActions = {
   markStepDone: (stepId: string) => void
   markStepSkipped: (stepId: string) => void
+  /** The ninety-second floor. Counts toward drillCount only — no unit reps, no debt. */
+  markMicroDrillDone: (microDrillId: string) => void
   completeSession: () => void
   /** Attaches error tags to the session just completed. A no-op if none are selected. */
   tagLastSession: (tags: string[]) => void
@@ -34,6 +37,26 @@ export type AppActions = {
   hydrate: () => void
   /** Dismiss the "your phase advanced on the clock" explanation. */
   acknowledgeForcedAdvance: () => void
+  /** Marks a rising-standards day-milestone shown and dismissed — never reappears. */
+  dismissRisingStandardsCard: (day: number) => void
+  /** Logs a redraw round complete. Nothing else — no image, no comparison, no result. */
+  completeRedrawRound: (day: number) => void
+  setDailyNotificationSlot: (
+    index: 0 | 1,
+    partial: Partial<{ hour: number; minute: number; enabled: boolean }>,
+  ) => void
+  setWeeklyNotificationSlot: (
+    partial: Partial<{
+      hour: number
+      minute: number
+      enabled: boolean
+      weekday: number
+      durationOption: DurationOption
+    }>,
+  ) => void
+  recordNotificationFired: (due: DueNotification) => void
+  /** The real, user-facing full reset (Settings). Wipes everything to a first-run state. */
+  resetAll: () => void
   /** Dev-only: fills the current phase's daily units to their requiredReps. */
   devCloseAllDailyUnits: () => void
   /** Dev-only: backdates phaseEntryDate to exercise the forced-advance boundary. */
@@ -56,6 +79,9 @@ export const useAppStore = create<AppState>()(
 
       markStepSkipped: (stepId) =>
         set((state) => progression.markStepSkipped(state, curriculum, stepId)),
+
+      markMicroDrillDone: (microDrillId) =>
+        set((state) => progression.markMicroDrillDone(state, curriculum, microDrillId)),
 
       completeSession: () =>
         set((state) => progression.completeSession(state, curriculum)),
@@ -104,6 +130,23 @@ export const useAppStore = create<AppState>()(
 
       acknowledgeForcedAdvance: () => set({ forcedAdvance: false }),
 
+      dismissRisingStandardsCard: (day) =>
+        set((state) => progression.dismissRisingStandardsCard(state, day)),
+
+      completeRedrawRound: (day) =>
+        set((state) => progression.completeRedrawRound(state, day)),
+
+      setDailyNotificationSlot: (index, partial) =>
+        set((state) => progression.setDailyNotificationSlot(state, index, partial)),
+
+      setWeeklyNotificationSlot: (partial) =>
+        set((state) => progression.setWeeklyNotificationSlot(state, partial)),
+
+      recordNotificationFired: (due) =>
+        set((state) => progression.recordNotificationFired(state, due)),
+
+      resetAll: () => set(progression.initialProgress(curriculum)),
+
       devCloseAllDailyUnits: () =>
         set((state) => progression.closeAllDailyUnits(state, curriculum)),
 
@@ -143,5 +186,9 @@ function pickProgress(state: AppState): ProgressState {
     forcedAdvance: state.forcedAdvance,
     topUp: state.topUp,
     activeSession: state.activeSession,
+    firstUseDate: state.firstUseDate,
+    risingStandardsShown: state.risingStandardsShown,
+    redrawRoundsCompleted: state.redrawRoundsCompleted,
+    notificationSettings: state.notificationSettings,
   }
 }

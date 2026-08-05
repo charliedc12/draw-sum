@@ -1,7 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { curriculum } from '../data/curriculum.ts'
-import { getTodayStep } from '../logic/progression.ts'
+import {
+  RISING_STANDARDS_COPY,
+  getDueRedrawRound,
+  getDueRisingStandardsMilestone,
+  getTodayStep,
+  unitLabel,
+} from '../logic/progression.ts'
 import type { TodayView } from '../logic/progression.ts'
 import { useAppStore } from '../store/useAppStore.ts'
 import './Today.css'
@@ -17,6 +23,9 @@ export default function Today() {
   }, [hydrate])
 
   const view = getTodayStep(state, curriculum)
+  const now = new Date()
+  const dueRisingStandardsDay = getDueRisingStandardsMilestone(state, now)
+  const dueRedrawDay = getDueRedrawRound(state, now)
 
   return (
     <section className="today">
@@ -25,6 +34,14 @@ export default function Today() {
           phaseName={view.kind === 'empty' ? '' : view.phase.name}
           onDismiss={state.acknowledgeForcedAdvance}
         />
+      )}
+      {dueRisingStandardsDay !== null && (
+        <RisingStandardsCard
+          onDismiss={() => state.dismissRisingStandardsCard(dueRisingStandardsDay)}
+        />
+      )}
+      {dueRedrawDay !== null && (
+        <RedrawCard onComplete={() => state.completeRedrawRound(dueRedrawDay)} />
       )}
       <TodayCard view={view} />
     </section>
@@ -147,10 +164,7 @@ function TodayCard({ view }: { view: TodayView }) {
         </button>
       </div>
 
-      {/* Wired up in a later milestone: offers a shorter version of the same step. */}
-      <button type="button" className="card__shortcut">
-        Less than five minutes?
-      </button>
+      <MicroDrillPicker />
     </article>
   )
 }
@@ -177,11 +191,84 @@ function ForcedAdvanceNotice({
   )
 }
 
-function phaseLabel(order: number): string {
-  return `PHASE ${order}`
+/** The ninety-second floor: a five-minute drill actually done beats a longer one
+    planned and skipped. Collapsed by default so it never competes with today's step. */
+function MicroDrillPicker() {
+  const [open, setOpen] = useState(false)
+  const markMicroDrillDone = useAppStore((s) => s.markMicroDrillDone)
+
+  if (!open) {
+    return (
+      <button type="button" className="card__shortcut" onClick={() => setOpen(true)}>
+        Less than five minutes?
+      </button>
+    )
+  }
+
+  return (
+    <div className="microDrills">
+      <p className="microDrills__lede">Pick one — two minutes, nothing else changes.</p>
+      <div className="microDrills__options">
+        {curriculum.microDrills.map((drill) => (
+          <button
+            key={drill.id}
+            type="button"
+            className="microDrills__button"
+            onClick={() => {
+              markMicroDrillDone(drill.id)
+              setOpen(false)
+            }}
+          >
+            {drill.name}
+          </button>
+        ))}
+      </div>
+      <button type="button" className="card__shortcut" onClick={() => setOpen(false)}>
+        Never mind
+      </button>
+    </div>
+  )
 }
 
-/* Unit IDs carry their own label: u1.W renders as "1.W". See CLAUDE.md. */
-function unitLabel(unitId: string): string {
-  return unitId.replace(/^u/, '')
+function RisingStandardsCard({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <div className="notice" role="status">
+      <p className="notice__text">{RISING_STANDARDS_COPY}</p>
+      <button type="button" className="notice__dismiss" onClick={onDismiss}>
+        Got it
+      </button>
+    </div>
+  )
+}
+
+/** Stays until checked — there's no reason to time-pressure something the user may do
+    away from the app. Logs completion only: no image, no comparison, no result. */
+function RedrawCard({ onComplete }: { onComplete: () => void }) {
+  return (
+    <div className="notice">
+      <p className="notice__phase">Redraw set</p>
+      <p className="notice__text">
+        Draw all six again: {curriculum.redrawSubjects.map((s) => s.text).join(', ')}.
+      </p>
+      <p className="notice__text">
+        Keep every attempt of each subject together in one place — a folder, a stack, a
+        pinned wall — and compare them side by side on paper. That comparison is the
+        only reliable way to see progress: your own sense of whether you're improving
+        isn't trustworthy while your standards are rising faster than your skill.
+      </p>
+      <label className="notice__checkboxRow">
+        <input
+          type="checkbox"
+          className="notice__checkbox"
+          checked={false}
+          onChange={onComplete}
+        />
+        <span>I've drawn all six and compared them</span>
+      </label>
+    </div>
+  )
+}
+
+function phaseLabel(order: number): string {
+  return `PHASE ${order}`
 }

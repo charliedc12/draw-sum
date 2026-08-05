@@ -2849,5 +2849,61 @@
         }
       ]
     }
+  ],
+  "microDrills": [
+    {
+      "id": "micro-lines",
+      "name": "Ten straight lines",
+      "durationMin": 2,
+      "materials": "Pen",
+      "instructions": [
+        "Draw ten straight lines, dot to dot.",
+        "Look at the endpoint, not the pen tip."
+      ]
+    },
+    {
+      "id": "micro-boxes",
+      "name": "Four boxes",
+      "durationMin": 2,
+      "materials": "Pen",
+      "instructions": [
+        "Draw four freehand boxes, rotated at random."
+      ]
+    },
+    {
+      "id": "micro-value-scale",
+      "name": "One value scale",
+      "durationMin": 2,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw a five-step value scale, smooth, with no banding."
+      ]
+    }
+  ],
+  "redrawSubjects": [
+    {
+      "id": "redraw-chair",
+      "text": "a chair"
+    },
+    {
+      "id": "redraw-mug-spoon",
+      "text": "a mug and spoon"
+    },
+    {
+      "id": "redraw-house",
+      "text": "a two-storey house at three-quarter"
+    },
+    {
+      "id": "redraw-egg",
+      "text": "an egg under one light"
+    },
+    {
+      "id": "redraw-hand",
+      "text": "a hand"
+    },
+    {
+      "id": "redraw-face",
+      "text": "a face at three-quarter"
+    }
   ]
 }

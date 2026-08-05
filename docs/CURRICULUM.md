@@ -235,3 +235,25 @@ Subjects: hillside with a fence line running away from the viewer / treeline at 
 river bend / road disappearing over a rise / mountain range in three layers / dunes /
 rain-wet street with reflected lights / urban skyline at low sun / farmyard with
 scattered outbuildings
+
+## MICRO-DRILLS
+
+Not tied to any unit or phase. Offered from Today's "Less than five minutes?" link —
+the ninety-second floor for whenever there's real time but not enough for a normal
+drill. Completing one counts toward drillCount only; it never touches unit reps or
+debtCounter.
+
+  Ten straight lines. 2 min. Pen.
+  Four boxes. 2 min. Pen.
+  One value scale. 2 min. Pencil.
+
+## REDRAW SUBJECTS
+
+Six locked subjects, fixed for the life of the app, used nowhere else — never served by
+the ordinary reference or from-life pools. Redrawn as one set at day 7, 84, 168 and 252
+since first use, so the four attempts of each subject stay comparable. The app stores no
+image; the point is that the user keeps the physical pages together and compares them on
+paper.
+
+  a chair / a mug and spoon / a two-storey house at three-quarter / an egg under one
+  light / a hand / a face at three-quarter
