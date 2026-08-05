@@ -195,6 +195,67 @@ export function shouldOfferAlternate(state: ProgressState, step: Step): boolean 
   return (state.stepSkipCounts[step.id] ?? 0) >= SKIPS_BEFORE_ALTERNATE
 }
 
+// ---- classification (for the Path tree) ------------------------------------
+
+/**
+ * Three states, and only three: everything on the Path screen is one of these. Future
+ * phases and units always render — 'upcoming' is a display state, never a lock.
+ */
+export type Classification = 'completed' | 'current' | 'upcoming'
+
+export function classifyPhase(
+  state: ProgressState,
+  curriculum: Curriculum,
+  phase: Phase,
+): Classification {
+  const active = findPhase(curriculum, state.currentPhaseId)
+  if (!active) return 'upcoming'
+  if (phase.order < active.order) return 'completed'
+  if (phase.order === active.order) return 'current'
+  return 'upcoming'
+}
+
+/**
+ * A weekend unit has no round-robin pointer to be "next" in, so it counts as current
+ * whenever its phase is active and it isn't closed yet — it's always available, not
+ * gated behind the daily units.
+ */
+export function classifyUnit(
+  state: ProgressState,
+  curriculum: Curriculum,
+  unit: Unit,
+): Classification {
+  if (isUnitClosed(state, unit)) return 'completed'
+  if (unit.phaseId !== state.currentPhaseId) return 'upcoming'
+  if (unit.kind === 'weekend') return 'current'
+  return getServingUnit(state, curriculum)?.id === unit.id ? 'current' : 'upcoming'
+}
+
+/** The step getTodayStep would hand out right now, independent of debt or the gate. */
+export function getCurrentStepId(
+  state: ProgressState,
+  curriculum: Curriculum,
+): string | undefined {
+  const unit = getServingUnit(state, curriculum)
+  if (!unit) return undefined
+  return orderStepsForUnit(state, curriculum, unit)[0]?.id
+}
+
+/**
+ * A step reads as 'completed' once it has a single completion, even though a unit
+ * cycles through its steps repeatedly to reach requiredReps — "filled" means "you've
+ * done this," not "you'll never see it again."
+ */
+export function classifyStep(
+  state: ProgressState,
+  curriculum: Curriculum,
+  step: Step,
+): Classification {
+  if ((state.stepCompletionCounts[step.id] ?? 0) > 0) return 'completed'
+  if (step.id === getCurrentStepId(state, curriculum)) return 'current'
+  return 'upcoming'
+}
+
 /**
  * What to put on the Today screen.
  *

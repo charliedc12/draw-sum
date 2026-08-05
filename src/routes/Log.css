@@ -1,0 +1,110 @@
+.stats {
+  display: flex;
+  gap: var(--space-3);
+}
+
+/* Two figures, deliberately never merged — an imbalance between them is the point. */
+.stats__figure {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.stats__value {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.stats__label {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.log__empty {
+  color: var(--text-muted);
+  padding: var(--space-4) 0;
+}
+
+.log {
+  display: flex;
+  flex-direction: column;
+}
+
+.log__month {
+  display: flex;
+  flex-direction: column;
+}
+
+.log__monthHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: var(--space-2) 0;
+  background: var(--bg);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+.log__entries {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+}
+
+.log__row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  min-height: var(--touch-target);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--text-base);
+}
+
+.log__date {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.log__separator {
+  color: var(--text-faint);
+}
+
+.log__name {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.log__duration {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.log__check {
+  margin-left: auto;
+  color: var(--success);
+}
+
+/* A skip is a real, unremarkable choice — quieter than a done entry, not a warning. */
+.log__row--skipped {
+  color: var(--text-faint);
+}
+
+.log__row--skipped .log__name {
+  color: var(--text-faint);
+}
+
+.log__row--skipped .log__status {
+  font-style: italic;
+}

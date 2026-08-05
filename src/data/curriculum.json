@@ -5,7 +5,12 @@
       "id": "p1",
       "name": "Line control",
       "order": 1,
-      "unitIds": ["u1.1", "u1.2", "u1.3", "u1.W"],
+      "unitIds": [
+        "u1.1",
+        "u1.2",
+        "u1.3",
+        "u1.W"
+      ],
       "maxWeeks": 5,
       "gateStatements": [
         "My lines land roughly where I aimed about 7 times in 10.",
@@ -18,13 +23,85 @@
       "id": "p2",
       "name": "Observation",
       "order": 2,
-      "unitIds": ["u2.1", "u2.2", "u2.3", "u2.W"],
+      "unitIds": [
+        "u2.1",
+        "u2.2",
+        "u2.3",
+        "u2.W"
+      ],
       "maxWeeks": 10,
       "gateStatements": [
         "I can block in overall proportions in the first 90 seconds and not need to shift them.",
         "When I compare a drawing to its reference, my errors are small and scattered rather than the same distortion every time.",
         "I've done at least 4 complexity studies of 25 minutes or longer."
       ]
+    },
+    {
+      "id": "p3",
+      "name": "Perspective and construction",
+      "order": 3,
+      "unitIds": [
+        "u3.1",
+        "u3.2",
+        "u3.3",
+        "u3.4",
+        "u3.W"
+      ],
+      "maxWeeks": 10,
+      "gateStatements": [
+        "I can find the horizon line and vanishing points in a street photo in under a minute.",
+        "My windows no longer slide out of alignment with the wall they sit on.",
+        "I can draw a convincing cylinder tilted at any angle without thinking hard.",
+        "I've done at least 8 weekend building studies."
+      ]
+    },
+    {
+      "id": "p4",
+      "name": "Value and light",
+      "order": 4,
+      "unitIds": [
+        "u4.1",
+        "u4.2",
+        "u4.3",
+        "u4.4",
+        "u4.W"
+      ],
+      "maxWeeks": 8,
+      "gateStatements": [
+        "My drawings still read correctly when I squint or look at them thumbnail-sized.",
+        "I can identify a photo's light direction instantly.",
+        "I vary edge hardness on purpose instead of outlining everything the same."
+      ]
+    },
+    {
+      "id": "p5",
+      "name": "People and faces",
+      "order": 5,
+      "unitIds": [
+        "u5.1",
+        "u5.2",
+        "u5.3",
+        "u5.4",
+        "u5.W"
+      ],
+      "maxWeeks": 14,
+      "gateStatements": [
+        "My 60-second gestures read as a person doing something.",
+        "My heads stay structurally consistent when I rotate them off centre.",
+        "My portrait errors are proportional rather than structural — the features sit on a believable skull even when the likeness is off."
+      ]
+    },
+    {
+      "id": "p6",
+      "name": "Composition and landscape",
+      "order": 6,
+      "unitIds": [
+        "u6.1",
+        "u6.2",
+        "u6.W"
+      ],
+      "maxWeeks": 999,
+      "gateStatements": []
     }
   ],
   "units": [
@@ -33,7 +110,12 @@
       "phaseId": "p1",
       "name": "Marks",
       "kind": "daily",
-      "stepIds": ["s1.1.1", "s1.1.2", "s1.1.3", "s1.1.4"],
+      "stepIds": [
+        "s1.1.1",
+        "s1.1.2",
+        "s1.1.3",
+        "s1.1.4"
+      ],
       "requiredReps": 8
     },
     {
@@ -41,7 +123,11 @@
       "phaseId": "p1",
       "name": "Ellipses",
       "kind": "daily",
-      "stepIds": ["s1.2.1", "s1.2.2", "s1.2.3"],
+      "stepIds": [
+        "s1.2.1",
+        "s1.2.2",
+        "s1.2.3"
+      ],
       "requiredReps": 6
     },
     {
@@ -49,7 +135,11 @@
       "phaseId": "p1",
       "name": "Boxes",
       "kind": "daily",
-      "stepIds": ["s1.3.1", "s1.3.2", "s1.3.3"],
+      "stepIds": [
+        "s1.3.1",
+        "s1.3.2",
+        "s1.3.3"
+      ],
       "requiredReps": 6
     },
     {
@@ -57,7 +147,10 @@
       "phaseId": "p1",
       "name": "Weekend contour",
       "kind": "weekend",
-      "stepIds": ["s1.W.1", "s1.W.2"],
+      "stepIds": [
+        "s1.W.1",
+        "s1.W.2"
+      ],
       "requiredReps": 4
     },
     {
@@ -65,7 +158,11 @@
       "phaseId": "p2",
       "name": "Angles",
       "kind": "daily",
-      "stepIds": ["s2.1.1", "s2.1.2", "s2.1.3"],
+      "stepIds": [
+        "s2.1.1",
+        "s2.1.2",
+        "s2.1.3"
+      ],
       "requiredReps": 6
     },
     {
@@ -73,7 +170,11 @@
       "phaseId": "p2",
       "name": "Negative space",
       "kind": "daily",
-      "stepIds": ["s2.2.1", "s2.2.2", "s2.2.3"],
+      "stepIds": [
+        "s2.2.1",
+        "s2.2.2",
+        "s2.2.3"
+      ],
       "requiredReps": 6
     },
     {
@@ -81,7 +182,11 @@
       "phaseId": "p2",
       "name": "Measuring",
       "kind": "daily",
-      "stepIds": ["s2.3.1", "s2.3.2", "s2.3.3"],
+      "stepIds": [
+        "s2.3.1",
+        "s2.3.2",
+        "s2.3.3"
+      ],
       "requiredReps": 8
     },
     {
@@ -89,8 +194,223 @@
       "phaseId": "p2",
       "name": "Weekend studies",
       "kind": "weekend",
-      "stepIds": ["s2.W.1", "s2.W.2"],
+      "stepIds": [
+        "s2.W.1",
+        "s2.W.2"
+      ],
       "requiredReps": 8
+    },
+    {
+      "id": "u3.1",
+      "phaseId": "p3",
+      "name": "Vanishing points",
+      "kind": "daily",
+      "stepIds": [
+        "s3.1.1",
+        "s3.1.2",
+        "s3.1.3"
+      ],
+      "requiredReps": 8
+    },
+    {
+      "id": "u3.2",
+      "phaseId": "p3",
+      "name": "Cylinders",
+      "kind": "daily",
+      "stepIds": [
+        "s3.2.1",
+        "s3.2.2",
+        "s3.2.3"
+      ],
+      "requiredReps": 8
+    },
+    {
+      "id": "u3.3",
+      "phaseId": "p3",
+      "name": "Rotation",
+      "kind": "daily",
+      "stepIds": [
+        "s3.3.1",
+        "s3.3.2",
+        "s3.3.3"
+      ],
+      "requiredReps": 6
+    },
+    {
+      "id": "u3.4",
+      "phaseId": "p3",
+      "name": "Construction",
+      "kind": "daily",
+      "stepIds": [
+        "s3.4.1",
+        "s3.4.2",
+        "s3.4.3"
+      ],
+      "requiredReps": 6
+    },
+    {
+      "id": "u3.W",
+      "phaseId": "p3",
+      "name": "Weekend buildings",
+      "kind": "weekend",
+      "stepIds": [
+        "s3.W.1",
+        "s3.W.2"
+      ],
+      "requiredReps": 10
+    },
+    {
+      "id": "u4.1",
+      "phaseId": "p4",
+      "name": "Scales",
+      "kind": "daily",
+      "stepIds": [
+        "s4.1.1",
+        "s4.1.2",
+        "s4.1.3"
+      ],
+      "requiredReps": 6
+    },
+    {
+      "id": "u4.2",
+      "phaseId": "p4",
+      "name": "The five zones",
+      "kind": "daily",
+      "stepIds": [
+        "s4.2.1",
+        "s4.2.2",
+        "s4.2.3"
+      ],
+      "requiredReps": 8
+    },
+    {
+      "id": "u4.3",
+      "phaseId": "p4",
+      "name": "Hatching",
+      "kind": "daily",
+      "stepIds": [
+        "s4.3.1",
+        "s4.3.2",
+        "s4.3.3"
+      ],
+      "requiredReps": 6
+    },
+    {
+      "id": "u4.4",
+      "phaseId": "p4",
+      "name": "Edges",
+      "kind": "daily",
+      "stepIds": [
+        "s4.4.1",
+        "s4.4.2"
+      ],
+      "requiredReps": 4
+    },
+    {
+      "id": "u4.W",
+      "phaseId": "p4",
+      "name": "Weekend still life",
+      "kind": "weekend",
+      "stepIds": [
+        "s4.W.1",
+        "s4.W.2",
+        "s4.W.3"
+      ],
+      "requiredReps": 8
+    },
+    {
+      "id": "u5.1",
+      "phaseId": "p5",
+      "name": "Gesture",
+      "kind": "daily",
+      "stepIds": [
+        "s5.1.1",
+        "s5.1.2",
+        "s5.1.3"
+      ],
+      "requiredReps": 12
+    },
+    {
+      "id": "u5.2",
+      "phaseId": "p5",
+      "name": "Head construction",
+      "kind": "daily",
+      "stepIds": [
+        "s5.2.1",
+        "s5.2.2",
+        "s5.2.3"
+      ],
+      "requiredReps": 10
+    },
+    {
+      "id": "u5.3",
+      "phaseId": "p5",
+      "name": "Features",
+      "kind": "daily",
+      "stepIds": [
+        "s5.3.1",
+        "s5.3.2",
+        "s5.3.3",
+        "s5.3.4"
+      ],
+      "requiredReps": 8
+    },
+    {
+      "id": "u5.4",
+      "phaseId": "p5",
+      "name": "Hands and feet",
+      "kind": "daily",
+      "stepIds": [
+        "s5.4.1",
+        "s5.4.2",
+        "s5.4.3"
+      ],
+      "requiredReps": 8
+    },
+    {
+      "id": "u5.W",
+      "phaseId": "p5",
+      "name": "Weekend figure and portrait",
+      "kind": "weekend",
+      "stepIds": [
+        "s5.W.1",
+        "s5.W.2"
+      ],
+      "requiredReps": 12
+    },
+    {
+      "id": "u6.1",
+      "phaseId": "p6",
+      "name": "Thumbnails",
+      "kind": "daily",
+      "stepIds": [
+        "s6.1.1",
+        "s6.1.2",
+        "s6.1.3"
+      ],
+      "requiredReps": 8
+    },
+    {
+      "id": "u6.2",
+      "phaseId": "p6",
+      "name": "Depth",
+      "kind": "daily",
+      "stepIds": [
+        "s6.2.1",
+        "s6.2.2",
+        "s6.2.3"
+      ],
+      "requiredReps": 8
+    },
+    {
+      "id": "u6.W",
+      "phaseId": "p6",
+      "name": "Weekend finished work",
+      "kind": "weekend",
+      "stepIds": [
+        "s6.W.1"
+      ],
+      "requiredReps": 999
     }
   ],
   "steps": [
@@ -443,42 +763,1490 @@
         "kind": "fromLife",
         "text": "A kitchen sink with dishes in it, a pile of unfolded laundry, or a bookshelf corner."
       }
+    },
+    {
+      "id": "s3.1.1",
+      "unitId": "u3.1",
+      "name": "Six boxes to one vanishing point",
+      "durationMin": 7,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw six boxes, all converging to one vanishing point."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s3.1.2",
+      "unitId": "u3.1",
+      "name": "Six boxes to two vanishing points",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw six boxes, all converging to two vanishing points."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s3.1.3",
+      "unitId": "u3.1",
+      "name": "Horizon-line placement — the same box above, at, and below eye level",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw the same box three times: above eye level, at eye level, and below eye level."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s3.2.1",
+      "unitId": "u3.2",
+      "name": "Cylinders in boxes, six reps",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw cylinders inside boxes, six reps."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A soda can."
+      }
+    },
+    {
+      "id": "s3.2.2",
+      "unitId": "u3.2",
+      "name": "Cylinders tilted at varied angles, six reps",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw cylinders tilted at varied angles, six reps."
+      ],
+      "commonFailure": "The ellipse's minor axis tilted independently of the cylinder's axis.",
+      "subject": {
+        "kind": "fromLife",
+        "text": "A thermos."
+      }
+    },
+    {
+      "id": "s3.2.3",
+      "unitId": "u3.2",
+      "name": "Three stacked cylinders on one shared axis",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw three stacked cylinders on one shared axis."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "Stacked paper cups."
+      }
+    },
+    {
+      "id": "s3.3.1",
+      "unitId": "u3.3",
+      "name": "One box, four imagined angles",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw one box from four imagined angles."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s3.3.2",
+      "unitId": "u3.3",
+      "name": "One simple object — a book, a brick — four imagined angles",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw one simple object from four imagined angles."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A book, or a brick."
+      }
+    },
+    {
+      "id": "s3.3.3",
+      "unitId": "u3.3",
+      "name": "Rotate a mug through 90 degrees",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Rotate a mug through 90 degrees."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A mug."
+      }
+    },
+    {
+      "id": "s3.4.1",
+      "unitId": "u3.4",
+      "name": "Build an object from visible boxes and cylinders, light lines only, no contour",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Build an object from visible boxes and cylinders.",
+        "Light lines only, no contour."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A teapot."
+      }
+    },
+    {
+      "id": "s3.4.2",
+      "unitId": "u3.4",
+      "name": "Same, then find the real contour on top",
+      "durationMin": 10,
+      "materials": "Pencil",
+      "instructions": [
+        "Build the same kind of object from visible boxes and cylinders.",
+        "Then find the real contour on top."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A watering can."
+      }
+    },
+    {
+      "id": "s3.4.3",
+      "unitId": "u3.4",
+      "name": "Same on something organic — a shoe, a pepper grinder",
+      "durationMin": 10,
+      "materials": "Pencil",
+      "instructions": [
+        "Build the same way on something organic.",
+        "Then find the real contour on top."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A shoe, or a pepper grinder."
+      }
+    },
+    {
+      "id": "s3.W.1",
+      "unitId": "u3.W",
+      "name": "One building, built in order",
+      "durationMin": 50,
+      "materials": "Pencil",
+      "instructions": [
+        "Build one building in order: horizon line, vanishing points, big masses, then windows and detail last.",
+        "Do not start with the door."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A suburban house at three-quarter."
+      }
+    },
+    {
+      "id": "s3.W.2",
+      "unitId": "u3.W",
+      "name": "One interior in one-point perspective, from imagination",
+      "durationMin": 40,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw one interior in one-point perspective, from imagination."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "A café interior — built from imagination, not observed directly."
+      }
+    },
+    {
+      "id": "s4.1.1",
+      "unitId": "u4.1",
+      "name": "Five-step value scale, smooth, no banding",
+      "durationMin": 6,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw a five-step value scale, smooth, with no banding."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s4.1.2",
+      "unitId": "u4.1",
+      "name": "Nine-step value scale",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw a nine-step value scale."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s4.1.3",
+      "unitId": "u4.1",
+      "name": "Value scale with hatching only, no blending",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw a value scale using hatching only, no blending."
+      ],
+      "commonFailure": "The darks crowd together and the top three steps are indistinguishable.",
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s4.2.1",
+      "unitId": "u4.2",
+      "name": "Sphere, one light source, five zones",
+      "durationMin": 3,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw a sphere with one light source.",
+        "Include all five zones — light, halftone, core shadow, reflected light, cast shadow.",
+        "Work from understanding rather than copying."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s4.2.2",
+      "unitId": "u4.2",
+      "name": "Same on a cylinder",
+      "durationMin": 4,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw the same five zones on a cylinder."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s4.2.3",
+      "unitId": "u4.2",
+      "name": "Same on a box: three planes, three clearly distinct values",
+      "durationMin": 4,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw the same idea on a box: three planes, three clearly distinct values."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s4.3.1",
+      "unitId": "u4.3",
+      "name": "Even parallel hatching, one page",
+      "durationMin": 7,
+      "materials": "Pencil",
+      "instructions": [
+        "Fill one page with even, parallel hatching."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s4.3.2",
+      "unitId": "u4.3",
+      "name": "Cross-hatching at three densities",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw cross-hatching at three densities."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s4.3.3",
+      "unitId": "u4.3",
+      "name": "Hatching that follows a curved surface",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw hatching that follows a curved surface."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A blank page. The marks are the subject."
+      }
+    },
+    {
+      "id": "s4.4.1",
+      "unitId": "u4.4",
+      "name": "One shape, four edges: hard, soft, lost, broken",
+      "durationMin": 7,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw one shape using four edge types: hard, soft, lost, and broken."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "An egg beside a drinking glass with crumpled foil behind it."
+      }
+    },
+    {
+      "id": "s4.4.2",
+      "unitId": "u4.4",
+      "name": "Two overlapping objects — hard edge where they meet, soft elsewhere",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw two overlapping objects.",
+        "Hard edge where they meet, soft elsewhere."
+      ],
+      "commonFailure": "Outlining everything at equal edge hardness.",
+      "subject": {
+        "kind": "fromLife",
+        "text": "A ceramic mug, glass jar and a stone together."
+      }
+    },
+    {
+      "id": "s4.W.1",
+      "unitId": "u4.W",
+      "name": "Single-lamp still life",
+      "durationMin": 50,
+      "materials": "Pencil",
+      "instructions": [
+        "Set up a single-lamp still life.",
+        "Block in three values before any refinement.",
+        "Squint to collapse detail into big shapes."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A halved onion."
+      }
+    },
+    {
+      "id": "s4.W.2",
+      "unitId": "u4.W",
+      "name": "One material study",
+      "durationMin": 30,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw the same simple form six times, focusing on material only."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "The same simple form, rendered six times — once each in unglazed ceramic, chrome, clear glass, brushed aluminium, velvet, and wet plastic."
+      }
+    },
+    {
+      "id": "s4.W.3",
+      "unitId": "u4.W",
+      "name": "One food study",
+      "durationMin": 40,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw one food subject, from life."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "A halved orange."
+      }
+    },
+    {
+      "id": "s5.1.1",
+      "unitId": "u5.1",
+      "name": "Six poses, 60 seconds each",
+      "durationMin": 7,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw six poses, 60 seconds each.",
+        "Line of action and weight only, not the outline."
+      ],
+      "commonFailure": "A symmetrical, stiff pose with no weight shift. Expect these to look bad for about a month.",
+      "subject": {
+        "kind": "reference",
+        "text": "Six reference poses with readable action — lifting a box, reaching overhead, sitting slumped, mid-stride, crouching to tie a shoe, leaning on a counter, or throwing."
+      }
+    },
+    {
+      "id": "s5.1.2",
+      "unitId": "u5.1",
+      "name": "Six poses, 30 seconds each",
+      "durationMin": 4,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw six poses, 30 seconds each."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "Six reference poses with readable action — lifting a box, reaching overhead, sitting slumped, mid-stride, crouching to tie a shoe, leaning on a counter, or throwing."
+      }
+    },
+    {
+      "id": "s5.1.3",
+      "unitId": "u5.1",
+      "name": "Three poses, 2 minutes each: gesture, then simplified masses",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw three poses, 2 minutes each.",
+        "Start with gesture, then add simplified masses."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "Three reference poses with readable action, drawn from the same pool — lifting a box, reaching overhead, sitting slumped, mid-stride, crouching to tie a shoe, leaning on a counter, or throwing."
+      }
+    },
+    {
+      "id": "s5.2.1",
+      "unitId": "u5.2",
+      "name": "Loomis heads — sphere, sliced side plane, jaw",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Build four Loomis heads — sphere, sliced side plane, jaw.",
+        "Vary the angle each time."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "The same face at eye level, from below, from above, in profile, three-quarter, and tilted."
+      }
+    },
+    {
+      "id": "s5.2.2",
+      "unitId": "u5.2",
+      "name": "Add brow, nose and mouth division lines, wrapped around the curve",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Add brow, nose and mouth division lines to the Loomis head, wrapped around the curve of the skull."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "The same face at eye level, from below, from above, in profile, three-quarter, and tilted."
+      }
+    },
+    {
+      "id": "s5.2.3",
+      "unitId": "u5.2",
+      "name": "The same head at four angles, structure consistent across all four",
+      "durationMin": 10,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw the same head at four angles.",
+        "Keep the structure consistent across all four."
+      ],
+      "commonFailure": "Features drawn on a flat plane instead of a curved skull.",
+      "subject": {
+        "kind": "reference",
+        "text": "The same face at eye level, from below, from above, in profile, three-quarter, and tilted."
+      }
+    },
+    {
+      "id": "s5.3.1",
+      "unitId": "u5.3",
+      "name": "Twelve eyes, varied angles",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw twelve eyes, varied angles."
+      ],
+      "commonFailure": "Eyes placed too high on the skull.",
+      "subject": {
+        "kind": "reference",
+        "text": "Eyes, at varied angles."
+      }
+    },
+    {
+      "id": "s5.3.2",
+      "unitId": "u5.3",
+      "name": "Twelve noses, varied angles",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw twelve noses, varied angles."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "Noses, at varied angles."
+      }
+    },
+    {
+      "id": "s5.3.3",
+      "unitId": "u5.3",
+      "name": "Twelve mouths",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw twelve mouths."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "Mouths."
+      }
+    },
+    {
+      "id": "s5.3.4",
+      "unitId": "u5.3",
+      "name": "Twelve ears",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw twelve ears."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "Ears."
+      }
+    },
+    {
+      "id": "s5.4.1",
+      "unitId": "u5.4",
+      "name": "Your non-drawing hand, from life",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw your non-drawing hand, from life."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "Your non-drawing hand."
+      }
+    },
+    {
+      "id": "s5.4.2",
+      "unitId": "u5.4",
+      "name": "Hand as three masses — palm, thumb, fingers — before any detail",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw a hand as three masses — palm, thumb, and fingers — before any detail."
+      ],
+      "commonFailure": "Hands drawn as mittens.",
+      "subject": {
+        "kind": "fromLife",
+        "text": "Your own hand holding a phone."
+      }
+    },
+    {
+      "id": "s5.4.3",
+      "unitId": "u5.4",
+      "name": "Your own foot, or a shoe from above",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw your own foot, or a shoe from above."
+      ],
+      "subject": {
+        "kind": "fromLife",
+        "text": "Your own foot, or a shoe from above."
+      }
+    },
+    {
+      "id": "s5.W.1",
+      "unitId": "u5.W",
+      "name": "Two or three figure studies at 10-20 min each",
+      "durationMin": 50,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw two or three figure studies, 10-20 minutes each.",
+        "Work through gesture, masses, then contour."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "Two or three figure references, worked from gesture through masses to contour."
+      }
+    },
+    {
+      "id": "s5.W.2",
+      "unitId": "u5.W",
+      "name": "One constructed portrait",
+      "durationMin": 50,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw one constructed portrait.",
+        "Build the skull first, then place features onto that structure.",
+        "Resist starting with the eyes."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "One portrait reference, built skull-first."
+      }
+    },
+    {
+      "id": "s6.1.1",
+      "unitId": "u6.1",
+      "name": "Four 2-inch value thumbnails of one scene",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw four 2-inch value thumbnails of one scene.",
+        "Focal point and value structure only."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "A hillside with a fence line running away from the viewer."
+      }
+    },
+    {
+      "id": "s6.1.2",
+      "unitId": "u6.1",
+      "name": "The same scene, four different croppings",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw four different croppings of the same scene."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "Dunes."
+      }
+    },
+    {
+      "id": "s6.1.3",
+      "unitId": "u6.1",
+      "name": "The same scene, four different light directions",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw the same scene four times, each with a different light direction."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "A river bend."
+      }
+    },
+    {
+      "id": "s6.2.1",
+      "unitId": "u6.2",
+      "name": "Three atmospheric layers, foreground darkest, background lightest",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw three atmospheric layers — foreground darkest, background lightest."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "A mountain range in three layers."
+      }
+    },
+    {
+      "id": "s6.2.2",
+      "unitId": "u6.2",
+      "name": "Tree masses as shapes",
+      "durationMin": 8,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw tree masses as shapes.",
+        "No individual leaves."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "A treeline at dusk."
+      }
+    },
+    {
+      "id": "s6.2.3",
+      "unitId": "u6.2",
+      "name": "A receding line — fence, road, telegraph poles — with correct spacing compression",
+      "durationMin": 9,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw a receding line — a fence, road, or telegraph poles — with correct spacing compression."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "A road disappearing over a rise."
+      }
+    },
+    {
+      "id": "s6.W.1",
+      "unitId": "u6.W",
+      "name": "One finished drawing, thumbnail to final",
+      "durationMin": 60,
+      "materials": "Pencil",
+      "instructions": [
+        "Draw one finished piece, from thumbnail to final.",
+        "Rotate the subject each session: landscape, cityscape, food, portrait, or figure."
+      ],
+      "subject": {
+        "kind": "reference",
+        "text": "Whatever subject is due to rotate in — landscape, cityscape, food, portrait, or figure."
+      }
     }
   ],
   "references": [
-    { "id": "r1.01", "phaseId": "p1", "category": "subject", "subject": "crumpled receipt", "fromLife": true },
-    { "id": "r1.02", "phaseId": "p1", "category": "subject", "subject": "open scissors", "fromLife": true },
-    { "id": "r1.03", "phaseId": "p1", "category": "subject", "subject": "keys on a ring", "fromLife": true },
-    { "id": "r1.04", "phaseId": "p1", "category": "subject", "subject": "mug with the handle at three-quarter", "fromLife": true },
-    { "id": "r1.05", "phaseId": "p1", "category": "subject", "subject": "tangled charging cable", "fromLife": true },
-    { "id": "r1.06", "phaseId": "p1", "category": "subject", "subject": "half-peeled banana", "fromLife": true },
-    { "id": "r1.07", "phaseId": "p1", "category": "subject", "subject": "wire whisk", "fromLife": true },
-    { "id": "r1.08", "phaseId": "p1", "category": "subject", "subject": "folded towel", "fromLife": true },
-    { "id": "r1.09", "phaseId": "p1", "category": "subject", "subject": "sneaker with loose laces", "fromLife": true },
-    { "id": "r1.10", "phaseId": "p1", "category": "subject", "subject": "celery bunch", "fromLife": true },
-    { "id": "r1.11", "phaseId": "p1", "category": "subject", "subject": "clothespin", "fromLife": true },
-    { "id": "r1.12", "phaseId": "p1", "category": "subject", "subject": "adjustable wrench", "fromLife": true },
-
-    { "id": "r2.01", "phaseId": "p2", "category": "subject", "subject": "chair at an oblique angle", "fromLife": false },
-    { "id": "r2.02", "phaseId": "p2", "category": "subject", "subject": "open laptop", "fromLife": false },
-    { "id": "r2.03", "phaseId": "p2", "category": "subject", "subject": "stepladder", "fromLife": false },
-    { "id": "r2.04", "phaseId": "p2", "category": "subject", "subject": "bicycle side-on", "fromLife": false },
-    { "id": "r2.05", "phaseId": "p2", "category": "subject", "subject": "half-collapsed folding table", "fromLife": false },
-    { "id": "r2.06", "phaseId": "p2", "category": "subject", "subject": "staircase railing", "fromLife": false },
-    { "id": "r2.07", "phaseId": "p2", "category": "subject", "subject": "radiator", "fromLife": false },
-    { "id": "r2.08", "phaseId": "p2", "category": "subject", "subject": "bookshelf corner", "fromLife": false },
-    { "id": "r2.09", "phaseId": "p2", "category": "subject", "subject": "pile of unfolded laundry", "fromLife": false },
-    { "id": "r2.10", "phaseId": "p2", "category": "subject", "subject": "monstera or spider plant", "fromLife": false },
-    { "id": "r2.11", "phaseId": "p2", "category": "subject", "subject": "kitchen sink with dishes in it", "fromLife": false },
-    { "id": "r2.12", "phaseId": "p2", "category": "subject", "subject": "bare branch with leaves attached", "fromLife": false },
-
-    { "id": "r2.f01", "phaseId": "p2", "category": "fromLifePrompt", "subject": "the third item from the left on your kitchen counter", "fromLife": true },
-    { "id": "r2.f02", "phaseId": "p2", "category": "fromLifePrompt", "subject": "your own shoe from behind, laces toward you", "fromLife": true },
-    { "id": "r2.f03", "phaseId": "p2", "category": "fromLifePrompt", "subject": "the nearest chair, standing and looking down at it", "fromLife": true },
-    { "id": "r2.f04", "phaseId": "p2", "category": "fromLifePrompt", "subject": "whatever is currently in your sink", "fromLife": true },
-    { "id": "r2.f05", "phaseId": "p2", "category": "fromLifePrompt", "subject": "the corner where two walls meet the ceiling", "fromLife": true },
-    { "id": "r2.f06", "phaseId": "p2", "category": "fromLifePrompt", "subject": "the car parked furthest from your door, rear three-quarter", "fromLife": true },
-    { "id": "r2.f07", "phaseId": "p2", "category": "fromLifePrompt", "subject": "your non-drawing hand gripping a doorknob", "fromLife": true },
-    { "id": "r2.f08", "phaseId": "p2", "category": "fromLifePrompt", "subject": "the view out any window, but only shapes above the horizon line", "fromLife": true }
+    {
+      "id": "r1.01",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "crumpled receipt",
+      "fromLife": true
+    },
+    {
+      "id": "r1.02",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "open scissors",
+      "fromLife": true
+    },
+    {
+      "id": "r1.03",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "keys on a ring",
+      "fromLife": true
+    },
+    {
+      "id": "r1.04",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "mug with the handle at three-quarter",
+      "fromLife": true
+    },
+    {
+      "id": "r1.05",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "tangled charging cable",
+      "fromLife": true
+    },
+    {
+      "id": "r1.06",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "half-peeled banana",
+      "fromLife": true
+    },
+    {
+      "id": "r1.07",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "wire whisk",
+      "fromLife": true
+    },
+    {
+      "id": "r1.08",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "folded towel",
+      "fromLife": true
+    },
+    {
+      "id": "r1.09",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "sneaker with loose laces",
+      "fromLife": true
+    },
+    {
+      "id": "r1.10",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "celery bunch",
+      "fromLife": true
+    },
+    {
+      "id": "r1.11",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "clothespin",
+      "fromLife": true
+    },
+    {
+      "id": "r1.12",
+      "phaseId": "p1",
+      "category": "subject",
+      "subject": "adjustable wrench",
+      "fromLife": true
+    },
+    {
+      "id": "r2.01",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "chair at an oblique angle",
+      "fromLife": false
+    },
+    {
+      "id": "r2.02",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "open laptop",
+      "fromLife": false
+    },
+    {
+      "id": "r2.03",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "stepladder",
+      "fromLife": false
+    },
+    {
+      "id": "r2.04",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "bicycle side-on",
+      "fromLife": false
+    },
+    {
+      "id": "r2.05",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "half-collapsed folding table",
+      "fromLife": false
+    },
+    {
+      "id": "r2.06",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "staircase railing",
+      "fromLife": false
+    },
+    {
+      "id": "r2.07",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "radiator",
+      "fromLife": false
+    },
+    {
+      "id": "r2.08",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "bookshelf corner",
+      "fromLife": false
+    },
+    {
+      "id": "r2.09",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "pile of unfolded laundry",
+      "fromLife": false
+    },
+    {
+      "id": "r2.10",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "monstera or spider plant",
+      "fromLife": false
+    },
+    {
+      "id": "r2.11",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "kitchen sink with dishes in it",
+      "fromLife": false
+    },
+    {
+      "id": "r2.12",
+      "phaseId": "p2",
+      "category": "subject",
+      "subject": "bare branch with leaves attached",
+      "fromLife": false
+    },
+    {
+      "id": "r2.f01",
+      "phaseId": "p2",
+      "category": "fromLifePrompt",
+      "subject": "the third item from the left on your kitchen counter",
+      "fromLife": true
+    },
+    {
+      "id": "r2.f02",
+      "phaseId": "p2",
+      "category": "fromLifePrompt",
+      "subject": "your own shoe from behind, laces toward you",
+      "fromLife": true
+    },
+    {
+      "id": "r2.f03",
+      "phaseId": "p2",
+      "category": "fromLifePrompt",
+      "subject": "the nearest chair, standing and looking down at it",
+      "fromLife": true
+    },
+    {
+      "id": "r2.f04",
+      "phaseId": "p2",
+      "category": "fromLifePrompt",
+      "subject": "whatever is currently in your sink",
+      "fromLife": true
+    },
+    {
+      "id": "r2.f05",
+      "phaseId": "p2",
+      "category": "fromLifePrompt",
+      "subject": "the corner where two walls meet the ceiling",
+      "fromLife": true
+    },
+    {
+      "id": "r2.f06",
+      "phaseId": "p2",
+      "category": "fromLifePrompt",
+      "subject": "the car parked furthest from your door, rear three-quarter",
+      "fromLife": true
+    },
+    {
+      "id": "r2.f07",
+      "phaseId": "p2",
+      "category": "fromLifePrompt",
+      "subject": "your non-drawing hand gripping a doorknob",
+      "fromLife": true
+    },
+    {
+      "id": "r2.f08",
+      "phaseId": "p2",
+      "category": "fromLifePrompt",
+      "subject": "the view out any window, but only shapes above the horizon line",
+      "fromLife": true
+    },
+    {
+      "id": "r3.cyl01",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "soda can",
+      "fromLife": true
+    },
+    {
+      "id": "r3.cyl02",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "masking tape roll",
+      "fromLife": true
+    },
+    {
+      "id": "r3.cyl03",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "pill bottle",
+      "fromLife": true
+    },
+    {
+      "id": "r3.cyl04",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "French press",
+      "fromLife": true
+    },
+    {
+      "id": "r3.cyl05",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "candle",
+      "fromLife": true
+    },
+    {
+      "id": "r3.cyl06",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "thermos",
+      "fromLife": true
+    },
+    {
+      "id": "r3.cyl07",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "stacked paper cups",
+      "fromLife": true
+    },
+    {
+      "id": "r3.bld01",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "suburban house at three-quarter",
+      "fromLife": false
+    },
+    {
+      "id": "r3.bld02",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "corner shop with awning",
+      "fromLife": false
+    },
+    {
+      "id": "r3.bld03",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "brick row houses receding down a street",
+      "fromLife": false
+    },
+    {
+      "id": "r3.bld04",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "church with a square tower",
+      "fromLife": false
+    },
+    {
+      "id": "r3.bld05",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "petrol station canopy",
+      "fromLife": false
+    },
+    {
+      "id": "r3.bld06",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "multi-storey car park",
+      "fromLife": false
+    },
+    {
+      "id": "r3.bld07",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "fire escape on brick",
+      "fromLife": false
+    },
+    {
+      "id": "r3.bld08",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "bus shelter",
+      "fromLife": false
+    },
+    {
+      "id": "r3.bld09",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "loading dock",
+      "fromLife": false
+    },
+    {
+      "id": "r3.bld10",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "lighthouse",
+      "fromLife": false
+    },
+    {
+      "id": "r3.int01",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "your own bedroom corner",
+      "fromLife": false
+    },
+    {
+      "id": "r3.int02",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "hallway with three doors",
+      "fromLife": false
+    },
+    {
+      "id": "r3.int03",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "café interior",
+      "fromLife": false
+    },
+    {
+      "id": "r3.int04",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "subway carriage",
+      "fromLife": false
+    },
+    {
+      "id": "r3.int05",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "library aisle",
+      "fromLife": false
+    },
+    {
+      "id": "r3.con01",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "teapot",
+      "fromLife": true
+    },
+    {
+      "id": "r3.con02",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "pepper grinder",
+      "fromLife": true
+    },
+    {
+      "id": "r3.con03",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "hair dryer",
+      "fromLife": true
+    },
+    {
+      "id": "r3.con04",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "dress shoe",
+      "fromLife": true
+    },
+    {
+      "id": "r3.con05",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "camera body",
+      "fromLife": true
+    },
+    {
+      "id": "r3.con06",
+      "phaseId": "p3",
+      "category": "subject",
+      "subject": "watering can",
+      "fromLife": true
+    },
+    {
+      "id": "r4.sl01",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "egg beside a drinking glass with crumpled foil behind",
+      "fromLife": true
+    },
+    {
+      "id": "r4.sl02",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "halved onion",
+      "fromLife": true
+    },
+    {
+      "id": "r4.sl03",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "garlic bulb",
+      "fromLife": true
+    },
+    {
+      "id": "r4.sl04",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "drapery over a chair back",
+      "fromLife": true
+    },
+    {
+      "id": "r4.sl05",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "wine bottle with a steel spoon leaning on it",
+      "fromLife": true
+    },
+    {
+      "id": "r4.sl06",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "ceramic mug, glass jar and a stone together",
+      "fromLife": true
+    },
+    {
+      "id": "r4.mat01",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "unglazed ceramic",
+      "fromLife": true
+    },
+    {
+      "id": "r4.mat02",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "chrome",
+      "fromLife": true
+    },
+    {
+      "id": "r4.mat03",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "clear glass",
+      "fromLife": true
+    },
+    {
+      "id": "r4.mat04",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "brushed aluminium",
+      "fromLife": true
+    },
+    {
+      "id": "r4.mat05",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "velvet",
+      "fromLife": true
+    },
+    {
+      "id": "r4.mat06",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "wet plastic",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food01",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "baguette end",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food02",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "croissant",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food03",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "halved orange",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food04",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "fried egg in a pan",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food05",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "chocolate chip cookie",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food06",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "avocado half with the stone in",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food07",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "wedge of hard cheese",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food08",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "dumplings in a steamer basket",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food09",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "full ramen bowl",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food10",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "strawberry",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food11",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "roast chicken",
+      "fromLife": true
+    },
+    {
+      "id": "r4.food12",
+      "phaseId": "p4",
+      "category": "subject",
+      "subject": "pancake stack with syrup",
+      "fromLife": true
+    },
+    {
+      "id": "r5.ges01",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "lifting a box",
+      "fromLife": false
+    },
+    {
+      "id": "r5.ges02",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "reaching overhead",
+      "fromLife": false
+    },
+    {
+      "id": "r5.ges03",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "sitting slumped",
+      "fromLife": false
+    },
+    {
+      "id": "r5.ges04",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "mid-stride",
+      "fromLife": false
+    },
+    {
+      "id": "r5.ges05",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "crouching to tie a shoe",
+      "fromLife": false
+    },
+    {
+      "id": "r5.ges06",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "leaning on a counter",
+      "fromLife": false
+    },
+    {
+      "id": "r5.ges07",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "throwing",
+      "fromLife": false
+    },
+    {
+      "id": "r5.head01",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "the same face at eye level, from below, from above, in profile, three-quarter, and tilted",
+      "fromLife": false
+    },
+    {
+      "id": "r5.hand01",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "own hand holding a phone",
+      "fromLife": true
+    },
+    {
+      "id": "r5.hand02",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "gripping a mug",
+      "fromLife": true
+    },
+    {
+      "id": "r5.hand03",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "holding a pen",
+      "fromLife": true
+    },
+    {
+      "id": "r5.hand04",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "in a fist",
+      "fromLife": true
+    },
+    {
+      "id": "r5.hand05",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "gripping fabric",
+      "fromLife": true
+    },
+    {
+      "id": "r5.hand06",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "flat on a table",
+      "fromLife": true
+    },
+    {
+      "id": "r5.hand07",
+      "phaseId": "p5",
+      "category": "subject",
+      "subject": "fingers interlaced",
+      "fromLife": true
+    },
+    {
+      "id": "r6.scn01",
+      "phaseId": "p6",
+      "category": "subject",
+      "subject": "hillside with a fence line running away from the viewer",
+      "fromLife": false
+    },
+    {
+      "id": "r6.scn02",
+      "phaseId": "p6",
+      "category": "subject",
+      "subject": "treeline at dusk",
+      "fromLife": false
+    },
+    {
+      "id": "r6.scn03",
+      "phaseId": "p6",
+      "category": "subject",
+      "subject": "river bend",
+      "fromLife": false
+    },
+    {
+      "id": "r6.scn04",
+      "phaseId": "p6",
+      "category": "subject",
+      "subject": "road disappearing over a rise",
+      "fromLife": false
+    },
+    {
+      "id": "r6.scn05",
+      "phaseId": "p6",
+      "category": "subject",
+      "subject": "mountain range in three layers",
+      "fromLife": false
+    },
+    {
+      "id": "r6.scn06",
+      "phaseId": "p6",
+      "category": "subject",
+      "subject": "dunes",
+      "fromLife": false
+    },
+    {
+      "id": "r6.scn07",
+      "phaseId": "p6",
+      "category": "subject",
+      "subject": "rain-wet street with reflected lights",
+      "fromLife": false
+    },
+    {
+      "id": "r6.scn08",
+      "phaseId": "p6",
+      "category": "subject",
+      "subject": "urban skyline at low sun",
+      "fromLife": false
+    },
+    {
+      "id": "r6.scn09",
+      "phaseId": "p6",
+      "category": "subject",
+      "subject": "farmyard with scattered outbuildings",
+      "fromLife": false
+    }
   ]
 }

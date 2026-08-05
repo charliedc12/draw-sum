@@ -16,10 +16,16 @@ describe('curriculum.json', () => {
     expect(checkCurriculumIntegrity(valid)).toEqual([])
   })
 
-  it('carries both phases in full', () => {
-    expect(valid.phases.map((p) => p.id)).toEqual(['p1', 'p2'])
-    expect(valid.units).toHaveLength(8)
-    expect(valid.steps).toHaveLength(23)
+  it('carries all six phases in full', () => {
+    expect(valid.phases.map((p) => p.id)).toEqual(['p1', 'p2', 'p3', 'p4', 'p5', 'p6'])
+    expect(valid.units).toHaveLength(26)
+    expect(valid.steps).toHaveLength(73)
+  })
+
+  it('lets the terminal, ongoing phase have no gate statements', () => {
+    const phase6 = valid.phases.find((p) => p.id === 'p6')!
+    expect(phase6.gateStatements).toEqual([])
+    expect(phase6.maxWeeks).toBe(999)
   })
 
   it('keeps the exact durations and failure lines from the source doc', () => {

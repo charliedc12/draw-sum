@@ -15,7 +15,8 @@ export const phaseSchema: z.ZodType<Phase> = z.object({
   order: z.number().int().positive(),
   unitIds: z.array(id).min(1),
   maxWeeks: z.number().int().positive(),
-  gateStatements: z.array(text).min(1),
+  // Empty for a terminal, ongoing phase (Phase 6) — there is nothing beyond it to gate into.
+  gateStatements: z.array(text),
 })
 
 export const unitSchema: z.ZodType<Unit> = z.object({

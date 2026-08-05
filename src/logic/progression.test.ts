@@ -6,6 +6,9 @@ import {
   SKIPS_BEFORE_ALTERNATE,
   advancePhase,
   applyForcedAdvance,
+  classifyPhase,
+  classifyStep,
+  classifyUnit,
   completeSession,
   daysSince,
   getServingUnit,
@@ -413,6 +416,76 @@ describe('gaps in usage never cost progress', () => {
   it('daysSince never goes negative and survives a bad date', () => {
     expect(daysSince(at(5).toISOString(), T0)).toBe(0)
     expect(daysSince('not-a-date', T0)).toBe(0)
+  })
+})
+
+describe('classifyPhase', () => {
+  it('marks phases before the active one completed, the active one current, and later ones upcoming', () => {
+    const state = start({ currentPhaseId: 'p2' })
+    expect(classifyPhase(state, fixture, fixture.phases[0])).toBe('completed')
+    expect(classifyPhase(state, fixture, fixture.phases[1])).toBe('current')
+  })
+
+  it('future phases classify as upcoming, never anything that implies a lock', () => {
+    const state = start()
+    expect(classifyPhase(state, fixture, fixture.phases[1])).toBe('upcoming')
+  })
+})
+
+describe('classifyUnit', () => {
+  it('is completed once requiredReps is met, regardless of phase', () => {
+    const state = start({ unitRepCounts: { 'u1.1': 3 } })
+    expect(classifyUnit(state, fixture, fixture.units[0])).toBe('completed')
+  })
+
+  it('is current for the unit getServingUnit would serve next', () => {
+    const state = start()
+    expect(classifyUnit(state, fixture, fixture.units[0])).toBe('current')
+    expect(classifyUnit(state, fixture, fixture.units[1])).toBe('upcoming')
+  })
+
+  it('is upcoming for a unit in a phase that has not been reached', () => {
+    const state = start()
+    const otherPhaseUnit = fixture.units.find((u) => u.phaseId === 'p2')!
+    expect(classifyUnit(state, fixture, otherPhaseUnit)).toBe('upcoming')
+  })
+
+  it('treats an open weekend unit as current the moment its phase is active', () => {
+    const state = start()
+    const weekend = fixture.units.find((u) => u.kind === 'weekend')!
+    expect(classifyUnit(state, fixture, weekend)).toBe('current')
+  })
+
+  it('closed weekend unit still reads completed', () => {
+    const weekend = fixture.units.find((u) => u.kind === 'weekend')!
+    const state = start({ unitRepCounts: { [weekend.id]: weekend.requiredReps } })
+    expect(classifyUnit(state, fixture, weekend)).toBe('completed')
+  })
+})
+
+describe('classifyStep', () => {
+  it('is completed once it has any completions, even mid-cycle', () => {
+    const state = start({ stepCompletionCounts: { a1: 1 } })
+    expect(classifyStep(state, fixture, fixture.steps[0])).toBe('completed')
+  })
+
+  it('is current for exactly the step getTodayStep would serve', () => {
+    const state = start()
+    expect(classifyStep(state, fixture, fixture.steps[0])).toBe('current')
+    expect(classifyStep(state, fixture, fixture.steps[1])).toBe('upcoming')
+  })
+
+  it('is upcoming for a step in a unit not yet being served', () => {
+    const state = start()
+    const b1 = fixture.steps.find((s) => s.id === 'b1')!
+    expect(classifyStep(state, fixture, b1)).toBe('upcoming')
+  })
+
+  it('reclassifies as steps complete and the pointer moves', () => {
+    let state = start()
+    state = markStepDone(state, fixture, 'a1', T0)
+    expect(classifyStep(state, fixture, fixture.steps[0])).toBe('completed')
+    expect(classifyStep(state, fixture, fixture.steps[1])).toBe('current')
   })
 })
 

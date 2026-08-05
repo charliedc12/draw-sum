@@ -82,3 +82,156 @@ Gate statements (Phase 2):
   - When I compare a drawing to its reference, my errors are small and scattered rather
     than the same distortion every time.
   - I've done at least 4 complexity studies of 25 minutes or longer.
+
+## PHASE 3 — Perspective and construction  (maxWeeks 10)
+
+Unit 3.1 Vanishing points (daily, requiredReps 8)
+  1 Six boxes to one vanishing point. 7 min.
+  2 Six boxes to two vanishing points. 8 min.
+  3 Horizon-line placement — the same box above, at, and below eye level. 8 min.
+
+Unit 3.2 Cylinders (daily, requiredReps 8)
+  1 Cylinders in boxes, six reps. 8 min.
+  2 Cylinders tilted at varied angles, six reps. 8 min.
+    Failure: the ellipse's minor axis tilted independently of the cylinder's axis.
+  3 Three stacked cylinders on one shared axis. 8 min.
+
+Unit 3.3 Rotation (daily, requiredReps 6)
+  1 One box, four imagined angles. 8 min.
+  2 One simple object — a book, a brick — four imagined angles. 9 min.
+  3 Rotate a mug through 90 degrees. 9 min.
+
+Unit 3.4 Construction (daily, requiredReps 6)
+  1 Build an object from visible boxes and cylinders, light lines only, no contour. 9 min.
+  2 Same, then find the real contour on top. 10 min.
+  3 Same on something organic — a shoe, a pepper grinder. 10 min.
+
+Unit 3.W Weekend buildings (weekend, requiredReps 10)
+  1 One building, built in order: horizon line, vanishing points, big masses, then
+    windows and detail last. Do not start with the door. 50 min.
+  2 One interior in one-point perspective, from imagination. 40 min.
+
+Subjects — cylinders: soda can / masking tape roll / pill bottle / French press /
+candle / thermos / stacked paper cups
+Buildings: suburban house at three-quarter / corner shop with awning / brick row houses
+receding down a street / church with a square tower / petrol station canopy /
+multi-storey car park / fire escape on brick / bus shelter / loading dock / lighthouse
+Interiors: your own bedroom corner / hallway with three doors / café interior / subway
+carriage / library aisle
+Construction: teapot / pepper grinder / hair dryer / dress shoe / camera body / watering can
+
+Gate statements (Phase 3):
+  - I can find the horizon line and vanishing points in a street photo in under a minute.
+  - My windows no longer slide out of alignment with the wall they sit on.
+  - I can draw a convincing cylinder tilted at any angle without thinking hard.
+  - I've done at least 8 weekend building studies.
+
+## PHASE 4 — Value and light  (maxWeeks 8)
+
+Unit 4.1 Scales (daily, requiredReps 6)
+  1 Five-step value scale, smooth, no banding. 6 min. Pencil.
+  2 Nine-step value scale. 8 min.
+  3 Value scale with hatching only, no blending. 8 min.
+    Failure: the darks crowd together and the top three steps are indistinguishable.
+
+Unit 4.2 The five zones (daily, requiredReps 8)
+  1 Sphere, one light source, five zones — light, halftone, core shadow, reflected
+    light, cast shadow. 3 min, from understanding rather than copying.
+  2 Same on a cylinder. 4 min.
+  3 Same on a box: three planes, three clearly distinct values. 4 min.
+
+Unit 4.3 Hatching (daily, requiredReps 6)
+  1 Even parallel hatching, one page. 7 min.
+  2 Cross-hatching at three densities. 8 min.
+  3 Hatching that follows a curved surface. 8 min.
+
+Unit 4.4 Edges (daily, requiredReps 4)
+  1 One shape, four edges: hard, soft, lost, broken. 7 min.
+  2 Two overlapping objects — hard edge where they meet, soft elsewhere. 8 min.
+    Failure: outlining everything at equal edge hardness.
+
+Unit 4.W Weekend still life (weekend, requiredReps 8)
+  1 Single-lamp still life. Block in three values before any refinement. Squint to
+    collapse detail into big shapes. 50 min.
+  2 One material study. 30 min.
+  3 One food study. 40 min.
+
+Subjects — still life: egg beside a drinking glass with crumpled foil behind / halved
+onion / garlic bulb / drapery over a chair back / wine bottle with a steel spoon
+leaning on it / ceramic mug, glass jar and a stone together
+Materials, the same simple form six times: unglazed ceramic / chrome / clear glass /
+brushed aluminium / velvet / wet plastic
+Food: baguette end / croissant / halved orange / fried egg in a pan / chocolate chip
+cookie / avocado half with the stone in / wedge of hard cheese / dumplings in a steamer
+basket / full ramen bowl / strawberry / roast chicken / pancake stack with syrup
+
+Gate statements (Phase 4):
+  - My drawings still read correctly when I squint or look at them thumbnail-sized.
+  - I can identify a photo's light direction instantly.
+  - I vary edge hardness on purpose instead of outlining everything the same.
+
+## PHASE 5 — People and faces  (maxWeeks 14)
+
+Unit 5.1 Gesture (daily, requiredReps 12)
+  1 Six poses, 60 seconds each. Line of action and weight only, not the outline. 7 min.
+    Failure: a symmetrical, stiff pose with no weight shift. Expect these to look bad
+    for about a month.
+  2 Six poses, 30 seconds each. 4 min.
+  3 Three poses, 2 minutes each: gesture, then simplified masses. 8 min.
+
+Unit 5.2 Head construction (daily, requiredReps 10)
+  1 Loomis heads — sphere, sliced side plane, jaw. Four per session, varied angles. 8 min.
+  2 Add brow, nose and mouth division lines, wrapped around the curve. 9 min.
+  3 The same head at four angles, structure consistent across all four. 10 min.
+    Failure: features drawn on a flat plane instead of a curved skull.
+
+Unit 5.3 Features (daily, requiredReps 8)
+  1 Twelve eyes, varied angles. 9 min. Failure: eyes placed too high on the skull.
+  2 Twelve noses, varied angles. 9 min.
+  3 Twelve mouths. 9 min.
+  4 Twelve ears. 9 min.
+
+Unit 5.4 Hands and feet (daily, requiredReps 8)
+  1 Your non-drawing hand, from life. 8 min.
+  2 Hand as three masses — palm, thumb, fingers — before any detail. 8 min.
+    Failure: hands drawn as mittens.
+  3 Your own foot, or a shoe from above. 9 min.
+
+Unit 5.W Weekend figure and portrait (weekend, requiredReps 12)
+  1 Two or three figure studies at 10-20 min each: gesture, masses, contour. 50 min.
+  2 One constructed portrait. Skull first, features placed onto that structure. Resist
+    starting with the eyes. 50 min.
+
+Subjects — gesture, chosen for readable action: lifting a box / reaching overhead /
+sitting slumped / mid-stride / crouching to tie a shoe / leaning on a counter / throwing
+Heads: the same face at eye level, from below, from above, in profile, three-quarter,
+and tilted — so you can see your construction breaking
+Hands: own hand holding a phone / gripping a mug / holding a pen / in a fist / gripping
+fabric / flat on a table / fingers interlaced
+
+Gate statements (Phase 5):
+  - My 60-second gestures read as a person doing something.
+  - My heads stay structurally consistent when I rotate them off centre.
+  - My portrait errors are proportional rather than structural — the features sit on a
+    believable skull even when the likeness is off.
+
+## PHASE 6 — Composition and landscape  (maxWeeks 999, ongoing)
+
+Unit 6.1 Thumbnails (daily, requiredReps 8)
+  1 Four 2-inch value thumbnails of one scene. Focal point and value structure only. 8 min.
+  2 The same scene, four different croppings. 8 min.
+  3 The same scene, four different light directions. 8 min.
+
+Unit 6.2 Depth (daily, requiredReps 8)
+  1 Three atmospheric layers, foreground darkest, background lightest. 8 min.
+  2 Tree masses as shapes. No individual leaves. 8 min.
+  3 A receding line — fence, road, telegraph poles — with correct spacing compression. 9 min.
+
+Unit 6.W Weekend finished work (weekend, requiredReps 999)
+  1 One finished drawing, thumbnail to final, rotating subject each session: landscape,
+    cityscape, food, portrait, figure. 60 min.
+
+Subjects: hillside with a fence line running away from the viewer / treeline at dusk /
+river bend / road disappearing over a rise / mountain range in three layers / dunes /
+rain-wet street with reflected lights / urban skyline at low sun / farmyard with
+scattered outbuildings
