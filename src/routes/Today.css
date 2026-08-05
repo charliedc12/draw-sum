@@ -38,6 +38,12 @@
   color: var(--text-muted);
 }
 
+.card__supportingNote {
+  font-size: var(--text-sm);
+  color: var(--accent);
+  margin-top: calc(var(--space-4) * -1 + var(--space-1));
+}
+
 .card__instructions {
   display: flex;
   flex-direction: column;
@@ -171,6 +177,12 @@
   padding: var(--space-3) var(--space-4);
   background: var(--surface-sunken);
   border-radius: var(--radius);
+}
+
+.notice__phase {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text);
 }
 
 .notice__text {

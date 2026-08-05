@@ -11,6 +11,15 @@ export type Subject = {
   text: string
 }
 
+export type GateStatement = {
+  text: string
+  /**
+   * Which units feed this statement. Used to assemble a targeted top-up when the
+   * statement is left unticked at the gate — see [[startTopUp]] in progression.ts.
+   */
+  statementUnitIds: string[]
+}
+
 export type Phase = {
   id: string
   name: string
@@ -18,7 +27,7 @@ export type Phase = {
   unitIds: string[]
   /** After this many weeks the phase advances whether or not the gate was ticked. */
   maxWeeks: number
-  gateStatements: string[]
+  gateStatements: GateStatement[]
 }
 
 export type Unit = {

@@ -1,0 +1,93 @@
+.progressBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.progressBlock__phase {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: var(--space-1);
+}
+
+.progressBlock__line {
+  font-size: var(--text-lg);
+  font-variant-numeric: tabular-nums;
+}
+
+.progressBlock__note {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* Stats block matches Log's — same figures, same "never merged" rule. */
+.stats {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.stats__figure {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.stats__value {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.stats__label {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.gatePreview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.gatePreview__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.gatePreview__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+  padding: 0;
+}
+
+.gatePreview__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-sunken);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.gatePreview__mark {
+  flex-shrink: 0;
+  color: var(--text-faint);
+}

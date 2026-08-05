@@ -17,10 +17,18 @@ export type AppActions = {
   advancePhase: () => void
   /** Manual override, either direction. Leaves all progress counts intact. */
   setPhase: (phaseId: string) => void
+  /** Starts (or restarts) a top-up on the current phase's unticked gate statements. */
+  startTopUp: () => void
   /** Fills in anything a fresh or partial save is missing, then applies the clock cap. */
   hydrate: () => void
   /** Dismiss the "your phase advanced on the clock" explanation. */
   acknowledgeForcedAdvance: () => void
+  /** Dev-only: fills the current phase's daily units to their requiredReps. */
+  devCloseAllDailyUnits: () => void
+  /** Dev-only: backdates phaseEntryDate to exercise the forced-advance boundary. */
+  devSetPhaseEntryDaysAgo: (days: number) => void
+  /** Dev-only: wipes all progress back to a first-run state. */
+  devResetAll: () => void
 }
 
 export type AppState = ProgressState & AppActions
@@ -49,6 +57,8 @@ export const useAppStore = create<AppState>()(
       setPhase: (phaseId) =>
         set((state) => progression.setPhase(state, curriculum, phaseId)),
 
+      startTopUp: () => set((state) => progression.startTopUp(state, curriculum)),
+
       hydrate: () => {
         const defaults = progression.initialProgress(curriculum)
         const repaired: ProgressState = {
@@ -63,6 +73,14 @@ export const useAppStore = create<AppState>()(
       },
 
       acknowledgeForcedAdvance: () => set({ forcedAdvance: false }),
+
+      devCloseAllDailyUnits: () =>
+        set((state) => progression.closeAllDailyUnits(state, curriculum)),
+
+      devSetPhaseEntryDaysAgo: (days) =>
+        set((state) => progression.setPhaseEntryDaysAgo(state, days)),
+
+      devResetAll: () => set(progression.initialProgress(curriculum)),
     }),
     {
       name: STORAGE_KEY,
@@ -93,5 +111,6 @@ function pickProgress(state: AppState): ProgressState {
     gateTicks: state.gateTicks,
     log: state.log,
     forcedAdvance: state.forcedAdvance,
+    topUp: state.topUp,
   }
 }

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { Curriculum, Phase, Reference, Step, Unit } from './curriculum.ts'
+import type { Curriculum, GateStatement, Phase, Reference, Step, Unit } from './curriculum.ts'
 
 const id = z.string().min(1)
 const text = z.string().min(1)
@@ -9,6 +9,11 @@ export const subjectSchema = z.object({
   text,
 })
 
+export const gateStatementSchema: z.ZodType<GateStatement> = z.object({
+  text,
+  statementUnitIds: z.array(id),
+})
+
 export const phaseSchema: z.ZodType<Phase> = z.object({
   id,
   name: text,
@@ -16,7 +21,7 @@ export const phaseSchema: z.ZodType<Phase> = z.object({
   unitIds: z.array(id).min(1),
   maxWeeks: z.number().int().positive(),
   // Empty for a terminal, ongoing phase (Phase 6) — there is nothing beyond it to gate into.
-  gateStatements: z.array(text),
+  gateStatements: z.array(gateStatementSchema),
 })
 
 export const unitSchema: z.ZodType<Unit> = z.object({
@@ -93,6 +98,22 @@ export function checkCurriculumIntegrity(curriculum: Curriculum): CurriculumIssu
         })
       }
     }
+    phase.gateStatements.forEach((statement, index) => {
+      for (const unitId of statement.statementUnitIds) {
+        const unit = unitsById.get(unitId)
+        if (!unit) {
+          issues.push({
+            path: `phases/${phase.id}/gateStatements[${index}]/statementUnitIds`,
+            message: `references missing unit "${unitId}"`,
+          })
+        } else if (unit.phaseId !== phase.id) {
+          issues.push({
+            path: `phases/${phase.id}/gateStatements[${index}]/statementUnitIds`,
+            message: `unit "${unitId}" belongs to phase "${unit.phaseId}", not this gate's phase`,
+          })
+        }
+      }
+    })
   }
 
   for (const unit of curriculum.units) {

@@ -107,6 +107,6 @@ describe('Today', () => {
     useAppStore.setState({ forcedAdvance: true })
     renderToday()
 
-    expect(screen.getByRole('status')).toHaveTextContent(/ran its full length/)
+    expect(screen.getByRole('status')).toHaveTextContent(/far more common, and far more damaging/)
   })
 })

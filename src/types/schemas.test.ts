@@ -83,4 +83,34 @@ describe('validation failures', () => {
     })
     expect(() => parseCurriculum(broken)).toThrow(/alternateStepId/)
   })
+
+  it('catches a gate statement referencing a missing unit', () => {
+    const broken = mutate((draft) => {
+      draft.phases[0].gateStatements[0].statementUnitIds.push('u-nope')
+    })
+    expect(() => parseCurriculum(broken)).toThrow(/gateStatements\[0\].*references missing unit "u-nope"/s)
+  })
+
+  it('catches a gate statement pointing at a unit from a different phase', () => {
+    const broken = mutate((draft) => {
+      const otherPhaseUnitId = draft.units.find((u) => u.phaseId === 'p2')!.id
+      draft.phases[0].gateStatements[0].statementUnitIds.push(otherPhaseUnitId)
+    })
+    expect(() => parseCurriculum(broken)).toThrow(/not this gate's phase/)
+  })
+})
+
+describe('gate statement data', () => {
+  it('every gate statement in every phase maps to at least one real unit in that phase', () => {
+    for (const phase of valid.phases) {
+      for (const statement of phase.gateStatements) {
+        expect(statement.statementUnitIds.length).toBeGreaterThan(0)
+        for (const unitId of statement.statementUnitIds) {
+          const unit = valid.units.find((u) => u.id === unitId)
+          expect(unit).toBeDefined()
+          expect(unit?.phaseId).toBe(phase.id)
+        }
+      }
+    }
+  })
 })

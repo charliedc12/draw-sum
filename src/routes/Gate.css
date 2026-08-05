@@ -1,0 +1,65 @@
+.gate__phase {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-top: calc(var(--space-4) * -1 + var(--space-1));
+}
+
+.gate__intro {
+  color: var(--text-muted);
+}
+
+.gate__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  list-style: none;
+  padding: 0;
+  margin: var(--space-2) 0;
+}
+
+.gate__item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.gate__label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: var(--touch-target);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+}
+
+.gate__checkbox {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+}
+
+.gate__text {
+  font-size: var(--text-base);
+  line-height: 1.45;
+  /* Full statement text, always — never truncated or clamped. */
+}
+
+.gate__unticked {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.gate__unticked-copy {
+  color: var(--text-muted);
+}
+
+.gate__topUpStatus {
+  font-size: var(--text-sm);
+  color: var(--accent);
+}

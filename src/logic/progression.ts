@@ -12,12 +12,42 @@ export const DEBT_THRESHOLD = 10
 /** Skips of one step before its alternate (if any) is offered as a swap. */
 export const SKIPS_BEFORE_ALTERNATE = 3
 
+/** How long a gate top-up keeps reinjecting its units before falling back to the gate. */
+export const TOP_UP_DAYS = 14
+
+/**
+ * Applied to a weekend session's log entry when the drawing's overall proportions came
+ * apart. No UI writes this tag yet (that's a later milestone) — the field exists now so
+ * the regression detector has something to read.
+ */
+export const PROPORTION_COLLAPSED_TAG = 'proportion-collapsed'
+
+/** Earliest phase order at which a proportion regression is watched for. */
+export const REGRESSION_MIN_PHASE_ORDER = 4
+/** The unit reinjected when a regression is detected — Phase 2's Measuring drills. */
+export const REGRESSION_UNIT_ID = 'u2.3'
+/** How many of the most recent sessions are considered. */
+export const REGRESSION_WINDOW = 5
+/** How many tagged sessions within the window trigger reinjection. */
+export const REGRESSION_THRESHOLD = 3
+
 export type LogEntry = {
   id: string
   targetId: string
   targetKind: 'step' | 'session'
   date: string
   status: 'done' | 'skipped'
+  /** Free-form error tags a weekend session can carry. Written by a later milestone. */
+  tags?: string[]
+}
+
+/** An active top-up: extra reps on specific units, kept alive for TOP_UP_DAYS. */
+export type TopUp = {
+  phaseId: string
+  /** Indices into that phase's gateStatements — the ones left unticked when requested. */
+  statementIndices: number[]
+  startedAt: string
+  expiresAt: string
 }
 
 export type ProgressState = {
@@ -34,6 +64,7 @@ export type ProgressState = {
   log: LogEntry[]
   /** Set when a phase advanced on the clock rather than on the gate. UI explains it. */
   forcedAdvance: boolean
+  topUp: TopUp | null
 }
 
 export type TodayView = { phaseOverdue: boolean } & (
@@ -47,6 +78,8 @@ export type TodayView = { phaseOverdue: boolean } & (
       stepCount: number
       /** Present once the step has been skipped enough times and declares one. */
       alternate?: Step
+      /** Set only when the step's own phase differs from the phase the user is in. */
+      supportingNote?: string
     }
   | {
       kind: 'session'
@@ -161,20 +194,23 @@ function weekendUnit(curriculum: Curriculum, phase: Phase): Unit | undefined {
 // ---- serving ---------------------------------------------------------------
 
 /**
- * Round-robin order for a unit: fewest completions first, then fewest skips, then the
- * step's own position in stepIds.
+ * Round-robin order across one or more units: fewest completions first, then fewest
+ * skips, then a stable position — the unit's own place in the given list, then the
+ * step's place within that unit.
  *
  * The skip tiebreak is what makes SKIP serve something new — a skip leaves completions
  * untouched (by design, it is not progress), so without it the same step would come
  * straight back.
  */
-export function orderStepsForUnit(
+export function orderStepsAcrossUnits(
   state: ProgressState,
   curriculum: Curriculum,
-  unit: Unit,
+  units: Unit[],
 ): Step[] {
-  return stepsOfUnit(curriculum, unit)
-    .map((step, index) => ({ step, index }))
+  return units
+    .flatMap((unit, unitIndex) =>
+      stepsOfUnit(curriculum, unit).map((step, stepIndex) => ({ step, unitIndex, stepIndex })),
+    )
     .sort((a, b) => {
       const doneA = state.stepCompletionCounts[a.step.id] ?? 0
       const doneB = state.stepCompletionCounts[b.step.id] ?? 0
@@ -184,15 +220,158 @@ export function orderStepsForUnit(
       const skipB = state.stepSkipCounts[b.step.id] ?? 0
       if (skipA !== skipB) return skipA - skipB
 
-      return a.index - b.index
+      if (a.unitIndex !== b.unitIndex) return a.unitIndex - b.unitIndex
+      return a.stepIndex - b.stepIndex
     })
     .map((entry) => entry.step)
+}
+
+/** Round-robin order for a single unit. A thin wrapper over the multi-unit version. */
+export function orderStepsForUnit(
+  state: ProgressState,
+  curriculum: Curriculum,
+  unit: Unit,
+): Step[] {
+  return orderStepsAcrossUnits(state, curriculum, [unit])
 }
 
 /** True once a step has been skipped enough times and offers somewhere else to go. */
 export function shouldOfferAlternate(state: ProgressState, step: Step): boolean {
   if (!step.alternateStepId) return false
   return (state.stepSkipCounts[step.id] ?? 0) >= SKIPS_BEFORE_ALTERNATE
+}
+
+function dedupeUnitsById(units: Unit[]): Unit[] {
+  const seen = new Set<string>()
+  const out: Unit[] = []
+  for (const unit of units) {
+    if (seen.has(unit.id)) continue
+    seen.add(unit.id)
+    out.push(unit)
+  }
+  return out
+}
+
+// ---- gate top-up -------------------------------------------------------------
+
+/** Indices of this phase's gate statements that aren't currently ticked. */
+export function getUntickedStatementIndices(
+  state: ProgressState,
+  curriculum: Curriculum,
+  phaseId: string,
+): number[] {
+  const phase = findPhase(curriculum, phaseId)
+  if (!phase) return []
+  const ticks = state.gateTicks[phaseId] ?? phase.gateStatements.map(() => false)
+  return phase.gateStatements.map((_, index) => index).filter((index) => !ticks[index])
+}
+
+/**
+ * Starts (or restarts) a top-up on the current phase's unticked statements. A no-op if
+ * everything is already ticked — there is nothing to top up.
+ */
+export function startTopUp(
+  state: ProgressState,
+  curriculum: Curriculum,
+  now: Date = new Date(),
+): ProgressState {
+  const statementIndices = getUntickedStatementIndices(state, curriculum, state.currentPhaseId)
+  if (statementIndices.length === 0) return state
+
+  const expiresAt = new Date(now.getTime() + TOP_UP_DAYS * MS_PER_DAY).toISOString()
+  return {
+    ...state,
+    topUp: {
+      phaseId: state.currentPhaseId,
+      statementIndices,
+      startedAt: now.toISOString(),
+      expiresAt,
+    },
+  }
+}
+
+/** A top-up counts only while it's for the phase the user is currently in, and unexpired. */
+export function isTopUpActive(
+  state: ProgressState,
+  curriculum: Curriculum,
+  now: Date = new Date(),
+): boolean {
+  const topUp = state.topUp
+  if (!topUp) return false
+  if (topUp.phaseId !== state.currentPhaseId) return false
+  if (!findPhase(curriculum, topUp.phaseId)) return false
+  return now.getTime() < new Date(topUp.expiresAt).getTime()
+}
+
+/** The units an active top-up reinjects — assembled from its stored statement indices. */
+export function getTopUpUnitIds(
+  state: ProgressState,
+  curriculum: Curriculum,
+  now: Date = new Date(),
+): string[] {
+  if (!isTopUpActive(state, curriculum, now)) return []
+  const phase = findPhase(curriculum, state.currentPhaseId)
+  const topUp = state.topUp
+  if (!phase || !topUp) return []
+
+  const ids = new Set<string>()
+  for (const index of topUp.statementIndices) {
+    const statement = phase.gateStatements[index]
+    if (!statement) continue
+    for (const unitId of statement.statementUnitIds) ids.add(unitId)
+  }
+  return [...ids]
+}
+
+// ---- soft regression -----------------------------------------------------------
+
+/**
+ * Three of the last five (or fewer, if there haven't been five yet) weekend sessions
+ * tagged with a collapsed-proportion error, while in Phase 4 or later. This never
+ * changes currentPhaseId or resets anything — see [[getRegressionUnitIds]].
+ */
+export function isSoftRegressionActive(
+  state: ProgressState,
+  curriculum: Curriculum,
+): boolean {
+  const phase = findPhase(curriculum, state.currentPhaseId)
+  if (!phase || phase.order < REGRESSION_MIN_PHASE_ORDER) return false
+
+  const recentSessions = state.log
+    .filter((entry) => entry.targetKind === 'session' && entry.status === 'done')
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, REGRESSION_WINDOW)
+
+  const tagged = recentSessions.filter((entry) =>
+    entry.tags?.includes(PROPORTION_COLLAPSED_TAG),
+  ).length
+
+  return tagged >= REGRESSION_THRESHOLD
+}
+
+/** The earlier-phase unit reinjected into today's rotation while regression is active. */
+export function getRegressionUnitIds(state: ProgressState, curriculum: Curriculum): string[] {
+  if (!isSoftRegressionActive(state, curriculum)) return []
+  return findUnit(curriculum, REGRESSION_UNIT_ID) ? [REGRESSION_UNIT_ID] : []
+}
+
+/**
+ * Units layered on top of the normal daily unit: an active gate top-up, and/or an
+ * active soft-regression reinjection. Phases layer, they never replace — nothing here
+ * touches currentPhaseId or any counter.
+ */
+export function getSupplementalUnits(
+  state: ProgressState,
+  curriculum: Curriculum,
+  now: Date = new Date(),
+): Unit[] {
+  const ids = [
+    ...getTopUpUnitIds(state, curriculum, now),
+    ...getRegressionUnitIds(state, curriculum),
+  ]
+  return dedupeUnitsById(
+    ids.map((id) => findUnit(curriculum, id)).filter((u): u is Unit => u !== undefined),
+  )
 }
 
 // ---- classification (for the Path tree) ------------------------------------
@@ -231,14 +410,25 @@ export function classifyUnit(
   return getServingUnit(state, curriculum)?.id === unit.id ? 'current' : 'upcoming'
 }
 
+/** The units getTodayStep serves from right now: the open daily unit plus any top-up or regression units. */
+function servingUnitsForToday(
+  state: ProgressState,
+  curriculum: Curriculum,
+  now: Date,
+): Unit[] {
+  const primary = getServingUnit(state, curriculum)
+  const supplemental = getSupplementalUnits(state, curriculum, now)
+  return dedupeUnitsById(primary ? [primary, ...supplemental] : supplemental)
+}
+
 /** The step getTodayStep would hand out right now, independent of debt or the gate. */
 export function getCurrentStepId(
   state: ProgressState,
   curriculum: Curriculum,
+  now: Date = new Date(),
 ): string | undefined {
-  const unit = getServingUnit(state, curriculum)
-  if (!unit) return undefined
-  return orderStepsForUnit(state, curriculum, unit)[0]?.id
+  const units = servingUnitsForToday(state, curriculum, now)
+  return orderStepsAcrossUnits(state, curriculum, units)[0]?.id
 }
 
 /**
@@ -250,9 +440,10 @@ export function classifyStep(
   state: ProgressState,
   curriculum: Curriculum,
   step: Step,
+  now: Date = new Date(),
 ): Classification {
   if ((state.stepCompletionCounts[step.id] ?? 0) > 0) return 'completed'
-  if (step.id === getCurrentStepId(state, curriculum)) return 'current'
+  if (step.id === getCurrentStepId(state, curriculum, now)) return 'current'
   return 'upcoming'
 }
 
@@ -260,7 +451,9 @@ export function classifyStep(
  * What to put on the Today screen.
  *
  * Precedence: debt outranks everything (the session is the thing being avoided), then
- * the gate, then the next drill.
+ * the gate — unless a top-up is active, in which case the top-up's units take the
+ * gate's place until it expires — then the next drill, which may be blended with
+ * top-up or soft-regression units on top of the phase's own serving unit.
  */
 export function getTodayStep(
   state: ProgressState,
@@ -284,26 +477,40 @@ export function getTodayStep(
     }
   }
 
-  if (isGateReady(state, curriculum)) return { kind: 'gate', phase, phaseOverdue }
+  const gateReady = isGateReady(state, curriculum)
+  const topUpActive = isTopUpActive(state, curriculum, now)
+  if (gateReady && !topUpActive) return { kind: 'gate', phase, phaseOverdue }
 
-  const unit = getServingUnit(state, curriculum)
-  if (!unit) return { kind: 'empty', phaseOverdue }
+  const units = servingUnitsForToday(state, curriculum, now)
+  if (units.length === 0) return { kind: 'empty', phaseOverdue }
 
-  const step = orderStepsForUnit(state, curriculum, unit)[0]
+  const step = orderStepsAcrossUnits(state, curriculum, units)[0]
   if (!step) return { kind: 'empty', phaseOverdue }
+
+  // The step's own unit and phase, not necessarily the phase the user is "in" — a
+  // regression step genuinely is Phase 2 content, shown honestly as Phase 2 content.
+  const stepUnit = findUnit(curriculum, step.unitId)
+  const stepPhase = (stepUnit && findPhase(curriculum, stepUnit.phaseId)) ?? phase
+  if (!stepUnit) return { kind: 'empty', phaseOverdue }
 
   const alternate = shouldOfferAlternate(state, step)
     ? findStep(curriculum, step.alternateStepId!)
     : undefined
 
+  const supportingNote =
+    stepPhase.id !== phase.id
+      ? `Supporting drill from Phase ${stepPhase.order} — ${stepPhase.name}.`
+      : undefined
+
   return {
     kind: 'step',
-    phase,
-    unit,
+    phase: stepPhase,
+    unit: stepUnit,
     step,
-    stepNumber: unit.stepIds.indexOf(step.id) + 1,
-    stepCount: unit.stepIds.length,
+    stepNumber: stepUnit.stepIds.indexOf(step.id) + 1,
+    stepCount: stepUnit.stepIds.length,
     alternate,
+    supportingNote,
     phaseOverdue,
   }
 }
@@ -500,5 +707,46 @@ export function initialProgress(curriculum: Curriculum, now: Date = new Date()):
     gateTicks: {},
     log: [],
     forcedAdvance: false,
+    topUp: null,
+  }
+}
+
+// ---- progress summary (read-only, for the Progress screen) -----------------
+
+/** True once sessions have fallen under a tenth of drills — never shown until drillCount > 0. */
+export function isSessionRatioLow(state: ProgressState): boolean {
+  return state.sessionCount < state.drillCount / 10
+}
+
+// ---- developer tools (stripped from production builds by the caller) -------
+
+/**
+ * Sets every daily unit in a phase to its requiredReps, so the gate becomes reachable
+ * without grinding it out by hand. Never touches currentUnitId or any other counter.
+ */
+export function closeAllDailyUnits(
+  state: ProgressState,
+  curriculum: Curriculum,
+  phaseId: string = state.currentPhaseId,
+): ProgressState {
+  const phase = findPhase(curriculum, phaseId)
+  if (!phase) return state
+
+  const unitRepCounts = { ...state.unitRepCounts }
+  for (const unit of unitsOfPhase(curriculum, phase)) {
+    if (unit.kind === 'daily') unitRepCounts[unit.id] = unit.requiredReps
+  }
+  return { ...state, unitRepCounts }
+}
+
+/** Backdates phaseEntryDate by `days`, for exercising the forced-advance boundary. */
+export function setPhaseEntryDaysAgo(
+  state: ProgressState,
+  days: number,
+  now: Date = new Date(),
+): ProgressState {
+  return {
+    ...state,
+    phaseEntryDate: new Date(now.getTime() - days * MS_PER_DAY).toISOString(),
   }
 }

@@ -13,10 +13,30 @@
       ],
       "maxWeeks": 5,
       "gateStatements": [
-        "My lines land roughly where I aimed about 7 times in 10.",
-        "My ellipses are smooth and closed, even when they're the wrong shape.",
-        "I can draw a box that reads as a box in space without thinking hard.",
-        "I've done at least 4 weekend contour sessions."
+        {
+          "text": "My lines land roughly where I aimed about 7 times in 10.",
+          "statementUnitIds": [
+            "u1.1"
+          ]
+        },
+        {
+          "text": "My ellipses are smooth and closed, even when they're the wrong shape.",
+          "statementUnitIds": [
+            "u1.2"
+          ]
+        },
+        {
+          "text": "I can draw a box that reads as a box in space without thinking hard.",
+          "statementUnitIds": [
+            "u1.3"
+          ]
+        },
+        {
+          "text": "I've done at least 4 weekend contour sessions.",
+          "statementUnitIds": [
+            "u1.W"
+          ]
+        }
       ]
     },
     {
@@ -31,9 +51,25 @@
       ],
       "maxWeeks": 10,
       "gateStatements": [
-        "I can block in overall proportions in the first 90 seconds and not need to shift them.",
-        "When I compare a drawing to its reference, my errors are small and scattered rather than the same distortion every time.",
-        "I've done at least 4 complexity studies of 25 minutes or longer."
+        {
+          "text": "I can block in overall proportions in the first 90 seconds and not need to shift them.",
+          "statementUnitIds": [
+            "u2.3"
+          ]
+        },
+        {
+          "text": "When I compare a drawing to its reference, my errors are small and scattered rather than the same distortion every time.",
+          "statementUnitIds": [
+            "u2.1",
+            "u2.3"
+          ]
+        },
+        {
+          "text": "I've done at least 4 complexity studies of 25 minutes or longer.",
+          "statementUnitIds": [
+            "u2.W"
+          ]
+        }
       ]
     },
     {
@@ -49,10 +85,31 @@
       ],
       "maxWeeks": 10,
       "gateStatements": [
-        "I can find the horizon line and vanishing points in a street photo in under a minute.",
-        "My windows no longer slide out of alignment with the wall they sit on.",
-        "I can draw a convincing cylinder tilted at any angle without thinking hard.",
-        "I've done at least 8 weekend building studies."
+        {
+          "text": "I can find the horizon line and vanishing points in a street photo in under a minute.",
+          "statementUnitIds": [
+            "u3.1"
+          ]
+        },
+        {
+          "text": "My windows no longer slide out of alignment with the wall they sit on.",
+          "statementUnitIds": [
+            "u3.1",
+            "u3.W"
+          ]
+        },
+        {
+          "text": "I can draw a convincing cylinder tilted at any angle without thinking hard.",
+          "statementUnitIds": [
+            "u3.2"
+          ]
+        },
+        {
+          "text": "I've done at least 8 weekend building studies.",
+          "statementUnitIds": [
+            "u3.W"
+          ]
+        }
       ]
     },
     {
@@ -68,9 +125,25 @@
       ],
       "maxWeeks": 8,
       "gateStatements": [
-        "My drawings still read correctly when I squint or look at them thumbnail-sized.",
-        "I can identify a photo's light direction instantly.",
-        "I vary edge hardness on purpose instead of outlining everything the same."
+        {
+          "text": "My drawings still read correctly when I squint or look at them thumbnail-sized.",
+          "statementUnitIds": [
+            "u4.2",
+            "u4.W"
+          ]
+        },
+        {
+          "text": "I can identify a photo's light direction instantly.",
+          "statementUnitIds": [
+            "u4.2"
+          ]
+        },
+        {
+          "text": "I vary edge hardness on purpose instead of outlining everything the same.",
+          "statementUnitIds": [
+            "u4.4"
+          ]
+        }
       ]
     },
     {
@@ -86,9 +159,26 @@
       ],
       "maxWeeks": 14,
       "gateStatements": [
-        "My 60-second gestures read as a person doing something.",
-        "My heads stay structurally consistent when I rotate them off centre.",
-        "My portrait errors are proportional rather than structural — the features sit on a believable skull even when the likeness is off."
+        {
+          "text": "My 60-second gestures read as a person doing something.",
+          "statementUnitIds": [
+            "u5.1"
+          ]
+        },
+        {
+          "text": "My heads stay structurally consistent when I rotate them off centre.",
+          "statementUnitIds": [
+            "u5.2"
+          ]
+        },
+        {
+          "text": "My portrait errors are proportional rather than structural — the features sit on a believable skull even when the likeness is off.",
+          "statementUnitIds": [
+            "u5.2",
+            "u5.3",
+            "u5.W"
+          ]
+        }
       ]
     },
     {

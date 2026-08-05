@@ -119,6 +119,10 @@ function TodayCard({ view }: { view: TodayView }) {
         {step.durationMin} min · {step.materials}
       </p>
 
+      {view.supportingNote && (
+        <p className="card__supportingNote">{view.supportingNote}</p>
+      )}
+
       <ol className="card__instructions">
         {step.instructions.map((instruction) => (
           <li key={instruction}>{instruction}</li>
@@ -180,9 +184,11 @@ function ForcedAdvanceNotice({
 }) {
   return (
     <div className="notice" role="status">
+      {phaseName && <p className="notice__phase">Now on {phaseName}</p>}
       <p className="notice__text">
-        Your last phase ran its full length, so you're on {phaseName || 'the next phase'}{' '}
-        now. Time moved you, not your work — you can move back whenever you want.
+        Staying too long in an early phase is far more common, and far more damaging,
+        than moving on before you feel ready. The earlier skills keep developing inside
+        the later work. You can go back any time from the Path screen.
       </p>
       <button type="button" className="notice__dismiss" onClick={onDismiss}>
         Got it

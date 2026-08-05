@@ -3,27 +3,40 @@ import type { Curriculum } from '../types/curriculum.ts'
 import { curriculum as realCurriculum } from '../data/curriculum.ts'
 import {
   DEBT_THRESHOLD,
+  PROPORTION_COLLAPSED_TAG,
+  REGRESSION_THRESHOLD,
+  REGRESSION_UNIT_ID,
   SKIPS_BEFORE_ALTERNATE,
+  TOP_UP_DAYS,
   advancePhase,
   applyForcedAdvance,
   classifyPhase,
   classifyStep,
   classifyUnit,
+  closeAllDailyUnits,
   completeSession,
   daysSince,
+  getRegressionUnitIds,
   getServingUnit,
   getTodayStep,
+  getTopUpUnitIds,
+  getUntickedStatementIndices,
   initialProgress,
   isGateReady,
   isPhaseOverdue,
+  isSessionRatioLow,
+  isSoftRegressionActive,
+  isTopUpActive,
   isUnitClosed,
   markStepDone,
   markStepSkipped,
   orderStepsForUnit,
   setPhase,
+  setPhaseEntryDaysAgo,
+  startTopUp,
   tickGate,
 } from './progression.ts'
-import type { ProgressState } from './progression.ts'
+import type { LogEntry, ProgressState } from './progression.ts'
 
 /* A miniature curriculum: two phases, small rep targets, one declared alternate.
    Fixtures rather than the real JSON, so a curriculum edit can't turn a rule test red. */
@@ -36,7 +49,10 @@ const fixture: Curriculum = {
       order: 1,
       unitIds: ['u1.1', 'u1.2', 'u1.W'],
       maxWeeks: 2,
-      gateStatements: ['a', 'b'],
+      gateStatements: [
+        { text: 'a', statementUnitIds: ['u1.1'] },
+        { text: 'b', statementUnitIds: ['u1.2'] },
+      ],
     },
     {
       id: 'p2',
@@ -44,7 +60,7 @@ const fixture: Curriculum = {
       order: 2,
       unitIds: ['u2.1'],
       maxWeeks: 4,
-      gateStatements: ['c'],
+      gateStatements: [{ text: 'c', statementUnitIds: ['u2.1'] }],
     },
   ],
   units: [
@@ -486,6 +502,247 @@ describe('classifyStep', () => {
     state = markStepDone(state, fixture, 'a1', T0)
     expect(classifyStep(state, fixture, fixture.steps[0])).toBe('completed')
     expect(classifyStep(state, fixture, fixture.steps[1])).toBe('current')
+  })
+})
+
+describe('gate evaluation', () => {
+  it('none ticked: every statement is unticked, nothing to advance on', () => {
+    const state = start()
+    expect(getUntickedStatementIndices(state, fixture, 'p1')).toEqual([0, 1])
+  })
+
+  it('some ticked: only the unticked indices are reported', () => {
+    const state = tickGate(start(), fixture, 'p1', 0, true)
+    expect(getUntickedStatementIndices(state, fixture, 'p1')).toEqual([1])
+  })
+
+  it('all ticked: nothing left unticked', () => {
+    let state = tickGate(start(), fixture, 'p1', 0, true)
+    state = tickGate(state, fixture, 'p1', 1, true)
+    expect(getUntickedStatementIndices(state, fixture, 'p1')).toEqual([])
+  })
+
+  it('unticking after ticking is reflected immediately', () => {
+    let state = tickGate(start(), fixture, 'p1', 0, true)
+    state = tickGate(state, fixture, 'p1', 0, false)
+    expect(getUntickedStatementIndices(state, fixture, 'p1')).toEqual([0, 1])
+  })
+})
+
+describe('gate top-up', () => {
+  it('assembles the units behind exactly the unticked statements', () => {
+    const state = tickGate(start(), fixture, 'p1', 0, true) // 'a' ticked, 'b' (-> u1.2) is not
+    const withTopUp = startTopUp(state, fixture, T0)
+    expect(withTopUp.topUp).toMatchObject({ phaseId: 'p1', statementIndices: [1] })
+    expect(getTopUpUnitIds(withTopUp, fixture, T0)).toEqual(['u1.2'])
+  })
+
+  it('is a no-op when everything is already ticked — nothing to top up', () => {
+    let state = tickGate(start(), fixture, 'p1', 0, true)
+    state = tickGate(state, fixture, 'p1', 1, true)
+    const after = startTopUp(state, fixture, T0)
+    expect(after.topUp).toBeNull()
+  })
+
+  it('is active immediately and inactive once TOP_UP_DAYS have passed', () => {
+    const state = startTopUp(tickGate(start(), fixture, 'p1', 0, true), fixture, T0)
+    expect(isTopUpActive(state, fixture, T0)).toBe(true)
+    expect(isTopUpActive(state, fixture, at(TOP_UP_DAYS - 1))).toBe(true)
+    expect(isTopUpActive(state, fixture, at(TOP_UP_DAYS))).toBe(false)
+  })
+
+  it('stops applying once the user has moved to a different phase', () => {
+    const state = startTopUp(tickGate(start(), fixture, 'p1', 0, true), fixture, T0)
+    const moved = setPhase(state, fixture, 'p2', T0)
+    expect(isTopUpActive(moved, fixture, T0)).toBe(false)
+    expect(getTopUpUnitIds(moved, fixture, T0)).toEqual([])
+  })
+
+  it('serves the top-up unit instead of the gate once every daily unit is closed', () => {
+    let state = start({ unitRepCounts: { 'u1.1': 3, 'u1.2': 2 } }) // gate-ready
+    state = tickGate(state, fixture, 'p1', 0, true) // leaves 'b' (u1.2) unticked
+    state = startTopUp(state, fixture, T0)
+
+    const view = getTodayStep(state, fixture, T0)
+    expect(view.kind).toBe('step')
+    if (view.kind !== 'step') return
+    expect(view.unit.id).toBe('u1.2')
+  })
+
+  it('falls back to the gate once the top-up window closes', () => {
+    let state = start({ unitRepCounts: { 'u1.1': 3, 'u1.2': 2 } })
+    state = tickGate(state, fixture, 'p1', 0, true)
+    state = startTopUp(state, fixture, T0)
+
+    expect(getTodayStep(state, fixture, at(TOP_UP_DAYS)).kind).toBe('gate')
+  })
+})
+
+describe('forced advance boundary', () => {
+  it('is not overdue one day before maxWeeks * 7', () => {
+    expect(isPhaseOverdue(start(), fixture, at(2 * 7 - 1))).toBe(false)
+  })
+
+  it('is overdue exactly at maxWeeks * 7', () => {
+    expect(isPhaseOverdue(start(), fixture, at(2 * 7))).toBe(true)
+  })
+
+  it('does not advance the day before the boundary', () => {
+    const state = applyForcedAdvance(start(), fixture, at(2 * 7 - 1))
+    expect(state.currentPhaseId).toBe('p1')
+  })
+
+  it('advances exactly on the boundary day', () => {
+    const state = applyForcedAdvance(start(), fixture, at(2 * 7))
+    expect(state.currentPhaseId).toBe('p2')
+    expect(state.forcedAdvance).toBe(true)
+  })
+})
+
+describe('soft regression detection', () => {
+  const session = (overrides: Partial<LogEntry>): LogEntry => ({
+    id: Math.random().toString(36),
+    targetId: 'u2.W',
+    targetKind: 'session',
+    date: T0.toISOString(),
+    status: 'done',
+    ...overrides,
+  })
+
+  it('does not trigger below Phase 4', () => {
+    const log = Array.from({ length: 3 }, () => session({ tags: [PROPORTION_COLLAPSED_TAG] }))
+    const state = start({ currentPhaseId: 'p2', log })
+    expect(isSoftRegressionActive(state, realCurriculum)).toBe(false)
+  })
+
+  it('triggers at 3 of the last 5 tagged sessions from Phase 4 onward', () => {
+    const log = [
+      session({ id: 'a', tags: [PROPORTION_COLLAPSED_TAG] }),
+      session({ id: 'b', tags: [] }),
+      session({ id: 'c', tags: [PROPORTION_COLLAPSED_TAG] }),
+      session({ id: 'd', tags: [] }),
+      session({ id: 'e', tags: [PROPORTION_COLLAPSED_TAG] }),
+    ]
+    const state = { ...initialProgress(realCurriculum, T0), currentPhaseId: 'p4', log }
+    expect(isSoftRegressionActive(state, realCurriculum)).toBe(true)
+  })
+
+  it('does not trigger at 2 of the last 5', () => {
+    const log = [
+      session({ id: 'a', tags: [PROPORTION_COLLAPSED_TAG] }),
+      session({ id: 'b', tags: [] }),
+      session({ id: 'c', tags: [PROPORTION_COLLAPSED_TAG] }),
+      session({ id: 'd', tags: [] }),
+      session({ id: 'e', tags: [] }),
+    ]
+    const state = { ...initialProgress(realCurriculum, T0), currentPhaseId: 'p4', log }
+    expect(isSoftRegressionActive(state, realCurriculum)).toBe(false)
+  })
+
+  it('only looks at the most recent 5 — an old tagged session outside the window does not count', () => {
+    const log = [
+      // Older, tagged sessions — outside the 5-session window once the recent ones exist.
+      session({ id: 'old1', date: at(1).toISOString(), tags: [PROPORTION_COLLAPSED_TAG] }),
+      session({ id: 'old2', date: at(2).toISOString(), tags: [PROPORTION_COLLAPSED_TAG] }),
+      session({ id: 'old3', date: at(3).toISOString(), tags: [PROPORTION_COLLAPSED_TAG] }),
+      // The five most recent — none tagged.
+      session({ id: 'recent1', date: at(30).toISOString(), tags: [] }),
+      session({ id: 'recent2', date: at(31).toISOString(), tags: [] }),
+      session({ id: 'recent3', date: at(32).toISOString(), tags: [] }),
+      session({ id: 'recent4', date: at(33).toISOString(), tags: [] }),
+      session({ id: 'recent5', date: at(34).toISOString(), tags: [] }),
+    ]
+    const state = { ...initialProgress(realCurriculum, T0), currentPhaseId: 'p4', log }
+    expect(isSoftRegressionActive(state, realCurriculum)).toBe(false)
+  })
+
+  it('never changes currentPhaseId or resets any counter — it only adds a unit to the pool', () => {
+    const log = Array.from({ length: REGRESSION_THRESHOLD }, () =>
+      session({ id: Math.random().toString(36), tags: [PROPORTION_COLLAPSED_TAG] }),
+    )
+    const state = {
+      ...initialProgress(realCurriculum, T0),
+      currentPhaseId: 'p4',
+      drillCount: 42,
+      log,
+    }
+    expect(getRegressionUnitIds(state, realCurriculum)).toEqual([REGRESSION_UNIT_ID])
+    expect(state.currentPhaseId).toBe('p4')
+    expect(state.drillCount).toBe(42)
+  })
+
+  it('interleaves the regression unit alongside the current phase unit, never replacing it', () => {
+    const log = Array.from({ length: REGRESSION_THRESHOLD }, () =>
+      session({ id: Math.random().toString(36), tags: [PROPORTION_COLLAPSED_TAG] }),
+    )
+    const state = { ...initialProgress(realCurriculum, T0), currentPhaseId: 'p4', log }
+    const view = getTodayStep(state, realCurriculum, T0)
+    expect(view.kind).toBe('step')
+    if (view.kind !== 'step') return
+    // Phase 4 has done zero drills and Phase 2's Measuring also has zero — the p4 step
+    // wins the tie via the "primary unit first" ordering, and gets no supporting note.
+    expect(view.phase.id).toBe('p4')
+    expect(view.supportingNote).toBeUndefined()
+  })
+
+  it('marks a served regression step with a supporting-drill note naming the earlier phase', () => {
+    const log = Array.from({ length: REGRESSION_THRESHOLD }, () =>
+      session({ id: Math.random().toString(36), tags: [PROPORTION_COLLAPSED_TAG] }),
+    )
+    // Give Phase 4's own next-up steps a head start in completions, so the regression
+    // unit's untouched steps win the "fewest completions" ordering.
+    const phase4FirstUnit = realCurriculum.units.find((u) => u.id === 'u4.1')!
+    const stepCompletionCounts = Object.fromEntries(
+      phase4FirstUnit.stepIds.map((id) => [id, 10]),
+    )
+    const state = {
+      ...initialProgress(realCurriculum, T0),
+      currentPhaseId: 'p4',
+      stepCompletionCounts,
+      log,
+    }
+    const view = getTodayStep(state, realCurriculum, T0)
+    expect(view.kind).toBe('step')
+    if (view.kind !== 'step') return
+    expect(view.unit.id).toBe(REGRESSION_UNIT_ID)
+    expect(view.phase.id).toBe('p2')
+    expect(view.supportingNote).toBe('Supporting drill from Phase 2 — Observation.')
+  })
+})
+
+describe('isSessionRatioLow', () => {
+  it('is false with no drills yet', () => {
+    expect(isSessionRatioLow(start({ drillCount: 0, sessionCount: 0 }))).toBe(false)
+  })
+
+  it('is false once sessions keep pace with a tenth of drills', () => {
+    expect(isSessionRatioLow(start({ drillCount: 50, sessionCount: 5 }))).toBe(false)
+  })
+
+  it('is true once sessions fall under a tenth of drills', () => {
+    expect(isSessionRatioLow(start({ drillCount: 50, sessionCount: 4 }))).toBe(true)
+  })
+})
+
+describe('dev tools', () => {
+  it('closeAllDailyUnits closes every daily unit in the phase and nothing else', () => {
+    const state = closeAllDailyUnits(start(), fixture, 'p1')
+    expect(state.unitRepCounts['u1.1']).toBe(3)
+    expect(state.unitRepCounts['u1.2']).toBe(2)
+    expect(state.unitRepCounts['u1.W']).toBeUndefined()
+    expect(isGateReady(state, fixture)).toBe(true)
+  })
+
+  it('closeAllDailyUnits does not touch currentUnitId or drillCount', () => {
+    const before = start({ drillCount: 7 })
+    const state = closeAllDailyUnits(before, fixture, 'p1')
+    expect(state.currentUnitId).toBe(before.currentUnitId)
+    expect(state.drillCount).toBe(7)
+  })
+
+  it('setPhaseEntryDaysAgo backdates phaseEntryDate by exactly N days', () => {
+    const state = setPhaseEntryDaysAgo(start(), 10, T0)
+    expect(state.phaseEntryDate).toBe(at(-10).toISOString())
   })
 })
 
