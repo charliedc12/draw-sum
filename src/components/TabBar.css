@@ -1,0 +1,48 @@
+.tabbar {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  /* The bar sits on the home indicator; its content must not. */
+  padding-bottom: var(--safe-bottom);
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+}
+
+.tabbar__list {
+  display: flex;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: 0;
+  list-style: none;
+}
+
+.tabbar__item {
+  flex: 1;
+}
+
+.tabbar__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: var(--touch-target);
+  padding: var(--space-2) var(--space-1);
+  color: var(--text-muted);
+  touch-action: manipulation;
+}
+
+.tabbar__link.active {
+  color: var(--accent);
+}
+
+.tabbar__icon {
+  display: block;
+}
+
+.tabbar__label {
+  font-size: var(--text-sm);
+  line-height: 1.2;
+}
