@@ -14,10 +14,14 @@ Unit 1.1 Marks (daily, requiredReps 8)
   4 Long single-stroke curves, 15 reps. 7 min. Pen. Failure: sketchy repair strokes.
 
 Unit 1.2 Ellipses (daily, requiredReps 6)
-  1 Ellipses in a shallow angled box, fill the row. 7 min. Pen.
-  2 Ellipses in a steep box, fill the row. 7 min. Pen.
-  3 Ellipse funnel — a curved corridor, ellipses filling it, all minor axes aligned to
-    the centre line. 8 min. Pen. Failure: each ellipse tilted independently.
+  1 Ellipses in a shallow angled box — two lines a hand's width apart, only lightly
+    tilted; fill the lane with ellipses touching both edges, evenly spaced. Should
+    look flat and narrow. 7 min. Pen.
+  2 Ellipses in a steep box — same construction, lines tilted much more steeply; the
+    ellipses should look rounder and more open than in the shallow box. 7 min. Pen.
+  3 Ellipse funnel — a curved corridor (two roughly parallel curved lines), ellipses
+    filling it, all minor axes aligned to the centre line. 8 min. Pen. Failure: each
+    ellipse tilted independently.
 
 Unit 1.3 Boxes (daily, requiredReps 6)
   1 Eight freehand boxes, rotated at random. 8 min. Pen, no rulers ever.
@@ -91,10 +95,14 @@ Unit 3.1 Vanishing points (daily, requiredReps 8)
   3 Horizon-line placement — the same box above, at, and below eye level. 8 min.
 
 Unit 3.2 Cylinders (daily, requiredReps 8)
-  1 Cylinders in boxes, six reps. 8 min.
-  2 Cylinders tilted at varied angles, six reps. 8 min.
+  1 Cylinders in boxes, six reps — draw a box, inscribe a cylinder by drawing an
+    ellipse touching all four sides top and bottom, then two side lines tangent to
+    both. 8 min.
+  2 Cylinders tilted at varied angles, six reps — same construction, box tilted
+    differently each time. 8 min.
     Failure: the ellipse's minor axis tilted independently of the cylinder's axis.
-  3 Three stacked cylinders on one shared axis. 8 min.
+  3 Three stacked cylinders on one shared axis — like tins in a tower, each ellipse
+    end centred on the same axis line. 8 min.
 
 Unit 3.3 Rotation (daily, requiredReps 6)
   1 One box, four imagined angles. 8 min.
@@ -180,8 +188,11 @@ Unit 5.1 Gesture (daily, requiredReps 12)
   3 Three poses, 2 minutes each: gesture, then simplified masses. 8 min.
 
 Unit 5.2 Head construction (daily, requiredReps 10)
-  1 Loomis heads — sphere, sliced side plane, jaw. Four per session, varied angles. 8 min.
-  2 Add brow, nose and mouth division lines, wrapped around the curve. 9 min.
+  1 Loomis heads — circle for the cranium, centreline and brow line curving around it
+    like lines of longitude and latitude, one side flattened into a plane, jaw
+    dropped from the lower half. Four per session, varied angles. 8 min.
+  2 Add brow, nose and mouth division lines, wrapped around the curve — bowing away
+    from you at the centre, curving back at the sides, not drawn flat. 9 min.
   3 The same head at four angles, structure consistent across all four. 10 min.
     Failure: features drawn on a flat plane instead of a curved skull.
 

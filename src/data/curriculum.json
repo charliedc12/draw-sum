@@ -614,8 +614,9 @@
       "durationMin": 7,
       "materials": "Pen",
       "instructions": [
-        "Draw a shallow angled box.",
-        "Fill the row with ellipses."
+        "Draw two lines a hand's width apart, only lightly tilted from horizontal — a shallow lane going off into the distance.",
+        "Fill the lane with ellipses, each one touching both edges. Keep them evenly spaced and tilted the same way as each other.",
+        "At this shallow angle the ellipses should look flat and narrow."
       ],
       "subject": {
         "kind": "fromLife",
@@ -629,8 +630,9 @@
       "durationMin": 7,
       "materials": "Pen",
       "instructions": [
-        "Draw a steep box.",
-        "Fill the row with ellipses."
+        "Draw two lines a hand's width apart, tilted much more steeply this time — closer to looking down into the lane than along it.",
+        "Fill the lane with ellipses, each touching both edges, evenly spaced, tilted the same way as each other.",
+        "At this steeper angle the ellipses should look rounder and more open than in the shallow box."
       ],
       "subject": {
         "kind": "fromLife",
@@ -644,8 +646,9 @@
       "durationMin": 8,
       "materials": "Pen",
       "instructions": [
-        "Draw a curved corridor.",
-        "Fill it with ellipses, all minor axes aligned to the centre line."
+        "Draw a curved corridor: two curved lines running roughly parallel to each other, like a bent tube seen from outside.",
+        "Fill it with ellipses that touch both edges of the corridor at each point along its length.",
+        "Their tilt should change smoothly along the curve — each ellipse's minor axis stays aligned to an imagined centre line running down the middle of the corridor."
       ],
       "commonFailure": "Each ellipse tilted independently.",
       "subject": {
@@ -944,7 +947,9 @@
       "durationMin": 8,
       "materials": "Pencil",
       "instructions": [
-        "Draw cylinders inside boxes, six reps."
+        "Draw a simple box.",
+        "Inscribe a cylinder inside it: draw an ellipse touching all four sides of the box's top face, a matching ellipse on the bottom face, then connect them with two straight side lines tangent to both ellipses.",
+        "Repeat six times, using a new box each time."
       ],
       "subject": {
         "kind": "fromLife",
@@ -958,7 +963,8 @@
       "durationMin": 8,
       "materials": "Pencil",
       "instructions": [
-        "Draw cylinders tilted at varied angles, six reps."
+        "Same construction as before — box first, then an inscribed cylinder touching all four sides top and bottom — but tilt the box itself at a different angle each time.",
+        "Repeat six times."
       ],
       "commonFailure": "The ellipse's minor axis tilted independently of the cylinder's axis.",
       "subject": {
@@ -973,7 +979,8 @@
       "durationMin": 8,
       "materials": "Pencil",
       "instructions": [
-        "Draw three stacked cylinders on one shared axis."
+        "Draw one straight line — the shared axis all three cylinders will sit on, one above the next.",
+        "Draw three cylinders stacked end to end along that axis, like tins in a tower, each one's ellipse ends centred on the same axis line."
       ],
       "subject": {
         "kind": "fromLife",
@@ -1351,8 +1358,11 @@
       "durationMin": 8,
       "materials": "Pencil",
       "instructions": [
-        "Build four Loomis heads — sphere, sliced side plane, jaw.",
-        "Vary the angle each time."
+        "Draw a circle for the cranium.",
+        "Add a centreline and a brow line curving around the sphere's surface, like lines of longitude and latitude on a globe.",
+        "Flatten one side of the sphere with a straight-ish plane — that's the side plane, roughly where the cheekbone and jaw hinge sit.",
+        "Drop a simple jaw and chin shape down from the lower half.",
+        "Repeat four times, changing the angle of the sphere each time."
       ],
       "subject": {
         "kind": "reference",
@@ -1366,7 +1376,8 @@
       "durationMin": 9,
       "materials": "Pencil",
       "instructions": [
-        "Add brow, nose and mouth division lines to the Loomis head, wrapped around the curve of the skull."
+        "On a Loomis head from the previous step, add three guide lines: one for the brow, one for the base of the nose, one for the mouth.",
+        "Curve each line around the surface of the head as if it were wrapped around a ball, not drawn flat — bowing away from you at the centre and curving back at the sides."
       ],
       "subject": {
         "kind": "reference",
@@ -1380,8 +1391,8 @@
       "durationMin": 10,
       "materials": "Pencil",
       "instructions": [
-        "Draw the same head at four angles.",
-        "Keep the structure consistent across all four."
+        "Draw the same Loomis head four times, from four different angles — front, three-quarter, profile, and from above or below.",
+        "Keep the sphere, side plane, centreline and brow line consistent across all four, so it reads as one head turning rather than four different heads."
       ],
       "commonFailure": "Features drawn on a flat plane instead of a curved skull.",
       "subject": {
