@@ -51,6 +51,7 @@ import {
   tagLastSession,
   tickGate,
   toggleActiveSessionStage,
+  undoLastAction,
 } from './progression.ts'
 import type { LogEntry, ProgressState } from './progression.ts'
 
@@ -369,6 +370,116 @@ describe('markStepSkipped', () => {
     const view = getTodayStep(state, fixture, T0)
     if (view.kind !== 'step') throw new Error('expected a step')
     expect(view.alternate).toBeUndefined()
+  })
+})
+
+describe('undoLastAction — reversing a fat-fingered Done or Skip', () => {
+  it('is a no-op when there is nothing to undo', () => {
+    const before = start()
+    expect(undoLastAction(before)).toBe(before)
+  })
+
+  it('reverses a Done: reps, drill count, debt and the log entry all revert', () => {
+    const before = start()
+    const done = markStepDone(before, fixture, 'a1', T0)
+    const undone = undoLastAction(done)
+
+    expect(undone.unitRepCounts).toEqual(before.unitRepCounts)
+    expect(undone.stepCompletionCounts).toEqual(before.stepCompletionCounts)
+    expect(undone.drillCount).toBe(before.drillCount)
+    expect(undone.debtCounter).toBe(before.debtCounter)
+    expect(undone.log).toEqual([])
+    expect(undone.lastUndo).toBeNull()
+  })
+
+  it('reverses a Skip: the skip count and its log entry revert', () => {
+    const before = start()
+    const skipped = markStepSkipped(before, fixture, 'a1', T0)
+    const undone = undoLastAction(skipped)
+
+    expect(undone.stepSkipCounts).toEqual(before.stepSkipCounts)
+    expect(undone.log).toEqual([])
+    expect(undone.lastUndo).toBeNull()
+  })
+
+  it('restores the unit pointer too, when the undone Done had closed a unit', () => {
+    // u1.1 requires 3 reps; the third markStepDone below closes it and advances
+    // currentUnitId to u1.2. Undoing that exact Done must put the pointer back.
+    let state = start()
+    state = markStepDone(state, fixture, 'a1', T0)
+    state = markStepDone(state, fixture, 'a2', T0)
+    const beforeClosing = state
+    state = markStepDone(state, fixture, 'a1', T0)
+    expect(state.currentUnitId).toBe('u1.2')
+
+    const undone = undoLastAction(state)
+    expect(undone.currentUnitId).toBe(beforeClosing.currentUnitId)
+    expect(undone.unitRepCounts).toEqual(beforeClosing.unitRepCounts)
+  })
+
+  it('only reverses the single most recent action — using it twice does nothing the second time', () => {
+    const done = markStepDone(start(), fixture, 'a1', T0)
+    const undone = undoLastAction(done)
+    expect(undoLastAction(undone)).toBe(undone)
+  })
+
+  it('a second Done overwrites the undo record — undo only ever reverses the latest one', () => {
+    let state = start()
+    state = markStepDone(state, fixture, 'a1', T0) // first Done, now superseded
+    const afterFirst = state
+    state = markStepDone(state, fixture, 'a2', T0) // second Done — this is what undo reverses
+
+    const undone = undoLastAction(state)
+    // Back to exactly after the first Done, not all the way to the start.
+    expect(undone.stepCompletionCounts).toEqual(afterFirst.stepCompletionCounts)
+    expect(undone.drillCount).toBe(afterFirst.drillCount)
+    expect(undone.log).toHaveLength(1)
+  })
+
+  it('leaves an unrelated log entry logged after it untouched', () => {
+    let state = start()
+    state = markStepDone(state, fixture, 'a1', T0)
+    state = markStepSkipped(state, fixture, 'a2', T0) // overwrites lastUndo to this skip
+    const undone = undoLastAction(state)
+    // The Done from 'a1' is still counted — only the Skip on 'a2' was undone.
+    expect(undone.stepCompletionCounts.a1).toBe(1)
+    expect(undone.log.some((e) => e.targetId === 'a1')).toBe(true)
+    expect(undone.log.some((e) => e.targetId === 'a2')).toBe(false)
+  })
+
+  it('markMicroDrillDone invalidates a pending undo, since it shares drillCount and log', () => {
+    let state = markStepDone(start(), fixture, 'a1', T0)
+    state = markMicroDrillDone(state, fixture, 'micro-x', T0)
+    expect(state.lastUndo).toBeNull()
+    expect(undoLastAction(state)).toBe(state)
+  })
+
+  it('completeSession invalidates a pending undo, since it shares debtCounter, unitRepCounts and log', () => {
+    let state = markStepDone(start(), fixture, 'a1', T0)
+    state = completeSession(state, fixture, T0)
+    expect(state.lastUndo).toBeNull()
+  })
+
+  it('a phase jump (setPhase / advancePhase) invalidates a pending undo, since it shares currentUnitId', () => {
+    let state = markStepDone(start(), fixture, 'a1', T0)
+    state = setPhase(state, fixture, 'p2', T0)
+    expect(state.lastUndo).toBeNull()
+  })
+
+  it('the dev tool closeAllDailyUnits invalidates a pending undo, since it shares unitRepCounts', () => {
+    let state = markStepDone(start(), fixture, 'a1', T0)
+    state = closeAllDailyUnits(state, fixture, 'p1')
+    expect(state.lastUndo).toBeNull()
+  })
+
+  it('actions that touch none of the shared fields leave a pending undo intact', () => {
+    let state = markStepDone(start(), fixture, 'a1', T0)
+    state = tickGate(state, fixture, 'p1', 0, true)
+    expect(state.lastUndo).not.toBeNull()
+    const undone = undoLastAction(state)
+    expect(undone.drillCount).toBe(0)
+    // The unrelated gate tick survives the undo untouched.
+    expect(undone.gateTicks.p1).toEqual([true, false])
   })
 })
 

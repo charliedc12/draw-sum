@@ -83,6 +83,9 @@ function applyOne(state: ProgressState, migration: IdMigration): ProgressState {
     activeSession: state.activeSession
       ? { ...state.activeSession, phaseId: remapKey(phaseIdMap, state.activeSession.phaseId) }
       : state.activeSession,
+    // A pending Done/Skip undo snapshot references old IDs by name and isn't remapped
+    // above — safest to just drop it rather than let it restore under a renamed ID.
+    lastUndo: null,
   }
 }
 

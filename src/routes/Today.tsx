@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { curriculum } from '../data/curriculum.ts'
 import {
   RISING_STANDARDS_COPY,
+  findStep,
   getDueRedrawRound,
   getDueRisingStandardsMilestone,
   getTodayStep,
@@ -29,6 +30,7 @@ export default function Today() {
 
   return (
     <section className="today">
+      <UndoBar />
       {state.forcedAdvance && (
         <ForcedAdvanceNotice
           phaseName={view.kind === 'empty' ? '' : view.phase.name}
@@ -45,6 +47,26 @@ export default function Today() {
       )}
       <TodayCard view={view} />
     </section>
+  )
+}
+
+/**
+ * A fat-fingered Done or Skip costs nothing to correct — this shows for exactly one
+ * screen, right after it happens, naming what it undoes so tapping it is never a
+ * guess. Gone the moment anything else happens; see undoLastAction in progression.ts.
+ */
+function UndoBar() {
+  const lastUndo = useAppStore((s) => s.lastUndo)
+  const undoLastAction = useAppStore((s) => s.undoLastAction)
+
+  if (!lastUndo) return null
+
+  const step = findStep(curriculum, lastUndo.stepId)
+
+  return (
+    <button type="button" className="undoBar" onClick={undoLastAction}>
+      ← Back{step ? ` to "${step.name}"` : ''}
+    </button>
   )
 }
 

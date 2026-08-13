@@ -109,6 +109,63 @@ describe('Today', () => {
   })
 })
 
+describe('the back button — undoing a fat-fingered Done or Skip', () => {
+  it('is absent on a fresh screen, before anything has been tapped', () => {
+    renderToday()
+    expect(screen.queryByRole('button', { name: /← Back/ })).not.toBeInTheDocument()
+  })
+
+  it('appears after Done, naming the step it would restore', async () => {
+    renderToday()
+    await userEvent.click(screen.getByRole('button', { name: 'Done' }))
+
+    expect(
+      screen.getByRole('button', { name: '← Back to "Straight lines, dot to dot, 20 reps"' }),
+    ).toBeInTheDocument()
+  })
+
+  it('tapping it returns to the exact previous step and reverses the count', async () => {
+    renderToday()
+    await userEvent.click(screen.getByRole('button', { name: 'Done' }))
+    expect(screen.getByText('PHASE 1 · UNIT 1.1 · STEP 2')).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: /← Back/ }))
+
+    expect(screen.getByText('PHASE 1 · UNIT 1.1 · STEP 1')).toBeInTheDocument()
+    const state = useAppStore.getState()
+    expect(state.drillCount).toBe(0)
+    expect(state.debtCounter).toBe(0)
+    expect(state.log).toEqual([])
+  })
+
+  it('also appears after Skip, and reverses it the same way', async () => {
+    renderToday()
+    await userEvent.click(screen.getByRole('button', { name: 'Skip' }))
+    await userEvent.click(screen.getByRole('button', { name: /← Back/ }))
+
+    expect(screen.getByText('PHASE 1 · UNIT 1.1 · STEP 1')).toBeInTheDocument()
+    expect(useAppStore.getState().stepSkipCounts['s1.1.1']).toBeUndefined()
+  })
+
+  it('disappears once used — it only ever reverses the one thing that just happened', async () => {
+    renderToday()
+    await userEvent.click(screen.getByRole('button', { name: 'Done' }))
+    await userEvent.click(screen.getByRole('button', { name: /← Back/ }))
+
+    expect(screen.queryByRole('button', { name: /← Back/ })).not.toBeInTheDocument()
+  })
+
+  it('a second Done replaces it, so it only ever offers to undo the latest one', async () => {
+    renderToday()
+    await userEvent.click(screen.getByRole('button', { name: 'Done' })) // step 1
+    await userEvent.click(screen.getByRole('button', { name: 'Done' })) // step 2
+
+    expect(
+      screen.getByRole('button', { name: '← Back to "Superimposed lines — one line, trace it 5 times without drifting"' }),
+    ).toBeInTheDocument()
+  })
+})
+
 describe('the ninety-second floor', () => {
   it('reveals three micro-drill options on tap, none shown before that', () => {
     renderToday()

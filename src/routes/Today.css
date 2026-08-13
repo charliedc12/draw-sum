@@ -173,6 +173,25 @@
   text-underline-offset: 3px;
 }
 
+/* A correction, not a decision — deliberately quieter than the notice cards below it,
+   so it reads as "available" rather than as something demanding a response. */
+.undoBar {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-2);
+  margin-left: calc(var(--space-2) * -1);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--accent);
+  border-radius: var(--radius);
+}
+
+.undoBar:active {
+  background: var(--surface-sunken);
+}
+
 .notice {
   display: flex;
   flex-direction: column;

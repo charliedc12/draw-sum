@@ -15,6 +15,8 @@ export type { LogEntry, ProgressState } from '../logic/progression.ts'
 export type AppActions = {
   markStepDone: (stepId: string) => void
   markStepSkipped: (stepId: string) => void
+  /** Reverses the single most recent Done or Skip. A no-op if there's nothing to undo. */
+  undoLastAction: () => void
   /** The ninety-second floor. Counts toward drillCount only — no unit reps, no debt. */
   markMicroDrillDone: (microDrillId: string) => void
   completeSession: () => void
@@ -80,6 +82,8 @@ export const useAppStore = create<AppState>()(
 
       markStepSkipped: (stepId) =>
         set((state) => progression.markStepSkipped(state, curriculum, stepId)),
+
+      undoLastAction: () => set((state) => progression.undoLastAction(state)),
 
       markMicroDrillDone: (microDrillId) =>
         set((state) => progression.markMicroDrillDone(state, curriculum, microDrillId)),
@@ -196,5 +200,6 @@ function pickProgress(state: AppState): ProgressState {
     redrawRoundsCompleted: state.redrawRoundsCompleted,
     notificationSettings: state.notificationSettings,
     curriculumVersion: state.curriculumVersion,
+    lastUndo: state.lastUndo,
   }
 }

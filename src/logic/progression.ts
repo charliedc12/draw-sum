@@ -93,6 +93,23 @@ export type ProgressState = {
    * which brings it forward and updates this field — see that module for why.
    */
   curriculumVersion: number
+  /**
+   * A single-level undo for the most recent Done or Skip tap — a fat-fingered Done
+   * costs nothing to correct. Cleared (not chained) by any other action that touches
+   * the same counters, so "Undo" always means "undo the one thing that just happened,"
+   * never something further back. Persisted, so it survives a reload.
+   */
+  lastUndo: UndoRecord | null
+}
+
+export type UndoRecord = {
+  kind: 'stepDone' | 'stepSkipped'
+  stepId: string
+  /** The log entry the action added — removed on undo rather than the whole array,
+      so undoing never risks discarding anything logged after it. */
+  loggedEntryId: string
+  /** Exactly the fields that action touched, from immediately before it ran. */
+  before: Partial<ProgressState>
 }
 
 export type TodayView = { phaseOverdue: boolean } & (
@@ -590,6 +607,8 @@ export function markStepDone(
     if (next) currentUnitId = next.id
   }
 
+  const entry = makeLogEntry(state, stepId, 'step', 'done', now)
+
   return {
     ...state,
     stepCompletionCounts: bump(state.stepCompletionCounts, stepId),
@@ -597,7 +616,19 @@ export function markStepDone(
     currentUnitId,
     drillCount: state.drillCount + 1,
     debtCounter: state.debtCounter + 1,
-    log: [...state.log, makeLogEntry(state, stepId, 'step', 'done', now)],
+    log: [...state.log, entry],
+    lastUndo: {
+      kind: 'stepDone',
+      stepId,
+      loggedEntryId: entry.id,
+      before: {
+        stepCompletionCounts: state.stepCompletionCounts,
+        unitRepCounts: state.unitRepCounts,
+        currentUnitId: state.currentUnitId,
+        drillCount: state.drillCount,
+        debtCounter: state.debtCounter,
+      },
+    },
   }
 }
 
@@ -613,10 +644,35 @@ export function markStepSkipped(
 ): ProgressState {
   if (!findStep(curriculum, stepId)) return state
 
+  const entry = makeLogEntry(state, stepId, 'step', 'skipped', now)
+
   return {
     ...state,
     stepSkipCounts: bump(state.stepSkipCounts, stepId),
-    log: [...state.log, makeLogEntry(state, stepId, 'step', 'skipped', now)],
+    log: [...state.log, entry],
+    lastUndo: {
+      kind: 'stepSkipped',
+      stepId,
+      loggedEntryId: entry.id,
+      before: { stepSkipCounts: state.stepSkipCounts },
+    },
+  }
+}
+
+/**
+ * Reverses the single most recent Done or Skip — a fat-fingered tap costs nothing.
+ * Restores exactly the fields that action touched and drops the log entry it added.
+ * A no-op if there's nothing to undo, or if it's already been used once.
+ */
+export function undoLastAction(state: ProgressState): ProgressState {
+  if (!state.lastUndo) return state
+  const { before, loggedEntryId } = state.lastUndo
+
+  return {
+    ...state,
+    ...before,
+    log: state.log.filter((entry) => entry.id !== loggedEntryId),
+    lastUndo: null,
   }
 }
 
@@ -638,6 +694,9 @@ export function markMicroDrillDone(
     ...state,
     drillCount: state.drillCount + 1,
     log: [...state.log, makeLogEntry(state, microDrillId, 'microDrill', 'done', now)],
+    // Touches drillCount and log, both of which a pending Done/Skip undo would
+    // restore — so that undo opportunity is no longer valid past this point.
+    lastUndo: null,
   }
 }
 
@@ -661,6 +720,9 @@ export function completeSession(
     unitRepCounts: unit ? bump(state.unitRepCounts, unit.id) : state.unitRepCounts,
     log: [...state.log, makeLogEntry(state, targetId, 'session', 'done', now)],
     activeSession: null,
+    // Touches debtCounter, unitRepCounts and log — the same fields a pending
+    // Done/Skip undo would restore, so that undo opportunity no longer applies.
+    lastUndo: null,
   }
 }
 
@@ -784,6 +846,10 @@ export function setPhase(
     currentUnitId: firstDailyUnitId(curriculum, phase),
     phaseEntryDate: now.toISOString(),
     forcedAdvance: options.forced ?? false,
+    // Touches currentUnitId, which a pending Done undo would restore — a phase jump
+    // (manual or forced) makes that stale, so it's cleared here. advancePhase and
+    // applyForcedAdvance both route through this function, so this covers them too.
+    lastUndo: null,
   }
 }
 
@@ -842,6 +908,7 @@ export function initialProgress(curriculum: Curriculum, now: Date = new Date()):
     redrawRoundsCompleted: [],
     notificationSettings: defaultNotificationSettings(),
     curriculumVersion: curriculum.version,
+    lastUndo: null,
   }
 }
 
@@ -974,7 +1041,8 @@ export function closeAllDailyUnits(
   for (const unit of unitsOfPhase(curriculum, phase)) {
     if (unit.kind === 'daily') unitRepCounts[unit.id] = unit.requiredReps
   }
-  return { ...state, unitRepCounts }
+  // Touches unitRepCounts, which a pending Done undo would restore.
+  return { ...state, unitRepCounts, lastUndo: null }
 }
 
 /** Backdates phaseEntryDate by `days`, for exercising the forced-advance boundary. */
